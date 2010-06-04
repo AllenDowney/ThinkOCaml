@@ -743,7 +743,7 @@ Note that OCaml, like all good things, comes from France (hence the .fr in the u
 
 A {\bf value} is one of the basic things a program works with,
 like a letter or a
-number.  The values we have seen so far
+number.  Some values we have seen so far
 are {\tt 1}, {\tt 2}, and
 \verb"'Hello, World!'".
 
@@ -755,27 +755,27 @@ strings because they are enclosed in quotation marks.
 
 \index{quotation mark}
 
-The print statement also works for integers.
+There's also a print statement for integers:
 
 \beforeverb
 \begin{verbatim}
->>> print 4
-4
+# print_int 4;;
+4- : unit = ()
 \end{verbatim}
 \afterverb
-%
-If you are not sure what type a value has, the interpreter can tell you.
+
+If you are not sure what type a value has, the interpreter will tell you.
 
 \beforeverb
 \begin{verbatim}
->>> type('Hello, World!')
-<type 'str'>
->>> type(17)
-<type 'int'>
+# let a = 1;;
+val a : int = 1;;
+# let foo = "Hello, World!"
+val foo : string = "Hello, World!"
 \end{verbatim}
 \afterverb
 %
-Not surprisingly, strings belong to the type {\tt str} and
+Not surprisingly, strings belong to the type {\tt string} and
 integers belong to the type {\tt int}.  Less obviously, numbers
 with a decimal point belong to a type called {\tt float},
 because these numbers are represented in a
@@ -791,42 +791,47 @@ format called {\bf floating-point}.
 
 \beforeverb
 \begin{verbatim}
->>> type(3.2)
-<type 'float'>
+# let a = 3.2;;
+val a : float = 3.2
 \end{verbatim}
 \afterverb
-%
-What about values like \verb"'17'" and \verb"'3.2'"?
-They look like numbers, but they are in quotation marks like
-strings.
 
-\index{quotation mark}
+Just for fun, there's also a separate type called ``char,'' which is short for ``character.'' A char is like a string, but it's only one character long (hence the name), and it's surrounded by single quotes instead of double quotes.
+
+\index{char type}
+\index{type!char}
 
 \beforeverb
 \begin{verbatim}
->>> type('17')
-<type 'str'>
->>> type('3.2')
-<type 'str'>
+# let foo = 'a';;
+val foo : char = 'a'
 \end{verbatim}
 \afterverb
-%
-They're strings.
+
+If you attempt to make a char that's more than one character in length, you get a syntax error:
+
+\beforeverb
+\begin{verbatim}
+# let foo = 'ab';;
+Error: Syntax error
+\end{verbatim}
+\afterverb
+
+If you enclose a number in quotes, OCaml will infer that it is a char or string, depending on the number of quotes.
 
 When you type a large integer, you might be tempted to use commas
 between groups of three digits, as in {\tt 1,000,000}.  This is not a
-legal integer in Python, but it is legal:
+legal integer in OCaml, but it is legal:
 
 \beforeverb
 \begin{verbatim}
->>> print 1,000,000
-1 0 0
+>>> 1,000,000
+- : int * int * int = (1, 0, 0)
 \end{verbatim}
 \afterverb
-%
-Well, that's not what we expected at all!  Python interprets {\tt
-  1,000,000} as a comma-separated sequence of integers, which it
-prints with spaces between.
+
+Well, that's not what we expected at all!  OCaml interprets {\tt
+  1,000,000} as a comma-separated sequence of integers. Nevermind the type of this object; we'll get to it later.
 
 \index{semantic error}
 \index{error!semantic}
@@ -844,19 +849,22 @@ runs without producing an error message, but it doesn't do the
 
 One of the most powerful features of a programming language is the
 ability to manipulate {\bf variables}.  A variable is a name that
-refers to a value.
+refers to a value. In OCaml, variables {\it really} refer to expressions, but don't worry about that.
 
 An {\bf assignment statement} creates new variables and gives
 them values:
 
 \beforeverb
 \begin{verbatim}
->>> message = 'And now for something completely different'
->>> n = 17
->>> pi = 3.1415926535897931
+# let message = "Don't forget to buy milk.";;
+val message : string = "Don't forget to buy milk."
+# let n = 17;;
+val n : int = 17
+# let pi = 3.14159265;;
+val pi : float = 3.14159265
 \end{verbatim}
 \afterverb
-%
+
 This example makes three assignments.  The first assigns a string
 to a new variable named {\tt message};
 the second gives the integer {\tt 17} to {\tt n}; the third
