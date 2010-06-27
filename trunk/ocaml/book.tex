@@ -326,7 +326,7 @@ One of the nice features of OCaml is that OCaml is both a compiled and an interp
 \end{verbatim}
 \afterverb
 %
-The octothorp, {\tt #}, is the {\bf prompt} the interpreter uses to indicate that it is ready. The double semi-colons indicates the end of a line. If you type {\tt 1 + 1;;}, the interpreter replies {\tt - : int = 2}.
+The octothorp, {\tt \#}, is the {\bf prompt} the interpreter uses to indicate that it is ready. The double semi-colons indicates the end of a line. If you type {\tt 1 + 1;;}, the interpreter replies {\tt - : int = 2}.
 
 \index{prompt}
 
@@ -358,7 +358,7 @@ First off, you must install the ocaml package and its dependencies. Open the ter
 
 Then, you can open the OCaml toplevel simply by typing ``ocaml'' at the command line.
 
-Once in the toplevel, you can open a script by using the #use ``{\it filename}'';; directive:
+Once in the toplevel, you can open a script by using the \#use ``{\it filename}'';; directive:
 
 \beforeverb
 \begin{verbatim}
@@ -366,7 +366,10 @@ Once in the toplevel, you can open a script by using the #use ``{\it filename}''
 \end{verbatim}
 \afterverb
 
-Note that the toplevel's {\bf current directory} \footnote{The {\bf current directory} is the directory in which ocaml will look to find files to run, outside of the standard ocaml directories.} will be the current directory when you ran it within the terminal. You can change your current directory using the #cd ``{\it dirname}'';; directive.
+Note that the toplevel's {\bf current directory} \footnote{The {\bf current directory} is the 
+directory in which ocaml will look to find files to run, outside of the standard ocaml directories.} 
+will be the current directory when you ran it within the terminal. You can change your current directory 
+using the \#cd ``{\it dirname}'';; directive.
 
 \subsection{Windows 7}
 
@@ -540,7 +543,9 @@ Here are some suggestions for reading programs (and other formal languages).  Fi
 
 \index{Hello, World}
 
-Traditionally, the first program you write in a new language is called ``Hello, World!'' because all it does is display the words, ``Hello, World!''  In Ocaml, one version looks like this:
+Traditionally, the first program you write in a new language is called ``Hello, World!'' 
+because all it does is display the words, ``Hello, World!''  In Ocaml, one version looks 
+like this:
 
 \beforeverb
 \begin{verbatim}
@@ -548,7 +553,8 @@ print_string ''Hello, World!\n'';;
 \end{verbatim}
 \afterverb
 
-This is an example of a {\bf print statement}, which doesn't actually print anything on paper.  It displays a value on the screen.  In this case, the result is:
+This is an example of a {\bf print statement}, which doesn't actually print anything on paper. 
+It displays a value on the screen.  In this case, the result is:
 
 \beforeverb
 \begin{verbatim}
@@ -557,32 +563,54 @@ Hello, World!
 \end{verbatim}
 \afterverb
 
-The quotation marks in the program mark the beginning and end of the text to be displayed; they don't appear in the result. The ``\n'' is an {\bf escape character} \footnote{An escape character is a special character within a string denoted by a ``whack'' (``\\'') followed by a character or series of characters that results in a special character, such as a new line.}, specifically the newline character, which tells the output to move to a new line.
+The quotation marks in the program mark the beginning and end of the text to be displayed; they 
+don't appear in the result. The ``\\n'' is an {\bf escape character} \footnote{An escape character 
+is a special character within a string denoted by a ``whack'' (``\\'') followed by a character or 
+series of characters that results in a special character, such as a new line.}, specifically the 
+newline character, which tells the output to move to a new line.
 
-\indec{escape character}
+\index{escape character}
 \index{quotation mark}
 \index{print statement}
 \index{statement!print}
 
+There's another, more general print statement called ``printf,'' which lets you do more than $print_string$.
+Printf comes from it's own {\bf module}, called Printf, meaning you call printf by typing ``Printf.printf.''
+Modules are extensions of OCaml that often contain useful functions. Printf is a standard module, meaning
+it comes prepackaged with most OCaml installations. You can look up printf on your own if you're interested, 
+else we'll probably see more of it later in this text.
+
+\index{module}
+
 Really, we could get simply and just type ``Hello, World!'' and get the result ``- : string = ''Hello, World!''.''
 
-Some people judge the quality of a programming language by the simplicity of the ``Hello, World!'' program.  By this standard, OCaml does \footnote{Or can do, anyway. There are about as many different OCaml ``Hello, World!'' programs as there are OCaml programmers, all arguably valid.} about as well as possible.
+Some people judge the quality of a programming language by the simplicity of the ``Hello, World!'' program.  By this 
+standard, OCaml does \footnote{Or can do, anyway. There are about as many different OCaml ``Hello, World!'' programs 
+as there are OCaml programmers, all arguably equally valid.} about as well as possible.
 
 
 \section{Debugging}
 \index{debugging}
 
-It is a good idea to read this book in front of a computer so you can try out the examples as you go.  You can run most of the examples in interactive mode, but if you put the code into a script, it is easier to try out variations.
+It is a good idea to read this book in front of a computer so you can try out the examples as you go.  You can run most 
+of the examples in interactive mode, but if you put the code into a script, it is easier to try out variations.
 
-Whenever you are experimenting with a new feature, you should try to make mistakes.  For example, in the ``Hello, world!'' program, what happens if you leave out one of the quotation marks?  What if you leave out both?  What if you spell {\tt print_string} wrong?
+Whenever you are experimenting with a new feature, you should try to make mistakes.  For example, in the ``Hello, world!'' 
+program, what happens if you leave out one of the quotation marks?  What if you leave out both?  What if you spell {\tt 
+$print_string$} wrong?
 
 \index{error message}
 
-This kind of experiment helps you remember what you read; it also helps with debugging, because you get to know what the error messages mean. It is better to make mistakes now and on purpose than later and accidentally.
+This kind of experiment helps you remember what you read; it also helps with debugging, because you get to know what the 
+error messages mean. It is better to make mistakes now and on purpose than later and accidentally.
 
-Programming, and especially debugging, sometimes brings out strong emotions.  If you are struggling with a difficult bug, you might feel angry, despondent or embarrassed.
+Programming, and especially debugging, sometimes brings out strong emotions.  If you are struggling with a difficult bug, 
+you might feel angry, despondent or embarrassed.
 
-There is evidence that people naturally respond to computers as if they were people\footnote{See Reeves and Nass, {\it The Media Equation: How People Treat Computers, Television, and New Media Like Real People and Places}.}.  When they work well, we think of them as teammates, and when they are obstinate or rude, we respond to them the same way we respond to rude, obstinate people.
+There is evidence that people naturally respond to computers as if they were people\footnote{See Reeves and Nass, {\it The 
+Media Equation: How People Treat Computers, Television, and New Media Like Real People and Places}.}.  When they work well, 
+we think of them as teammates, and when they are obstinate or rude, we respond to them the same way we respond to rude, 
+obstinate people.
 
 \index{debugging!emotional response}
 \index{emotional debugging}
@@ -652,7 +680,7 @@ typing commands and expressions at the prompt.
 and execute statements in a script.
 \index{script mode}
 
-\itme[toplevel:] The interface you interact with when working with the interpreter.
+\item[toplevel:] The interface you interact with when working with the interpreter.
 
 \item[program:] A set of instructions that specifies a computation.
 \index{program}
@@ -796,7 +824,13 @@ val a : float = 3.2
 \end{verbatim}
 \afterverb
 
-Just for fun, there's also a separate type called ``char,'' which is short for ``character.'' A char is like a string, but it's only one character long (hence the name), and it's surrounded by single quotes instead of double quotes.
+There's also a separate type called ``char,'' which is short for ``character.'' 
+A char is like a string, but it's only one character long (hence the name), and it's surrounded 
+by single quotes instead of double quotes. In fact, strings are comprised of lists (or strings!)
+of chars. \footnote{A note on pronunciation: most often, ``char'' is pronounced like in charcoal. 
+It's less standard, but I prefer to pronounce it like it appears in character, since that's where 
+it came from.} Usually, you'll use strings, but if you really only need one character, chars use 
+less memory.
 
 \index{char type}
 \index{type!char}
@@ -830,8 +864,9 @@ legal integer in OCaml, but it is legal:
 \end{verbatim}
 \afterverb
 
-Well, that's not what we expected at all!  OCaml interprets {\tt
-  1,000,000} as a comma-separated sequence of integers. Nevermind the type of this object; we'll get to it later.
+Well, that's not what we expected at all!  OCaml interprets {\tt  1,000,000} 
+as a comma-separated sequence of integers. Nevermind the type of this object; 
+we'll get to it later.
 
 \index{semantic error}
 \index{error!semantic}
@@ -841,6 +876,11 @@ This is the first example we have seen of a semantic error: the code
 runs without producing an error message, but it doesn't do the
 ``right'' thing.
 
+There's also one more type, called {\bf unit}, represented as (). This represents 
+a sort of ``void''  or ``empty'' value. You'll see where this pops up, and can be useful, later.
+
+\index{type!unit}
+\index{unit type}
 
 \section{Variables}
 \index{variable}
@@ -849,7 +889,8 @@ runs without producing an error message, but it doesn't do the
 
 One of the most powerful features of a programming language is the
 ability to manipulate {\bf variables}.  A variable is a name that
-refers to a value. In OCaml, variables {\it really} refer to expressions, but don't worry about that.
+refers to a value. In OCaml, variables {\it really} refer to expressions, 
+but don't worry about that for now.
 
 An {\bf assignment statement} creates new variables and gives
 them values:
@@ -883,61 +924,16 @@ This diagram shows the result of the previous example:
 \centerline{\includegraphics{figs/state2.eps}}
 \afterfig
 
-To display the value of a variable, you can use a print statement:
+To display the value of a variable, you can simply type it in the toplevel:
 
 \beforeverb
 \begin{verbatim}
->>> print n
-17
->>> print pi
-3.14159265359
+# n;;
+- : int = 17
+# pi;;
+- : float = 3.14159265
 \end{verbatim}
 \afterverb
-%
-The type of a variable is the type of the value it refers to.
-
-\beforeverb
-\begin{verbatim}
->>> type(message)
-<type 'str'>
->>> type(n)
-<type 'int'>
->>> type(pi)
-<type 'float'>
-\end{verbatim}
-\afterverb
-%
-\begin{ex}
-If you type an integer with a leading zero, you might get
-a confusing error:
-
-\beforeverb
-\begin{verbatim}
->>> zipcode = 02492
-                  ^
-SyntaxError: invalid token
-\end{verbatim}
-\afterverb
-
-Other numbers seem to work, but the results are bizarre:
-
-\beforeverb
-\begin{verbatim}
->>> zipcode = 02132
->>> print zipcode
-1114
-\end{verbatim}
-\afterverb
-
-Can you figure out what is going on?  Hint: print the
-values {\tt 01}, {\tt 010}, {\tt 0100} and {\tt 01000}.
-
-\index{octal}
-
-\end{ex}
-
-
-
 
 \section{Variable names and keywords}
 \index{keyword}
@@ -953,7 +949,8 @@ see why later).
 
 The underscore character (\verb"_") can appear in a name.
 It is often used in names with multiple words, such as
-\verb"my_name" or \verb"airspeed_of_unladen_swallow".
+\verb"my_name" or \verb"airspeed_of_unladen_swallow". So can 
+an apostraphe (\verb"'"), such as \verb"h'".
 
 \index{underscore character}
 
@@ -961,83 +958,78 @@ If you give a variable an illegal name, you get a syntax error:
 
 \beforeverb
 \begin{verbatim}
->>> 76trombones = 'big parade'
-SyntaxError: invalid syntax
->>> more@ = 1000000
-SyntaxError: invalid syntax
->>> class = 'Advanced Theoretical Zymurgy'
-SyntaxError: invalid syntax
+# let 17h = 17*17;;
+Error: Syntax error
+# let more@ = "hello";;
+Error: Sytax error
+# let class = 2;;
+Error: Syntax error
 \end{verbatim}
 \afterverb
-%
-{\tt 76trombones} is illegal because it does not begin with a letter.
+
+At the toplevel, OCaml will be nice and even underline where the error occured for you.
+
+{\tt 7h} is illegal because it does not begin with a letter.
 {\tt more@} is illegal because it contains an illegal character, {\tt
 @}.  But what's wrong with {\tt class}?
 
-It turns out that {\tt class} is one of Python's {\bf keywords}.  The
+It turns out that {\tt class} is one of OCaml's {\bf keywords}.  The
 interpreter uses keywords to recognize the structure of the program,
-and they cannot be used as variable names.
+and they cannot be used as variable names. The full list of keywords can be found online here: \url{http://caml.inria.fr/pub/docs/manual-ocaml/manual044.html}.
 
 \index{keyword}
 
-Python has 31 keywords\footnote{In Python 3.0, {\tt exec} is no
-longer a keyword, but {\tt nonlocal} is.}:
+You'll get a really interesting error if you try to use just a number as a variable:
 
 \beforeverb
 \begin{verbatim}
-and       del       from      not       while    
-as        elif      global    or        with     
-assert    else      if        pass      yield    
-break     except    import    print              
-class     exec      in        raise              
-continue  finally   is        return             
-def       for       lambda    try
+# let 17 = 2;;
+Warning P: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+0
+Exception: Match_failure ("", 8, -17).
 \end{verbatim}
 \afterverb
+
+That's fun. This will make a little more sense later.
+
+%\section{Statements}
 %
-You might want to keep this list handy.  If the interpreter complains
-about one of your variable names and you don't know why, see if it
-is on this list.
-
-
-\section{Statements}
-
-A statement is a unit of code that the Python interpreter can
-execute.  We have seen two kinds of statements: print
-and assignment.
-
-\index{statement}
-\index{interactive mode}
-\index{script mode}
-
-When you type a statement in interactive mode, the interpreter
-executes it and displays the result, if there is one.
-
-A script usually contains a sequence of statements.  If there
-is more than one statement, the results appear one at a time
-as the statements execute.
-
-For example, the script
-
-\beforeverb
-\begin{verbatim}
-print 1
-x = 2
-print x
-\end{verbatim}
-\afterverb
+%A statement is a unit of code that the Python interpreter can
+%execute.  We have seen two kinds of statements: print
+%and assignment.
 %
-produces the output
-
-\beforeverb
-\begin{verbatim}
-1
-2
-\end{verbatim}
-\afterverb
+%\index{statement}
+%\index{interactive mode}
+%\index{script mode}
 %
-The assignment statement produces no output.
-
+%When you type a statement in interactive mode, the interpreter
+%executes it and displays the result, if there is one.
+%
+%A script usually contains a sequence of statements.  If there
+%is more than one statement, the results appear one at a time
+%as the statements execute.
+%
+%For example, the script
+%
+%\beforeverb
+%\begin{verbatim}
+%print 1
+%x = 2
+%print x
+%\end{verbatim}
+%\afterverb
+%%
+%produces the output
+%
+%\beforeverb
+%\begin{verbatim}
+%1
+%52
+%\end{verbatim}
+%\afterverb
+%
+%The assignment statement produces no output.
 
 \section{Operators and operands}
 \index{operator, arithmetic}
@@ -1049,64 +1041,54 @@ The assignment statement produces no output.
 addition and multiplication.  The values the operator is applied to
 are called {\bf operands}.
 
-The operators {\tt +}, {\tt -}, {\tt *}, {\tt /} and {\tt **}
-perform addition, subtraction, multiplication, division and
-exponentiation, as in the following examples:
+\index{operator}
+
+In OCaml, operators are {\bf strictly typed}, meaning you can't use an integer operator
+for a float, or vice versa. OCaml, unlike some other programming languages, won't
+even infer that you meant a float when you put an int, or vice versa. This can make
+debugging type errors much simpler, though it seems like a pain at first.
+
+\index{Strictly typed}
+
+For integers, the operators {\tt +}, {\tt -}, {\tt *}, and {\tt /}
+perform addition, subtraction, multiplication, and division, as in the following examples:
 
 \beforeverb
 \begin{verbatim}
-20+32   hour-1   hour*60+minute   minute/60   5**2   (5+9)*(15-7)
+20+32   hour-1   hour*60+minute   minute/60  (5+9)*(15-7)
 \end{verbatim}
 \afterverb
-%
+
+For floating-points, the operators are the same, but followed by a period, namely 
+{\tt +.}, {\tt -.}, {\tt *.}, and {\tt /.}. There is also a floating point operator for
+exponentiation, namely {\tt **}. There is no integer exponention, probably because an integer
+raised to a negative integer would result in a non-integer. \footnote{This is not to say that 
+a function can't take two integers and return a float, just that it's not particularly
+preferable.}
+
 In some other languages, \verb"^" is used for exponentiation, but
-in Python it is a bitwise operator called XOR.  I won't cover
-bitwise operators in this book, but you can read about
-them at \url{wiki.python.org/moin/BitwiseOperators}.
-
-\index{bitwise operator}
-\index{operator!bitwise}
-
-%When a variable name appears in the place of an operand, it
-%is replaced with its value before the operation is
-%performed.
-
-The division operator might not do what you expect:
+in OCaml it is used for string concatenation, meaning the two strings are added end-to-start,
+such as in the following example:
 
 \beforeverb
 \begin{verbatim}
->>> minute = 59
->>> minute/60
-0
+ # "Hello, "^"World!";;
+- : string = "Hello, World!"
 \end{verbatim}
 \afterverb
-%
-The value of {\tt minute} is 59, and in conventional arithmetic 59
-divided by 60 is 0.98333, not 0.  The reason for the discrepancy is
-that Python is performing {\bf floor division}\footnote{In Python 3.0,
-the result of this division is a {\tt float}.  The new operator
-{\tt //} performs integer division.}.
 
-\index{Python 3.0}
-\index{floor division}
-\index{floating-point division}
-\index{division!floor}
-\index{division!floating-point}
+Don't forget to put a space somewhere so your words are separated when you concatenate.
 
-When both of the operands are integers, the result is also an
-integer; floor division chops off the fraction
-part, so in this example it rounds down to zero.
-
-If either of the operands is a floating-point number, Python performs
-floating-point division, and the result is a {\tt float}:
+You can change an int to a float or a float to an int using the OCaml functions $float_of_int$ or
+$int_of_float$, like so:
 
 \beforeverb
 \begin{verbatim}
->>> minute/60.0
-0.98333333333333328
+ float_of_int x;; int_of_float x;;
 \end{verbatim}
 \afterverb
 
+I'll leave determining which is which as an exercise to the reader.
 
 \section{Expressions}
 
@@ -1120,9 +1102,9 @@ a variable, so the following are all legal expressions
 
 \beforeverb
 \begin{verbatim}
-17
-x
-x + 17
+17;;
+x;;
+x + 17;;
 \end{verbatim}
 \afterverb
 %
@@ -1131,30 +1113,155 @@ If you type an expression in interactive mode, the interpreter
 
 \beforeverb
 \begin{verbatim}
->>> 1 + 1
-2
+# 1 + 1;;
+- : int = 2
 \end{verbatim}
 \afterverb
-%
-But in a script, an expression all by itself doesn't
-do anything!  This is a common
-source of confusion for beginners.
+
+In OCaml, lots of things are actually expressions that might not look like them.
+You'll learn more about that later, as we see more expressions.
 
 \begin{ex}
-Type the following statements in the Python interpreter to see
+Type the following statements in the OCaml interpreter to see
 what they do:
 
 \beforeverb
 \begin{verbatim}
-5
-x = 5
-x + 1
+5;;
+let x = 5;;
+x + 1;;
 \end{verbatim}
 \afterverb
 %
 Now put the same statements into a script and run it.  What
-is the output?  Modify the script by transforming each
-expression into a print statement and then run it again.
+is the output?
+\end{ex}
+
+\section{Variables as Expressions, and References}
+
+\index{Variables!References}
+\index{References}
+
+Now, this is where I admit that I lied to you a little bit.
+
+Remember how I said that the expression ``let x = 3;;'' assigns
+the values of `3' to the variable `x'? Well, that's not
+entirely true. In fact, it's not true at all.
+
+What really happens when I say ``let x = 3;;'' is that the {\it expression}
+`3' is represented by `x'. `x' becomes kind of a shorthand way of writing `3'.
+
+One of the side effects of this is that you can't change the value of a variable.
+\footnote{So, really, in some sense they shouldn't be called variables at all.}
+
+In so-called object-oriented languages like C/C++, Java, and Python, most scripting
+involves creating and changing variables, so if you have done object-oriented programming
+before, you might find this a little weird. In function-oriented languages like OCaml, you 
+aren't really supposed to change the value of variables. You only use them as short-hand for 
+expressions. If you really want to, though, you can create a {\bf reference}, which functions
+a lot more like an object-oriented variable. This is what it looks like:
+
+\beforeverb
+\begin{verbatim}
+ # let my_ref = ref 100;;
+val my_ref : int ref = {contents = 100}
+\end{verbatim}
+\afterverb
+
+The output looks a little weird, but that's because, in OCaml, references take a backseat to expressions.
+
+Now, I said you could change the value of references, so let's see that.
+
+\beforeverb
+\begin{verbatim}
+ # my_ref := 42;;
+- : unit = ()
+\end{verbatim}
+\afterverb
+
+Note that the operator for changing the value of a reference is `:=' instead of just `='. Also, note that
+assignment doesn't return a value, but rather returns a unit. In order to read the value of a reference, use
+the `!' operator. \footnote{In many other programming languages, `!' is used to mean ``not.'' In OCaml, it's 
+better to think of it as ``get''.}
+
+\beforeverb
+\begin{verbatim}
+ # !my_ref;;
+- : int = 42
+\end{verbatim}
+\afterverb
+
+%\section{Scope}
+
+Now, I said you couldn't change the value of variables, but in some senses it looks like you can.
+
+\index{Scope}
+
+\beforeverb
+\begin{verbatim}
+ # let x = 2;;
+val x : int = 2
+ # let x = 3;;
+val x : int = 3;;
+ # x;;
+- : x = 3
+\end{verbatim}
+\afterverb
+
+See? The value of `x' changed! Didn't it?
+
+Actually, the answer is no, it didn't. What we have here is a problem of {\bf scope}. You see, variables
+all act within certain bounds, or on certain levels within a program. Every time we say ``let'', it kind of
+creates a new ``level'' of the program, within which only certain variables can be accessed. This brings up
+let's counterpart, `in'. The best way to explain `in' is with an example.
+
+\beforeverb
+\begin{verbatim}
+ # let x = 2;;
+val x : int = 2
+ # let x = 3 in x+1;;
+- : int = 4
+ # x;;
+- : int = 2
+\end{verbatim}
+\afterverb
+
+Now, didn't see that last bit coming, did you? When you use ``let... in...;;'', the value assigned by the let only
+exists within the expression after in. This is called a ``let-in-binding''. Similarly, any use of ``let'' is often 
+called a ``let-binding.'' Don't worry about why it's called a binding for now, or even ever.
+
+\index{let}
+\index{in}
+\index{bindings}
+\index{bindings!let-bindings}
+\index{bindings!let-in-bindings}
+
+\begin{ex}
+ Play around with scope a little bit in the command line.
+
+ See if you can predict the outcome of the following:
+ 
+ \newcounter{exno}
+\begin{list}{\arabic{exno}}{}
+  \item
+ \beforeverb
+ \begin{verbatim}
+  # let x = 2 in x+1;;
+  # let x = 3 in x+1;;
+  # x;;
+ \end{verbatim}
+ \afterverb
+   \item 
+ \beforeverb
+ \begin{verbatim}
+  # let x = 2;;
+  # let y = 3 in let x = 2 in x+y;;
+  # x;;
+  # y;;
+ \end{verbatim}
+ \afterverb
+\end{list}
+
 \end{ex}
 
 
@@ -1176,12 +1283,12 @@ remember the rules:
 \item {\bf P}arentheses have the highest precedence and can be used 
 to force an expression to evaluate in the order you want. Since
 expressions in parentheses are evaluated first, {\tt 2 * (3-1)} is 4,
-and {\tt (1+1)**(5-2)} is 8. You can also use parentheses to make an
+and {\tt (1.+.1.)**(5.-.2.)} is 8.. You can also use parentheses to make an
 expression easier to read, as in {\tt (minute * 100) / 60}, even
 if it doesn't change the result.
 
 \item {\bf E}xponentiation has the next highest precedence, so
-{\tt 2**1+1} is 3, not 4, and {\tt 3*1**3} is 3, not 27.
+{\tt 2.**1.+.1.} is 3., not 4., and {\tt 3.*1.**3.} is 3., not 27..
 
 \item {\bf M}ultiplication and {\bf D}ivision have the same precedence,
 which is higher than {\bf A}ddition and {\bf S}ubtraction, which also
@@ -1189,9 +1296,9 @@ have the same precedence.  So {\tt 2*3-1} is 5, not 4, and
 {\tt 6+4/2} is 8, not 5.
 
 \item Operators with the same precedence are evaluated from left to 
-right.  So in the expression {\tt degrees / 2 * pi}, the division
+right.  So in the expression {\tt degrees /. 2. * pi}, the division
 happens first and the result is multiplied by {\tt pi}.  
-To divide by $2 \pi$, you can use parentheses or write {\tt degrees / 2 / pi}.
+To divide by $2 \pi$, you can use parentheses or write {\tt degrees /. 2. /. pi}.
 
 \end{itemize}
 
@@ -1200,47 +1307,21 @@ To divide by $2 \pi$, you can use parentheses or write {\tt degrees / 2 / pi}.
 \index{string!operation}
 \index{operator!string}
 
-In general, you cannot perform mathematical operations on strings, even
+You cannot perform mathematical operations on strings, even
 if the strings look like numbers, so the following are illegal:
 
 \beforeverb
 \begin{verbatim}
-'2'-'1'    'eggs'/'easy'    'third'*'a charm'
+"2"-"1"    "eggs"/"easy"    "third"*"a charm"  "you"+"me"
 \end{verbatim}
 \afterverb
-%
-The {\tt +} operator works with strings, but it
-might not do what you expect: it performs
-{\bf concatenation}, which means joining the strings by
-linking them end-to-end.  For example:
 
-\index{concatenation}
+In OCaml, an operator cannot be used for two things. In some languages,
+for example Python, operators can be {\bf overloaded}, meaning they do different
+things in different situations (i.e., `+' can be used for string concatenation).
+In OCaml, this is not the case
 
-\beforeverb
-\begin{verbatim}
-first = 'throat'
-second = 'warbler'
-print first + second
-\end{verbatim}
-\afterverb
-%
-The output of this program is {\tt throatwarbler}.
-
-The {\tt *} operator also works on strings; it performs repetition.
-For example, \verb"'Spam'*3" is \verb"'SpamSpamSpam'".  If one of the operands
-is a string, the other has to be an integer.
-
-This use of {\tt +} and {\tt *} makes sense by
-analogy with addition and multiplication.  Just as {\tt 4*3} is
-equivalent to {\tt 4+4+4}, we expect \verb"'Spam'*3" to be the same as
-\verb"'Spam'+'Spam'+'Spam'", and it is.  On the other hand, there is a
-significant way in which string concatenation and repetition are
-different from integer addition and multiplication.
-Can you think of a property that addition has
-that string concatenation does not?
-
-\index{commutativity}
-
+\index{operator!overloading}
 
 \section{Comments}
 \index{comment}
@@ -1251,26 +1332,29 @@ look at a piece of code and figure out what it is doing, or why.
 
 For this reason, it is a good idea to add notes to your programs to explain
 in natural language what the program is doing.  These notes are called
-{\bf comments}, and they start with the \verb"#" symbol:
+{\bf comments}, and they start with a \verb"(*" and end with a \verb"*)":
 
 \beforeverb
 \begin{verbatim}
-# compute the percentage of the hour that has elapsed
+(* compute the percentage of the hour that has elapsed *)
 percentage = (minute * 100) / 60
 \end{verbatim}
 \afterverb
-%
-In this case, the comment appears on a line by itself.  You can also put
-comments at the end of a line:
+
+Everything between there will be ignored by the compiler. You can also put comments 
+at the end, or even in the middle, of a line of code:
 
 \beforeverb
 \begin{verbatim}
-percentage = (minute * 100) / 60     # percentage of an hour
+ # let x = 2;; (* I'm a comment! *)
+val x : int = 2
+ # let x (* Hi, mom! *) = 3;;
+val x = 3
 \end{verbatim}
 \afterverb
-%
-Everything from the {\tt \#} to the end of the line is ignored---it
-has no effect on the program.
+
+Of course, putting comments in the middle of expressions like that can be really 
+annoying to read.
 
 Comments are most useful when they document non-obvious features of
 the code.  It is reasonable to assume that the reader can figure out
@@ -1280,7 +1364,7 @@ This comment is redundant with the code and useless:
 
 \beforeverb
 \begin{verbatim}
-v = 5     # assign 5 to v
+let v = 5;;     (* assign 5 to v *)
 \end{verbatim}
 \afterverb
 %
@@ -1288,7 +1372,7 @@ This comment contains useful information that is not in the code:
 
 \beforeverb
 \begin{verbatim}
-v = 5     # velocity in meters/second. 
+let v = 5;;     (* velocity in meters/second. *)
 \end{verbatim}
 \afterverb
 %
@@ -1300,8 +1384,8 @@ a tradeoff.
 \index{debugging}
 
 At this point the syntax error you are most likely to make is
-an illegal variable name, like {\tt class} and {\tt yield}, which
-are keywords, or \verb"odd~job" and \verb"US$", which contain
+an illegal variable name, like {\tt class}, which
+is a keyword, or \verb"odd.job" and \verb"hack_and_/", which contain
 illegal characters.
 
 \index{syntax error}
@@ -1327,18 +1411,19 @@ The most common messages are {\tt SyntaxError: invalid syntax} and
 \index{runtime error}
 \index{error!runtime}
 
-The runtime error you are most likely to make is a ``use before
-def;'' that is, trying to use a variable before you have assigned
+The runtime error you are most likely to make is a ``unbound value'' that is,
+trying to use a variable before you have assigned
 a value.  This can happen if you spell a variable name wrong:
 
 \beforeverb
 \begin{verbatim}
->>> principal = 327.68
->>> interest = principle * rate
-NameError: name 'principle' is not defined
+ # let principal = 327.68;;
+val principal : float = 327.68
+ # let interest = principle *. rate;;
+Error: Unbound value principle
 \end{verbatim}
 \afterverb
-%
+
 Variables names are case sensitive, so {\tt LaTeX} is not the
 same as {\tt latex}.
 
@@ -1352,7 +1437,7 @@ you might be tempted to write
 
 \beforeverb
 \begin{verbatim}
->>> 1.0 / 2.0 * pi
+ # 1. /. 2. *. pi;;
 \end{verbatim}
 \afterverb
 %
@@ -1363,6 +1448,20 @@ get an error message; you just get the wrong answer.
 
 \index{order of operations}
 
+The other semantic error you might encounter is a scope error.
+For example, assigning a variable for one scope and trying to use it
+in another:
+
+\beforeverb
+\begin{verbatim}
+ # let devil = -1;;
+val a : int = -1
+ # let god = 1 in god+devil;;
+- : int = 0;;
+ # god+devil;;
+Error: unbound value god
+\end{verbatim}
+\afterverb
 
 \section{Glossary}
 
@@ -1374,7 +1473,8 @@ that a program manipulates.
 
 \item[type:] A category of values.  The types we have seen so far
 are integers (type {\tt int}), floating-point numbers (type {\tt
-float}), and strings (type {\tt str}).
+float}), strings (type {\tt str}), characters (type {\tt char}), and 
+the unit type (type {\tt unit}, {\tt ()}).
 \index{type}
 
 \item[integer:] A type that represents whole numbers.
@@ -1387,7 +1487,13 @@ parts.
 \item[string:] A type that represents sequences of characters.
 \index{string}
 
-\item[variable:]  A name that refers to a value.
+\item[character: ] A type that represents a single character.
+\index{character}
+
+\item[unit type: ] A null or empty type.
+\index{unit type}
+
+\item[variable:]  A name that refers to a value. Actually, acts as shorthand for an expression.
 \index{variable}
 
 \item[statement:]  A section of code that represents a command or action.  So
@@ -1398,11 +1504,11 @@ far, the statements we have seen are assignments and print statements.
 \index{assignment}
 
 \item[state diagram:]  A graphical representation of a set of variables and the
-values they refer to.
+expressions they refer to.
 \index{state diagram}
 
 \item[keyword:]  A reserved word that is used by the compiler to parse a
-program; you cannot use keywords like {\tt if}, {\tt  def}, and {\tt while} as
+program; you cannot use keywords like {\tt if}, {\tt  class}, and {\tt while} as
 variable names.
 \index{keyword}
 
@@ -1413,9 +1519,9 @@ addition, multiplication, or string concatenation.
 \item[operand:]  One of the values on which an operator operates.
 \index{operand}
 
-\item[floor division:] The operation that divides two numbers and chops off
-the fraction part.
-\index{floor division}
+%\item[floor division:] The operation that divides two numbers and chops off
+%the fraction part.
+%\index{floor division}
 
 \item[expression:]  A combination of variables, operators, and values that
 represents a single result value.
@@ -1446,9 +1552,9 @@ execution of the program.
 Assume that we execute the following assignment statements:
 
 \begin{verbatim}
-width = 17
-height = 12.0
-delimiter = '.'
+let width = 17;;
+let height = 12.0;;
+let delimiter = '.';;
 \end{verbatim}
 
 For each of the following expressions, write the value of the
@@ -1458,7 +1564,7 @@ expression and the type (of the value of the expression).
 
 \item {\tt width/2}
 
-\item {\tt width/2.0}
+\item {\tt width/.2.0}
 
 \item {\tt height/3}
 
@@ -1468,11 +1574,11 @@ expression and the type (of the value of the expression).
 
 \end{enumerate}
 
-Use the Python interpreter to check your answers.
+Use the OCaml interpreter to check your answers.
 \end{ex}
 
 \begin{ex}
-Practice using the Python interpreter as a calculator: 
+Practice using the OCaml interpreter as a calculator: 
 \index{calculator}
 
 \begin{enumerate}
@@ -1494,7 +1600,7 @@ Practice using the Python interpreter as a calculator:
 \end{enumerate}
 \end{ex}
 
-
+%I'm right here!
 \chapter{Functions}
 \label{funcchap}
 
