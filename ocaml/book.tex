@@ -1,4 +1,4 @@
-% LaTeX source for ``Think OCaml: How to Think Like a Computer Scientist''
+% LaTeX source for ``Think OCaml: How to Think Like a (Functional) Computer Scientist''
 % Copyright (c)  2008  Allen B. Downey.
 
 % Permission is granted to copy, distribute and/or modify this
@@ -32,7 +32,7 @@
 \usepackage{hevea}                           
 \usepackage{upquote}
 
-\newcommand{\thetitle}{Think OCaml: How to Think Like a Computer Scientist}
+\newcommand{\thetitle}{Think OCaml: How to Think Like a (Functional) Computer Scientist}
 \newcommand{\theversion}{1.1.22}
 
 \makeindex
@@ -64,7 +64,7 @@
 
 \begin{spacing}{3}
 {\huge Think OCaml}\\
-{\Large How to Think Like a Computer Scientist}
+{\Large How to Think Like a (Functional) Computer Scientist}
 \end{spacing}
 
 \vspace{0.25in}
@@ -93,7 +93,7 @@ Version \theversion
 
 \begin{spacing}{3}
 {\huge Think OCaml}\\
-{\Large How to Think Like a Computer Scientist}
+{\Large How to Think Like a (Functional) Computer Scientist}
 \end{spacing}
 
 \vspace{0.25in}
@@ -143,6 +143,10 @@ a Computer Scientist}.
 {\em Think Python: How to Think Like
 a Computer Scientist}.
 
+\item[Someday:] Translation to OCaml, changed title to
+{\em Think OCaml: How to Think Like a (Functional) Computer
+Scientist}.
+
 \end{description}
 
 \vspace{0.2in}
@@ -185,8 +189,8 @@ The \LaTeX\ source for this book is available from
 
 {\Large \thetitle}
 
-{\large Allen B. Downey\\
- \small Nicholas Monje\\}
+{\large Allen B. Downey\\}
+{\small Nicholas Monje\\}
 
 Version \theversion
 
@@ -346,7 +350,7 @@ One thing you will need to use are OCaml commands known as {\bf directives}. A l
 
 \index{Toplevel}
 
-\subsection{Ubuntu 10.04}
+\subsection{Ubuntu (10.04)}
 
 First off, you must install the ocaml package and its dependencies. Open the terminal and type:
 
@@ -358,7 +362,7 @@ First off, you must install the ocaml package and its dependencies. Open the ter
 
 Then, you can open the OCaml toplevel simply by typing ``ocaml'' at the command line.
 
-Once in the toplevel, you can open a script by using the \#use ``{\it filename}'';; directive:
+Once in the toplevel, you can open a script by using the \#use "{\it filename}";; directive:
 
 \beforeverb
 \begin{verbatim}
@@ -371,9 +375,13 @@ directory in which ocaml will look to find files to run, outside of the standard
 will be the current directory when you ran it within the terminal. You can change your current directory 
 using the \#cd ``{\it dirname}'';; directive.
 
-\subsection{Windows 7}
+\subsection{Windows (7)}
 
-Do things. You're on your own here for now, too, until I get around to writing this.
+First you must install OCaml. Go to the OCaml home page (\url{caml.inria.fr}) and go to the Download page. Download the appropriate distribution - if you don't know which one to choose, go with the Windows binary ``for the port based on the Microsoft toolchain.'' Run the installer and follow the directions therein.
+
+You can now run an OCaml toplevel from the windows command line.
+
+%right here
 
 \section{What is a program?}
 
@@ -577,8 +585,18 @@ newline character, which tells the output to move to a new line.
 There's another, more general print statement called ``printf,'' which lets you do more than $print_string$.
 Printf comes from it's own {\bf module}, called Printf, meaning you call printf by typing ``Printf.printf.''
 Modules are extensions of OCaml that often contain useful functions. Printf is a standard module, meaning
-it comes prepackaged with most OCaml installations. You can look up printf on your own if you're interested, 
-else we'll probably see more of it later in this text.
+it comes prepackaged with most OCaml installations. You can look up printf on your own if you're interested.
+
+Alternatively, you can import the module by using the \verb"#use" directive:
+
+\beforeverb
+\begin{verbatim}
+# #use "printf.ml"
+\end{verbatim}
+\afterverb
+%
+And then call printf simply as {\tt printf}. However, importing a module generally isn't advised  unless you're
+really going to use functions from that module a lot.
 
 \index{module}
 
@@ -588,6 +606,25 @@ Some people judge the quality of a programming language by the simplicity of the
 standard, OCaml does \footnote{Or can do, anyway. There are about as many different OCaml ``Hello, World!'' programs 
 as there are OCaml programmers, all arguably equally valid.} about as well as possible.
 
+\section{Functional, as opposed to...?}
+
+\index{Functional Programming}
+\index{Programming!Functional}
+\index{Programming Paradigms}
+\index{Programming Paradigms!Functional}
+\index{Programming Paradigms!Object-Oriented}
+
+You may have noticed that this book is entitled ``Think OCaml: How to Think Like a (Functional) Computer Scientist.'' 
+No, this is not saying that you'll be good, but not great, at programming. Rather, it's a particular paradigm of 
+programming. {\bf Functional Programming} is programming where the function is a first-class citizen. Now, this is of 
+course a silly definition, but it's the best we can really do for now.
+
+Another popular programming paradigm is {\bf Object-Oriented}. Languages that are object-oriented, such as C++ and Python, 
+focus rather on having ``objects'' and changing them. ``Object'' is really kind of a blanket term for all kinds of 
+different, often custom, ways of storing data.
+
+OCaml is mostly a functional programming language. However, OCaml has support for some level of object-oriented programming,
+ unlike it's predecessor Caml. The ``O'' in OCaml stands for ``Objective''.
 
 \section{Debugging}
 \index{debugging}
@@ -1079,8 +1116,8 @@ such as in the following example:
 
 Don't forget to put a space somewhere so your words are separated when you concatenate.
 
-You can change an int to a float or a float to an int using the OCaml functions $float_of_int$ or
-$int_of_float$, like so:
+You can change an int to a float or a float to an int using the OCaml functions \verb"float_of_int" or
+\verb"int_of_float", like so:
 
 \beforeverb
 \begin{verbatim}
@@ -1227,14 +1264,10 @@ val x : int = 2
 \afterverb
 
 Now, didn't see that last bit coming, did you? When you use ``let... in...;;'', the value assigned by the let only
-exists within the expression after in. This is called a ``let-in-binding''. Similarly, any use of ``let'' is often 
-called a ``let-binding.'' Don't worry about why it's called a binding for now, or even ever.
+exists within the expression after in. This is called a ``let-in-binding''.
 
 \index{let}
 \index{in}
-\index{bindings}
-\index{bindings!let-bindings}
-\index{bindings!let-in-bindings}
 
 \begin{ex}
  Play around with scope a little bit in the command line.
@@ -1600,7 +1633,6 @@ Practice using the OCaml interpreter as a calculator:
 \end{enumerate}
 \end{ex}
 
-%I'm right here!
 \chapter{Functions}
 \label{funcchap}
 
@@ -1616,16 +1648,16 @@ We have already seen one example of a {\bf function call}:
 
 \beforeverb
 \begin{verbatim}
->>> type(32)
-<type 'int'>
+# float_of_int 32;;
+- : float = 32.
 \end{verbatim}
 \afterverb
 %
-The name of the function is {\tt type}.  The expression in parentheses
+The name of the function is {\tt \verb"float_of_int"}.  The expression that follows
 is called the {\bf argument} of the function.  The result, for this
-function, is the type of the argument.
-
-\index{parentheses!argument in}
+function, is a floating-point version of the integer argument. There is, of course, the
+inverse function,\verb"int_of_float". There are other type conversion functions, too, such as
+\verb"string_of_int" and \verb"string_of_float" and their respective inverses.
 
 It is common to say that a function ``takes'' an argument and ``returns''
 a result.  The result is called the {\bf return value}.
@@ -1634,10 +1666,10 @@ a result.  The result is called the {\bf return value}.
 \index{return value}
 
 
-\section{Type conversion functions}
-\index{conversion!type}
-\index{type conversion}
-
+% \section{Type conversion functions}
+% \index{conversion!type}
+% \index{type conversion}
+%
 % from Elkner:
 % comment on whether these things are _really_ functions?
 % use max as an example of a built-in?
@@ -1645,116 +1677,85 @@ a result.  The result is called the {\bf return value}.
 % my reply:
 % they are on the list of ``built-in functions'' so I am
 % willing to call them functions.
-
-Python provides built-in functions that convert values
-from one type to another.  The {\tt int} function takes any value and
-converts it to an integer, if it can, or complains otherwise:
-
-\index{int function}
-\index{function!int}
-
-\beforeverb
-\begin{verbatim}
->>> int('32')
-32
->>> int('Hello')
-ValueError: invalid literal for int(): Hello
-\end{verbatim}
-\afterverb
-%
-{\tt int} can convert floating-point values to integers, but it
-doesn't round off; it chops off the fraction part:
-
-\beforeverb
-\begin{verbatim}
->>> int(3.99999)
-3
->>> int(-2.3)
--2
-\end{verbatim}
-\afterverb
-%
-{\tt float} converts integers and strings to floating-point
-numbers:
-
-\index{float function}
-\index{function!float}
-
-\beforeverb
-\begin{verbatim}
->>> float(32)
-32.0
->>> float('3.14159')
-3.14159
-\end{verbatim}
-\afterverb
-%
-Finally, {\tt str} converts its argument to a string:
-
-\index{str function}
-\index{function!str}
-
-\beforeverb
-\begin{verbatim}
->>> str(32)
-'32'
->>> str(3.14159)
-'3.14159'
-\end{verbatim}
-\afterverb
-%
-
-
+% 
+% OCaml provides built-in functions that convert values
+% from one type to another.  The {\tt int} function takes any value and
+% converts it to an integer, if it can, or complains otherwise:
+% 
+% \index{int function}
+% \index{function!int}
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> int('32')
+% 32
+% >>> int('Hello')
+% ValueError: invalid literal for int(): Hello
+% \end{verbatim}
+% \afterverb
+% %
+% {\tt int} can convert floating-point values to integers, but it
+% doesn't round off; it chops off the fraction part:
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> int(3.99999)
+% 3
+% >>> int(-2.3)
+% -2
+% \end{verbatim}
+% \afterverb
+% %
+% {\tt float} converts integers and strings to floating-point
+% numbers:
+% 
+% \index{float function}
+% \index{function!float}
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> float(32)
+% 32.0
+% >>> float('3.14159')
+% 3.14159
+% \end{verbatim}
+% \afterverb
+% %
+% Finally, {\tt str} converts its argument to a string:
+% 
+% \index{str function}
+% \index{function!str}
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> str(32)
+% '32'
+% >>> str(3.14159)
+% '3.14159'
+% \end{verbatim}
+% \afterverb
+% %
 
 \section{Math functions}
 \index{math function}
 \index{function, math}
 
-Python has a math module that provides most of the familiar
-mathematical functions.  A {\bf module} is a file that contains a
-collection of related functions.
-
-\index{module}
-\index{module object}
-
-Before we can use the module, we have to import it:
+OCaml provides most of the familiar mathematical functions, including
+the trig functions and their inverses, log (natural log) and base-10 log.
+Naturally, they all take float arguments, not integers.
 
 \beforeverb
 \begin{verbatim}
->>> import math
+# let ratio = signal_power /. noise_power;
+# decibels = 10. *. log10 ratio;;
+
+# radians = 0.7;;
+# height = sin radians;;
 \end{verbatim}
 \afterverb
 %
-This statement creates a {\bf module object} named math.  If
-you print the module object, you get some information about it:
-
-\beforeverb
-\begin{verbatim}
->>> print math
-<module 'math' from '/usr/lib/python2.5/lib-dynload/math.so'>
-\end{verbatim}
-\afterverb
-%
-The module object contains the functions and variables defined in the
-module.  To access one of the functions, you have to specify the name
-of the module and the name of the function, separated by a dot (also
-known as a period).  This format is called {\bf dot notation}.
-
-\index{dot notation}
-
-\beforeverb
-\begin{verbatim}
->>> ratio = signal_power / noise_power
->>> decibels = 10 * math.log10(ratio)
-
->>> radians = 0.7
->>> height = math.sin(radians)
-\end{verbatim}
-\afterverb
-%
-The first example computes the logarithm base 10 of the
-signal-to-noise ratio.  The math module also provides a
-function called {\tt log} that computes logarithms base {\tt e}.
+The first example computes the base-10 logarithm of the
+signal-to-noise ratio.
 
 \index{log function}
 \index{function!log}
@@ -1771,18 +1772,14 @@ convert from degrees to radians, divide by 360 and multiply by $2
 
 \beforeverb
 \begin{verbatim}
->>> degrees = 45
->>> radians = degrees / 360.0 * 2 * math.pi
->>> math.sin(radians)
+# let degrees = 45.;;
+# let pi = 4. *. atan 1.0;;
+# let radians = degrees /. 360. *. 2. *. pi;;
+# sin radians;;
 0.707106781187
 \end{verbatim}
 \afterverb
 %
-The expression {\tt math.pi} gets the variable {\tt pi} from the math
-module.  The value of this variable is an approximation
-of $\pi$, accurate to about 15 digits.
-
-\index{pi}
 
 If you know
 your trigonometry, you can check the previous result by comparing it to
@@ -1797,7 +1794,6 @@ the square root of two divided by two:
 0.707106781187
 \end{verbatim}
 \afterverb
-%
 
 \section{Composition}
 \index{composition}
@@ -1813,7 +1809,7 @@ including arithmetic operators:
 
 \beforeverb
 \begin{verbatim}
-x = math.sin(degrees / 360.0 * 2 * math.pi)
+let x = sin (degrees /. 360.0 *. 2 *. pi);;
 \end{verbatim}
 \afterverb
 %
@@ -1821,21 +1817,26 @@ And even function calls:
 
 \beforeverb
 \begin{verbatim}
-x = math.exp(math.log(x+1))
+x = exp (log x+1);;
 \end{verbatim}
 \afterverb
 %
+Note in this example that we put parentheses around the inner
+function call, to tell OCaml how to read this statement. If we just
+told it \verb"exp log x+1;;" it would try to pass both {\tt log} and {\tt x+1} as two
+separate arguments to {\tt exp}.
+
 Almost anywhere you can put a value, you can put an arbitrary
 expression, with one exception: the left side of an assignment
-statement has to be a variable name.  Any other expression on the left
-side is a syntax error\footnote{We will see exceptions to this rule
-later.}.
+statement has to be a variable name, or function definition, which
+you'll see in the next section.  Any other expression on the left
+side is a syntax error.
 
 \beforeverb
 \begin{verbatim}
->>> minutes = hours * 60                 # right
->>> hours * 60 = minutes                 # wrong!
-SyntaxError: can't assign to operator
+ # let minutes = hours *. 60.0;;                 (* right *)
+ # let hours *. 60 = minutes;;;                  (* wrong! *)
+Error: Syntax error
 \end{verbatim}
 \afterverb
 %
@@ -1845,7 +1846,7 @@ SyntaxError: can't assign to operator
 
 \section{Adding new functions}
 
-So far, we have only been using the functions that come with Python,
+So far, we have only been using the functions that come with OCaml,
 but it is also possible to add new functions.
 A {\bf function definition} specifies the name of a new function and
 the sequence of statements that execute when the function is called.
@@ -1858,87 +1859,77 @@ Here is an example:
 
 \beforeverb
 \begin{verbatim}
-def print_lyrics():
-    print "I'm a lumberjack, and I'm okay."
-    print "I sleep all night and I work all day."
+let  print_lyrics() = 
+    print "I'm a lumberjack, and I'm okay. \n";
+    print "I sleep all night and I work all day. \n";;
 \end{verbatim}
 \afterverb
 %
-{\tt def} is a keyword that indicates that this is a function
-definition.  The name of the function is \verb"print_lyrics".  The
+Note that we use the "let" keyord to define functions just the same as
+variables. The name of the function is \verb"print_lyrics".  The
 rules for function names are the same as for variable names: letters,
 numbers and some punctuation marks are legal, but the first character
 can't be a number.  You can't use a keyword as the name of a function,
 and you should avoid having a variable and a function with the same
 name.
 
-\index{def keyword}
-\index{keyword!def}
 \index{argument}
 
 The empty parentheses after the name indicate that this function
-doesn't take any arguments.
+doesn't take any arguments. More specifically, it takes a unit type
+argument, meaning when we call it we have to put empty parentheses after it.
+If we don't put the parentheses, then it gives us a little information about
+the function:
+
+\beforeverb
+\begin{verbatim}
+# print_lyrics;;
+- : unit -> unit = <fun>
+\end{verbatim}
+\afterverb
+What this output means is that this is a function (\verb" = <fun>") which takes
+a unit type argument and returns a unit (\verb"unit -> unit"). We'll see why this
+is useful later.
+
+But wait! Was that a single semi-colon I saw there? What was that? I thought
+you used two semi-colons to end a statement? Well, sure, two semi-colons do
+end a statement. But if you put two semi-colons inside a function definition, 
+that ends the entire function definiton. So if we want a function to execute
+one statement and then execute another statement, we terminate all the intermediate
+statements with single semi-colons, which is called a {\em sequence point}. \footnote{
+Interestingly, the sequence point is actually an operator, like +. It takes a unit on the 
+left and anything on the right and returns the right.}
+If we don't, we get an interesting syntax error:
+
+\beforeverb
+\begin{verbatim}
+# let print_lyrics() = 
+	print_string "I'm a lumberjack and I'm okay. \n"
+	print_string "I work all night and I sleep all day. \n";;
+Error: This function is applied to too many arguments;
+maybe you forgot a `;'
+\end{verbatim}
+\afterverb
+It's trying to treat the second \verb"print_string" as another argument in the first \verb"print_string"!
+That's because we didn't give it anything to tell it that we've stopped putting in arguments
+to the first \verb"print_string". In OCaml, a new line in code is nothing more than a space.
+New lines and indentation just make your code easier to read and more organized. It doesn't
+help the  OCaml compiler at all.
 
 \index{parentheses!empty}
+\index{type!unit}
+\index{unit type}
 \index{header}
 \index{body}
-\index{indentation}
-\index{colon}
 
-The first line of the function definition is called the {\bf header};
-the rest is called the {\bf body}.  The header has to end with a colon
-and the body has to be indented.  By convention, the indentation is
-always four spaces (see Section~\ref{editor}).  The body can contain
-any number of statements.
-
-The strings in the print statements are enclosed in double
-quotes.  Single quotes and double quotes do the same thing;
-most people use single quotes except in cases like this where
-a single quote (which is also an apostrophe) appears in the string.
-
-\index{ellipses}
-
-If you type a function definition in interactive mode, the interpreter
-prints ellipses ({\em ...}) to let you know that the definition
-isn't complete:
+The syntax for calling the new function is the same as for built-in functions:
 
 \beforeverb
 \begin{verbatim}
->>> def print_lyrics():
-...     print "I'm a lumberjack, and I'm okay."
-...     print "I sleep all night and I work all day."
-...
-\end{verbatim}
-\afterverb
-%
-To end the function, you have to enter an empty line (this is
-not necessary in a script).
-
-Defining a function creates a variable with the same name.
-
-\beforeverb
-\begin{verbatim}
->>> print print_lyrics
-<function print_lyrics at 0xb7e99e9c>
->>> print type(print_lyrics)
-<type 'function'>
-\end{verbatim}
-\afterverb
-%
-The value of \verb"print_lyrics" is a {\bf function object}, which
-has type \verb"'function'".
-
-\index{function object}
-\index{object!function}
-
-The syntax for calling the new function is the same as
-for built-in functions:
-
-\beforeverb
-\begin{verbatim}
->>> print_lyrics()
+# print_lyrics();;
 I'm a lumberjack, and I'm okay.
 I sleep all night and I work all day.
+- : unit = ()
 \end{verbatim}
 \afterverb
 %
@@ -1948,21 +1939,22 @@ a function called \verb"repeat_lyrics":
 
 \beforeverb
 \begin{verbatim}
-def repeat_lyrics():
-    print_lyrics()
-    print_lyrics()
+let repeat_lyrics() = 
+    print_lyrics();
+    print_lyrics();;
 \end{verbatim}
 \afterverb
 %
-And then call \verb"repeat_lyrics":
+And then call \verb"repeat_lyrics();;":
 
 \beforeverb
 \begin{verbatim}
->>> repeat_lyrics()
+# repeat_lyrics()
 I'm a lumberjack, and I'm okay.
 I sleep all night and I work all day.
 I'm a lumberjack, and I'm okay.
 I sleep all night and I work all day.
+- : unit = ()
 \end{verbatim}
 \afterverb
 %
@@ -1977,13 +1969,13 @@ whole program looks like this:
 
 \beforeverb
 \begin{verbatim}
-def print_lyrics():
-    print "I'm a lumberjack, and I'm okay."
-    print "I sleep all night and I work all day."
+let print_lyrics() =
+    print_string "I'm a lumberjack, and I'm okay. \n";
+    print_string "I sleep all night and I work all day. \n";;
 
-def repeat_lyrics():
-    print_lyrics()
-    print_lyrics()
+let repeat_lyrics() =
+    print_lyrics();
+    print_lyrics();;
 
 repeat_lyrics()
 \end{verbatim}
@@ -1991,21 +1983,17 @@ repeat_lyrics()
 %
 This program contains two function definitions: \verb"print_lyrics" and
 \verb"repeat_lyrics".  Function definitions get executed just like other
-statements, but the effect is to create function objects.  The statements
+statements, but the effect is to create functions.  The statements
 inside the function do not get executed until the function is called, and
-the function definition generates no output.
+the function definition generates only trivial output.
 
-\index{use before def}
-
-As you might expect, you have to create a function before you can
-execute it.  In other words, the function definition has to be
-executed before the first time it is called.
+In OCaml, so you can define a function after you call it, so long as it is 
+called and defined in the same script.
 
 \begin{ex}
 Move the last line of this program
 to the top, so the function call appears before the definitions. Run 
-the program and see what error
-message you get.
+the program and see if the output changes.
 \end{ex}
 
 \begin{ex}
@@ -2017,10 +2005,6 @@ and move the definition of \verb"print_lyrics" after the definition of
 
 \section{Flow of execution}
 \index{flow of execution}
-
-In order to ensure that a function is defined before its first use,
-you have to know the order in which statements are executed, which is
-called the {\bf flow of execution}.
 
 Execution always begins at the first statement of the program.
 Statements are executed one at a time, in order from top to bottom.
@@ -2040,7 +2024,7 @@ have to execute the statements in another function. But while
 executing that new function, the program might have to execute yet
 another function!
 
-Fortunately, Python is good at keeping track of where it is, so each
+Fortunately, OCaml is good at keeping track of where it is, so each
 time a function completes, the program picks up where it left off in
 the function that called it.  When it gets to the end of the program,
 it terminates.
@@ -2058,9 +2042,8 @@ more sense if you follow the flow of execution.
 \index{function argument}
 
 Some of the built-in functions we have seen require arguments.  For
-example, when you call {\tt math.sin} you pass a number
-as an argument.  Some functions take more than one argument:
-{\tt math.pow} takes two, the base and the exponent.
+example, when you call {\tt sin} you pass a floating-point
+as an argument.  Some functions take more than one argument.
 
 Inside the function, the arguments are assigned to
 variables called {\bf parameters}.  Here is an example of a
@@ -2070,52 +2053,44 @@ user-defined function that takes an argument:
 
 \beforeverb
 \begin{verbatim}
-def print_twice(bruce):
-    print bruce
-    print bruce
+let print_twice bruce =
+	print_int bruce;
+	print_string " ";
+	print_int bruce;
+	print_string "\n";;
 \end{verbatim}
 \afterverb
 %
 This function assigns the argument to a parameter
 named {\tt bruce}.  When the function is called, it prints the value of
-the parameter (whatever it is) twice.
+the parameter (which must be an integer) twice, with a space in between then
+followed by a new line.
 
-This function works with any value that can be printed.
-
-\beforeverb
-\begin{verbatim}
->>> print_twice('Spam')
-Spam
-Spam
->>> print_twice(17)
-17
-17
->>> print_twice(math.pi)
-3.14159265359
-3.14159265359
-\end{verbatim}
-\afterverb
-%
 The same rules of composition that apply to built-in functions also
 apply to user-defined functions, so we can use any kind of expression
-as an argument for \verb"print_twice":
+as an argument for \verb"print_twice", so long as it evaluates to an integer:
 
 \index{composition}
 
 \beforeverb
 \begin{verbatim}
->>> print_twice('Spam '*4)
-Spam Spam Spam Spam
-Spam Spam Spam Spam
->>> print_twice(math.cos(math.pi))
--1.0
--1.0
+>>> print_twice (3*4)
+12 12
+- : unit = ()
+>>> print_twice (2+10)
+12 12
+- : unit = ()
 \end{verbatim}
 \afterverb
 %
+Note that we need to tell OCaml exactly what the argument is using parentheses in this case.
+This is because if we omitted them it would read left to right, so the first function call 
+would become {\tt (print_twice 3)*4}, which doesn't make any sense, especially since
+{\tt (print_twice 3)} evaluates to a unit, which you can't really multiply by four.
+
 The argument is evaluated before the function is called, so
-in the examples the expressions \verb"'Spam '*4" and
-{\tt math.cos(math.pi)} are only evaluated once.
+in the examples the expressions {\tt 3*4} and
+{\tt 2+10} are only evaluated once.
 
 \index{argument}
 
@@ -2123,10 +2098,10 @@ You can also use a variable as an argument:
 
 \beforeverb
 \begin{verbatim}
->>> michael = 'Eric, the half a bee.'
->>> print_twice(michael)
-Eric, the half a bee.
-Eric, the half a bee.
+>>> michael = 1
+>>> print_twice michael
+1 1
+- : unit = ()
 \end{verbatim}
 \afterverb
 %
@@ -2135,209 +2110,293 @@ nothing to do with the name of the parameter ({\tt bruce}).  It
 doesn't matter what the value was called back home (in the caller);
 here in \verb"print_twice", we call everybody {\tt bruce}.
 
+\index{Higher-Order Functions}
+\index{HOF}
 
-\section{Variables and parameters are local}
-\index{local variable}
-\index{variable!local}
+Functions can also take other functions as arguments. Such a function
+is called a {\em Higher-Order Function}, which is sometimes abbreviated HOF.
 
-When you create a variable inside a function, it is {\bf local},
-which means that it only
-exists inside the function.  For example:
 
-\index{parentheses!parameters in}
+\section{Functions are One Statement}
 
-\beforeverb
-\begin{verbatim}
-def cat_twice(part1, part2):
-    cat = part1 + part2
-    print_twice(cat)
-\end{verbatim}
-\afterverb
-%
-This function takes two arguments, concatenates them, and prints
-the result twice.  Here is an example that uses it:
+In OCaml, functions have to be all one statement, hence why you must use sequence points within a 
+function definition.
+
+Using {\tt let} within a function definition requires the in keyword:
 
 \index{concatenation}
 
 \beforeverb
 \begin{verbatim}
->>> line1 = 'Bing tiddle '
->>> line2 = 'tiddle bang.'
->>> cat_twice(line1, line2)
-Bing tiddle tiddle bang.
-Bing tiddle tiddle bang.
+let cat_twice part1 part2 = 
+    let cat = part1^part2^"\n" in cat^cat;;
 \end{verbatim}
 \afterverb
-%
+This function takes two string arguments, concatenates them and adds a newline character, 
+and then concatenates the result to itself and returns this string. Note that ``in'' in there: that's
+so that the variable definition doesn't return anything itself; it's only part of an expression which
+returns the result.
+
+\section{Scope and Functions}
+\index{local variable}
+\index{variable!local}
+
+
+\beforeverb
+%\begin{verbatim}
+# let line1 = 'Bing tiddle ';;
+# let line2 = 'tiddle bang.';;
+# cat_twice line1 line2;;
+Bing tiddle tiddle bang.
+- : unit = ()
+\end{verbatim}
+\afterverb
+
 When \verb"cat_twice" terminates, the variable {\tt cat}
 is destroyed.  If we try to print it, we get an exception:
 
-\index{NameError}
-\index{exception!NameError}
-
 \beforeverb
 \begin{verbatim}
->>> print cat
-NameError: name 'cat' is not defined
+# print_string cat
+Error: Unbound value cat
 \end{verbatim}
 \afterverb
-%
+
 Parameters are also local.
-For example, outside \verb"print_twice", there is no
+For example, outside \verb"_twice", there is no
 such thing as {\tt bruce}.
 
 \index{parameter}
 
 
-\section{Stack diagrams}
-\label{stackdiagram}
-\index{stack diagram}
-\index{function frame}
-\index{frame}
+% \section{Stack diagrams}
+%\label{stackdiagram}
+%\index{stack diagram}
+%\index{function frame}
+%\index{frame}
 
-To keep track of which variables can be used where, it is sometimes
-useful to draw a {\bf stack diagram}.  Like state diagrams, stack
-diagrams show the value of each variable, but they also show the
-function each variable belongs to.
+%To keep track of which variables can be used where, it is sometimes 
+%useful to draw a {\bf stack diagram}.  Like state diagrams, stack 
+%diagrams show the value of each variable, but they also show the 
+%function each variable belongs to.
 
-\index{stack diagram}
-\index{diagram!stack}
+%\index{stack diagram}
+%\index{diagram!stack}
 
-Each function is represented by a {\bf frame}.  A frame is a box
-with the name of a function
-beside it and the parameters and variables of the function inside it.
-The stack diagram for the
-previous example looks like this:
+%Each function is represented by a {\bf frame}.  A frame is a box
+%with the name of a function
+%beside it and the parameters and variables of the function inside it.
+%The stack diagram for the
+%previous example looks like this:
 
-\beforefig
-\centerline{\includegraphics{figs/stack.eps}}
-\afterfig
+%\beforefig
+%\centerline{\includegraphics{figs/stack.eps}}
+%\afterfig
 
-The frames are arranged in a stack that indicates which function
-called which, and so on.  In this example, \verb"print_twice"
-was called by \verb"cat_twice", and \verb"cat_twice" was called by 
-\verb"__main__", which is a special name for the topmost frame.  When
-you create a variable outside of any function, it belongs to 
-\verb"__main__".
+%The frames are arranged in a stack that indicates which function
+%called which, and so on.  In this example, \verb"print_twice"
+%was called by \verb"cat_twice", and \verb"cat_twice" was called by 
+%\verb"__main__", which is a special name for the topmost frame.  When
+%you create a variable outside of any function, it belongs to 
+%\verb"__main__".
 
-Each parameter refers to the same value as its corresponding
-argument.  So, {\tt part1} has the same value as
-{\tt line1}, {\tt part2} has the same value as {\tt line2},
-and {\tt bruce} has the same value as {\tt cat}.
+%Each parameter refers to the same value as its corresponding
+%argument.  So, {\tt part1} has the same value as
+%{\tt line1}, {\tt part2} has the same value as {\tt line2},
+%and {\tt bruce} has the same value as {\tt cat}.
 
-If an error occurs during a function call, Python prints the
-name of the function, and the name of the function that called
-it, and the name of the function that called {\em that}, all the
-way back to \verb"__main__".
+%If an error occurs during a function call, Python prints the
+%name of the function, and the name of the function that called
+%it, and the name of the function that called {\em that}, all the
+%way back to \verb"__main__".
 
-For example, if you try to access {\tt cat} from within 
-\verb"print_twice", you get a {\tt NameError}:
+%For example, if you try to access {\tt cat} from within 
+%\verb"print_twice", you get a {\tt NameError}:
+
+%\beforeverb
+%\begin{verbatim}
+%Traceback (innermost last):
+%  File "test.py", line 13, in __main__
+%    cat_twice(line1, line2)
+%  File "test.py", line 5, in cat_twice
+%    print_twice(cat)
+%  File "test.py", line 9, in print_twice
+%    print cat
+%NameError: name 'cat' is not defined
+%\end{verbatim}
+%\afterverb
+%
+%This list of functions is called a {\bf traceback}.  It tells you what
+%program file the error occurred in, and what line, and what functions
+%were executing at the time.  It also shows the line of code that
+%caused the error.
+
+%\index{traceback}
+
+%The order of the functions in the traceback is the same as the
+%order of the frames in the stack diagram.  The function that is
+%currently running is at the bottom.
+%
+
+%\section{Fruitful functions and void functions}
+
+%\index{fruitful function}
+%\index{void function}
+%\index{function, fruitful}
+%\index{function, void} 
+
+%Some of the functions we are using, such as the math functions, yield
+%results; for lack of a better name, I call them {\bf fruitful
+%  functions}.  Other functions, like \verb"print_twice", perform an
+%action but don't return a value.  They are called {\bf void
+%  functions}. Technically speaking, in OCaml, void functions return
+%the unit value.
+
+%When you call a fruitful function, you almost always
+%want to do something with the result; for example, you might
+%assign it to a variable or use it as part of an expression:
+
+%\beforeverb
+%\begin{verbatim}
+%x = math.cos(radians)
+%golden = (math.sqrt(5) + 1) / 2
+%\end{verbatim}
+%\afterverb
+%
+%When you call a function in interactive mode, Python displays
+%the result:
+
+%\beforeverb
+%\begin{verbatim}
+%>>> math.sqrt(5)
+%2.2360679774997898
+%\end{verbatim}
+%\afterverb
+%
+%But in a script, if you call a fruitful function all by itself,
+%the return value is lost forever!
+
+%\beforeverb
+%\begin{verbatim}
+%math.sqrt(5)
+%\end{verbatim}
+%\afterverb
+%
+%This script computes the square root of 5, but since it doesn't store
+%or display the result, it is not very useful.
+
+%\index{interactive mode}
+%\index{script mode}
+
+%Void functions might display something on the screen or have some
+%other effect, but they don't have a return value.  If you try to
+%assign the result to a variable, you get a special value called
+%{\tt None}.
+
+%\index{None special value}
+%\index{special value!None}
+
+%\beforeverb
+%\begin{verbatim}
+%>>> result = print_twice('Bing')
+%Bing
+%Bing
+%>>> print result
+%None
+%\end{verbatim}
+%\afterverb
+%
+%The value {\tt None} is not the same as the string \verb"'None'". 
+%It is a special value that has its own type:
+
+%\beforeverb
+%\begin{verbatim}
+%>>> print type(None)
+%<type 'NoneType'>
+%\end{verbatim}
+%\afterverb
+%
+%The functions we have written so far are all void.  We will start
+%writing fruitful functions in a few chapters.
+
+\section{Currying Functions}
+
+\index{Currying}
+\index{Functions!Currying}
+
+Currying functions is a very odd, but very powerful, idea in OCaml.
+
+You've probably noticed that OCaml gives you a very interesting output
+after a function definition. Consider the following (somewhat trivial) function:
 
 \beforeverb
 \begin{verbatim}
-Traceback (innermost last):
-  File "test.py", line 13, in __main__
-    cat_twice(line1, line2)
-  File "test.py", line 5, in cat_twice
-    print_twice(cat)
-  File "test.py", line 9, in print_twice
-    print cat
-NameError: name 'cat' is not defined
+# let add a b = a+b;;
+val add: int -> int -> int = <fun>
 \end{verbatim}
 \afterverb
-%
-This list of functions is called a {\bf traceback}.  It tells you what
-program file the error occurred in, and what line, and what functions
-were executing at the time.  It also shows the line of code that
-caused the error.
 
-\index{traceback}
+Effectively, what this means is that you have a function which takes two 
+integers as input and returns an integer (in this case, the sum of the two). 
+What's with the arrows, then? Well, this syntax was chosen for a reason.
 
-The order of the functions in the traceback is the same as the
-order of the frames in the stack diagram.  The function that is
-currently running is at the bottom.
-
-
-\section{Fruitful functions and void functions}
-
-\index{fruitful function}
-\index{void function}
-\index{function, fruitful}
-\index{function, void} 
-
-Some of the functions we are using, such as the math functions, yield
-results; for lack of a better name, I call them {\bf fruitful
-  functions}.  Other functions, like \verb"print_twice", perform an
-action but don't return a value.  They are called {\bf void
-  functions}.
-
-When you call a fruitful function, you almost always
-want to do something with the result; for example, you might
-assign it to a variable or use it as part of an expression:
+Consider the following:
 
 \beforeverb
 \begin{verbatim}
-x = math.cos(radians)
-golden = (math.sqrt(5) + 1) / 2
+# add 3;;
 \end{verbatim}
 \afterverb
-%
-When you call a function in interactive mode, Python displays
-the result:
+
+What is that? If you're familiar with other programming languages, you might 
+assume it's a syntax error: the function doesn't have enough input arguments!
+Well, you would be wrong. In fact, there's no error at all. That is a perfectly
+valid statement in OCaml:
 
 \beforeverb
 \begin{verbatim}
->>> math.sqrt(5)
-2.2360679774997898
+# add 3;;
+- : int -> int = <fun>
 \end{verbatim}
 \afterverb
-%
-But in a script, if you call a fruitful function all by itself,
-the return value is lost forever!
+
+That's right, {\tt add 3} is actually a function in it's own right. It takes an integer
+as an input, to which it will add three and then return the result. That's because functions
+of multiple input arguments in OCaml are really just chains of single-argument functions. 
+Hence, {\tt add a b} is really the function {\tt add a} applied to {\tt b}, which is really 
+the function {\tt add} applied to {\tt a|, the result of which is then applied to {\tt b}. 
+\footnote{"If you've never heard of currying before and that made sense to you the first 
+time through, then you deserve a medal and you're going to love when we get to recursion."} 
+This is called `{\bf currying}, after Haskell Curry. It is also sometimes called 
+{\bf partial application}.
+
+\index{Partial Application}
+
+In fact, we can even name this function:
 
 \beforeverb
 \begin{verbatim}
-math.sqrt(5)
+# let add3 = add 3;;
+val add3 : int -> int = <fun>
+# add3 2;;
+- : int = 5
 \end{verbatim}
 \afterverb
-%
-This script computes the square root of 5, but since it doesn't store
-or display the result, it is not very useful.
 
-\index{interactive mode}
-\index{script mode}
-
-Void functions might display something on the screen or have some
-other effect, but they don't have a return value.  If you try to
-assign the result to a variable, you get a special value called
-{\tt None}.
-
-\index{None special value}
-\index{special value!None}
+This would be effectively the same as writing:
 
 \beforeverb
 \begin{verbatim}
->>> result = print_twice('Bing')
-Bing
-Bing
->>> print result
-None
+# let add3 b = add 3 b;;
+val add3 : int -> int = <fun>
+# add3 2;;
+- : int = 5
 \end{verbatim}
 \afterverb
 %
-The value {\tt None} is not the same as the string \verb"'None'". 
-It is a special value that has its own type:
-
-\beforeverb
-\begin{verbatim}
->>> print type(None)
-<type 'NoneType'>
-\end{verbatim}
-\afterverb
-%
-The functions we have written so far are all void.  We will start
-writing fruitful functions in a few chapters.
-
+Except the first one is a little cleaner. In this trivial example, the difference is
+very slight, but when we introduce some new concepts later, you'll see why currying
+is so powerful.
 
 \section{Why functions?}
 \index{function, reasons for}
@@ -2362,24 +2421,11 @@ Once you write and debug one, you can reuse it.
 
 \end{itemize}
 
-
 \section{Debugging}
 \label{editor}
 \index{debugging}
 
-If you are using a text editor to write your scripts, you might
-run into problems with spaces and tabs.  The best way to avoid
-these problems is to use spaces exclusively (no tabs).  Most text
-editors that know about Python do this by default, but some
-don't.
-
-\index{whitespace}
-
-Tabs and spaces are usually invisible, which makes them
-hard to debug, so try to find an editor that manages indentation
-for you.
-
-Also, don't forget to save your program before you run it.  Some
+Don't forget to save your program before you run it.  Some
 development environments do this automatically, but some don't.
 In that case the program you are looking at in the text editor
 is not the same as the program you are running.
@@ -2388,11 +2434,9 @@ Debugging can take a long time if you keep running the same,
 incorrect, program over and over!
 
 Make sure that the code you are looking at is the code you are running.
-If you're not sure, put something like \verb"print 'hello'" at the
+If you're not sure, put something like {\verb print_int 42} at the
 beginning of the program and run it again.  If you don't see
-\verb"hello", you're not running the right program!
-
-
+{\tt 42}, you're not running the right program!
 
 
 \section{Glossary}
@@ -2400,8 +2444,8 @@ beginning of the program and run it again.  If you don't see
 \begin{description}
 
 \item[function:] A named sequence of statements that performs some
-useful operation.  Functions may or may not take arguments and may or
-may not produce a result.
+useful operation.  Functions may take any parameter and return any 
+type, including the unit type.
 \index{function}
 
 \item[function definition:]  A statement that creates a new function,
@@ -2440,24 +2484,24 @@ is used as an expression, the return value is the value of
 the expression.
 \index{return value}
 
-\item[fruitful function:] A function that returns a value.
-\index{fruitful function}
+%\item[fruitful function:] A function that returns a value.
+%\index{fruitful function}
 
-\item[void function:] A function that doesn't return a value.
-\index{void function}
+%\item[void function:] A function that doesn't return a value.
+%\index{void function}
 
 \item[module:] A file that contains a
 collection of related functions and other definitions.
 \index{module}
 
-\item[import statement:] A statement that reads a module file and creates
-a module object.
-\index{import statement}
-\index{statement!import}
+%\item[import statement:] A statement that reads a module file and creates
+%a module object.
+%\index{import statement}
+%\index{statement!import}
 
-\item[module object:] A value created by an {\tt import} statement
-that provides access to the values defined in a module.
-\index{module}
+%\item[module object:] A value created by an {\tt import} statement
+%that provides access to the values defined in a module.
+%\index{module}
 
 \item[dot notation:]  The syntax for calling a function in another
 module by specifying the module name followed by a dot (period) and
@@ -2472,19 +2516,22 @@ or a statement as part of a larger statement.
 a program run.
 \index{flow of execution}
 
-\item[stack diagram:]  A graphical representation of a stack of functions,
-their variables, and the values they refer to.
-\index{stack diagram}
+%\item[stack diagram:]  A graphical representation of a stack of functions,
+%their variables, and the values they refer to.
+%\index{stack diagram}
 
-\item[frame:]  A box in a stack diagram that represents a function call.
-It contains the local variables and parameters of the function.
-\index{function frame}
-\index{frame}
+%\item[frame:]  A box in a stack diagram that represents a function call.
+%It contains the local variables and parameters of the function.
+%\index{function frame}
+%\index{frame}
 
-\item[traceback:]  A list of the functions that are executing,
-printed when an exception occurs.
-\index{traceback}
+%\item[traceback:]  A list of the functions that are executing,
+%printed when an exception occurs.
+%\index{traceback}
 
+\item[currying:] Also known as partial application. The use of a function
+such that, instead of having multiple arguments, it is instead a chain of 
+single-argument functions.
 
 \end{description}
 
@@ -2496,8 +2543,9 @@ printed when an exception occurs.
 \index{len function}
 \index{function!len}
 
-Python provides a built-in function called {\tt len} that
-returns the length of a string, so the value of \verb"len('allen')" is 5.
+OCaml provides a standard module called {\tt String}, which includes a useful 
+function called {\tt length } that returns the length of a string, so the value 
+of \begin{verbatim} String.length("monje")" \end{verbatim} is 5.
 
 Write a function named \verb"right_justify" that takes a string
 named {\tt s} as a parameter and prints the string with enough
@@ -2506,66 +2554,22 @@ of the display.
 
 \beforeverb
 \begin{verbatim}
->>> right_justify('allen')
-                                                                 allen
+# right_justify('monje')
+                                                                 monje
 \end{verbatim}
 \afterverb
 
 \end{ex}
 
-
+%right here
 \begin{ex}
-\index{function object}
-\index{object!function}
+Write a function that takes two strings as an argument and concatenates
+them with a space in between.
 
-A function object is a value you can assign to a variable
-or pass as an argument.  For example, \verb"do_twice" is a function
-that takes a function object as an argument and calls it twice:
+Now use currying to define functions that append + and - to the end of the string, 
+again with a space in between.
 
-\beforeverb
-\begin{verbatim}
-def do_twice(f):
-    f()
-    f()
-\end{verbatim}
-\afterverb
-
-Here's an example that uses \verb"do_twice" to call a function
-named \verb"print_spam" twice.
-
-\beforeverb
-\begin{verbatim}
-def print_spam():
-    print 'spam'
-
-do_twice(print_spam)
-\end{verbatim}
-\afterverb
-
-\begin{enumerate}
-
-\item Type this example into a script and test it.
-
-\item Modify \verb"do_twice" so that it takes two arguments, a
-function object and a value, and calls the function twice,
-passing the value as an argument.
-
-\item Write a more general version of \verb"print_spam", called
-\verb"print_twice", that takes a string as a parameter and prints
-it twice.
-
-\item Use the modified version of \verb"do_twice" to call
-\verb"print_twice" twice, passing \verb"'spam'" as an argument.
-
-\item Define a new function called 
-\verb"do_four" that takes a function object and a value
-and calls the function four times, passing the value
-as a parameter.  There should be only
-two statements in the body of this function, not four.
-
-\end{enumerate}
-
-You can see my solution at \url{thinkpython.com/code/do_four.py}.
+Finally, write a function to append a symbol x number of times.
 
 \end{ex}
 
@@ -2575,7 +2579,7 @@ You can see my solution at \url{thinkpython.com/code/do_four.py}.
 This exercise\footnote{Based on an exercise in Oualline, {\em
     Practical C Programming, Third Edition}, O'Reilly (1997)} can be
 done using only the statements and other features we have learned so
-far.  
+far.
 
 \index{grid}
 
@@ -2600,771 +2604,17 @@ far.
 \end{verbatim}
 \afterverb
 %
-Hint: to print more than one value on a line, you can print
-a comma-separated sequence:
-
-\beforeverb
-\begin{verbatim}
-print '+', '-'
-\end{verbatim}
-\afterverb
-%
-If the sequence ends with a comma, Python leaves the line unfinished,
-so the value printed next appears on the same line.
-
-\beforeverb
-\begin{verbatim}
-print '+', 
-print '-'
-\end{verbatim}
-\afterverb
-%
-The output of these statements is \verb"'+ -'".
-
-A {\tt print} statement all by itself ends the current line and
-goes to the next line.
 
 \item Use the previous function to draw a similar grid
 with four rows and four columns.
 
 \end{enumerate}
 
-You can see my solution at \url{thinkpython.com/code/grid.py}.
+You can see my solution at \url{thinkpython.com/ocaml/code/grid.ml}.
 
 \end{ex}
 
-
-
-
-
-\chapter{Case study: interface design}
-\label{turtlechap}
-
-\section{TurtleWorld}
-\index{TurtleWorld}
-\index{Swampy}
-
-To accompany this book, I have written a suite of modules called
-Swampy.  One of these modules is TurtleWorld, which provides
-a set of functions for drawing lines by steering
-turtles around the screen.
-
-You can download Swampy from \url{thinkpython.com/swampy};
-follow the instructions there to install Swampy on your system.
-
-Move into the directory that contains {\tt TurtleWorld.py},
-create a file named {\tt polygon.py} and type in the following
-code:
-
-\beforeverb
-\begin{verbatim}
-from TurtleWorld import *
-
-world = TurtleWorld()
-bob = Turtle()
-print bob
-
-wait_for_user()
-\end{verbatim}
-\afterverb
-%
-The first line is a variation of the {\tt import} statement we saw before;
-instead of creating a module object, it imports the functions
-from the module directly, so you can access them without using dot
-notation.
-
-\index{import statement}
-\index{statement!import}
-
-The next lines create a TurtleWorld assigned to {\tt world} and
-a Turtle assigned to {\tt bob}.  Printing {\tt bob} yields something
-like:
-
-\beforeverb
-\begin{verbatim}
-<TurtleWorld.Turtle instance at 0xb7bfbf4c>
-\end{verbatim}
-\afterverb
-%
-This means that {\tt bob} refers to
-an {\bf instance} of a Turtle
-as defined in module {\tt TurtleWorld}.  In this context,
-``instance'' means a member of a set;
-this Turtle is one of the set of possible Turtles.
-
-\index{instance}
-
-\verb"wait_for_user" tells TurtleWorld to wait for the user
-to do something, although in this case there's not much for
-the user to do except close the window.
-
-TurtleWorld provides several
-turtle-steering functions: {\tt fd} and {\tt bk} for
-forward and backward, and {\tt lt} and {\tt rt} for left and
-right turns.  Also, each Turtle is holding a pen, which is
-either down or up; if the pen is down, the Turtle leaves
-a trail when it moves.  The functions {\tt pu} and {\tt pd}
-stand for ``pen up'' and ``pen down.''
-
-To draw a right angle, add these lines to the program
-(after creating {\tt bob} and before calling \verb"wait_for_user"):
-
-\beforeverb
-\begin{verbatim}
-fd(bob, 100)
-lt(bob)
-fd(bob, 100)
-\end{verbatim}
-\afterverb
-%
-The first line tells {\tt bob} to take 100 steps
-forward.  The second line tells him to turn left.
-
-When you run this program, you should see {\tt bob} move east and then
-south, leaving two line segments behind.
-
-Now modify the program to draw a square.  Don't go on until
-you've got it working!
-
-%\newpage
-
-\section{Simple repetition}
-\label{repetition}
-\index{repetition}
-
-Chances are you wrote something like this (leaving out the code
-that creates TurtleWorld and waits for the user):
-
-\begin{verbatim}
-fd(bob, 100)
-lt(bob)
-
-fd(bob, 100)
-lt(bob)
-
-fd(bob, 100)
-lt(bob)
-
-fd(bob, 100)
-\end{verbatim}
-%
-We can do the same thing more concisely with a {\tt for} statement.
-Add this example to {\tt polygon.py} and run it again:
-
-\index{for loop}
-\index{loop!for}
-\index{statement!for}
-
-\beforeverb
-\begin{verbatim}
-for i in range(4):
-    print 'Hello!'
-\end{verbatim}
-\afterverb
-%
-You should see something like this:
-
-\beforeverb
-\begin{verbatim}
-Hello!
-Hello!
-Hello!
-Hello!
-\end{verbatim}
-\afterverb
-%
-This is the simplest use of the {\tt for} statement; we will see
-more later.  But that should be enough to let you rewrite your
-square-drawing program.  Don't go on until you do.
-
-%\newpage
-
-Here is a {\tt for} statement that draws a square:
-
-\beforeverb
-\begin{verbatim}
-for i in range(4):
-    fd(bob, 100)
-    lt(bob)
-\end{verbatim}
-\afterverb
-%
-The syntax of a {\tt for} statement is similar to a function
-definition.  It has a header that ends with a colon and an indented
-body.  The body can contain any number of statements.
-
-\index{loop}
-
-A {\tt for} statement is sometimes called a {\bf loop} because
-the flow of execution runs through the body and then loops back
-to the top.  In this case, it runs the body four times.
-
-This version is actually a little different from the previous
-square-drawing code because it makes another turn after
-drawing the last side of the square.  The extra turn takes a little
-more time, but it simplifies the code if we do the same thing
-every time through the loop.  This version also has the effect
-of leaving the turtle back in the starting position, facing in
-the starting direction.
-
-\section{Exercises}
-
-The following is a series of exercises using TurtleWorld.  They
-are meant to be fun, but they have a point, too.  While you are
-working on them, think about what the point is.
-
-The following sections have solutions to the exercises, so
-don't look until you have finished (or at least tried).
-
-\begin{enumerate}
-
-\item Write a function called {\tt square} that takes a parameter
-named {\tt t}, which is a turtle.  It should use the turtle to draw
-a square.
-
-Write a function call that passes {\tt bob} as an argument to
-{\tt square}, and then run the program again.
-
-\item Add another parameter, named {\tt length}, to {\tt square}.
-Modify the body so length of the sides is {\tt length}, and then
-modify the function call to provide a second argument.  Run the
-program again.  Test your program with a range of values for {\tt
-length}.
-
-\item The functions {\tt lt} and {\tt rt} make 90-degree turns by
-default, but you can provide a second argument that specifies the
-number of degrees.  For example, {\tt lt(bob, 45)} turns {\tt bob} 45
-degrees to the left.
-
-Make a copy of {\tt square} and change the name to {\tt polygon}.  Add
-another parameter named {\tt n} and modify the body so it draws an
-n-sided regular polygon.  Hint: The exterior angles of an n-sided regular
-polygon are $360.0 / n$ degrees.
-
-\index{polygon function}
-\index{function!polygon}
-
-\item Write a function called {\tt circle} that takes a turtle, {\tt t},
-and radius, {\tt r}, as parameters and that draws an approximate circle
-by invoking {\tt polygon} with an appropriate length and number of
-sides.  Test your function with a range of values of {\tt r}.
-
-\index{circle function}
-\index{function!circle}
-
-Hint: figure out the circumference of the circle and make sure that
-{\tt length * n = circumference}.
-
-Another hint: if {\tt bob} is too slow for you, you can speed
-him up by changing {\tt bob.delay}, which is the time between moves,
-in seconds.  {\tt bob.delay = 0.01} ought to get him moving.
-
-\item Make a more general version of {\tt circle} called {\tt arc}
-that takes an additional parameter {\tt angle}, which determines
-what fraction of a circle to draw.  {\tt angle} is in units of
-degrees, so when {\tt angle=360}, {\tt arc} should draw a complete
-circle.
-
-\index{arc function}
-\index{function!arc}
-
-\end{enumerate}
-
-\section{Encapsulation}
-
-The first exercise asks you to put your square-drawing code
-into a function definition and then call the function, passing
-the turtle as a parameter.  Here is a solution:
-
-\beforeverb
-\begin{verbatim}
-def square(t):
-    for i in range(4):
-        fd(t, 100)
-        lt(t)
-
-square(bob)
-\end{verbatim}
-\afterverb
-%
-The innermost statements, {\tt fd} and {\tt lt} are
-indented twice to show that they are inside the {\tt for} loop,
-which is inside the function definition.  The next line,
-{\tt square(bob)}, is flush with the left margin, so that is the
-end of both the {\tt for} loop and the function definition.
-
-Inside the function, {\tt t} refers to the same turtle {\tt bob}
-refers to, so {\tt lt(t)} has the same effect as {\tt lt(bob)}.
-So why not call the parameter {\tt bob}?  The idea is that {\tt t}
-can be any turtle, not just {\tt bob}, so you could create
-a second turtle and pass it as an argument to {\tt square}:
-
-\beforeverb
-\begin{verbatim}
-ray = Turtle()
-square(ray)
-\end{verbatim}
-\afterverb
-%
-Wrapping a piece of code up in a function is called {\bf
-encapsulation}.  One of the benefits of encapsulation is that it
-attaches a name to the code, which serves as a kind of documentation.
-Another advantage is that if you re-use the code, it is more concise
-to call a function twice than to copy and paste the body!
-
-\index{encapsulation}
-
-
-\section{Generalization}
-
-The next step is to add a {\tt length} parameter to {\tt square}.
-Here is a solution:
-
-\beforeverb
-\begin{verbatim}
-def square(t, length):
-    for i in range(4):
-        fd(t, length)
-        lt(t)
-
-square(bob, 100)
-\end{verbatim}
-\afterverb
-%
-Adding a parameter to a function is called {\bf generalization}
-because it makes the function more general: in the previous
-version, the square is always the same size; in this version
-it can be any size.
-
-\index{generalization}
-
-The next step is also a generalization.  Instead of drawing
-squares, {\tt polygon} draws regular polygons with any number of
-sides.  Here is a solution:
-
-\beforeverb
-\begin{verbatim}
-def polygon(t, n, length):
-    angle = 360.0 / n
-    for i in range(n):
-        fd(t, length)
-        lt(t, angle)
-
-polygon(bob, 7, 70)
-\end{verbatim}
-\afterverb
-%
-This draws a 7-sided polygon with side length 70.  If you have
-more than a few numeric arguments, it is easy to forget what they
-are, or what order they should be in.  It is legal, and sometimes
-helpful, to include the names of the parameters in the argument
-list:
-
-\beforeverb
-\begin{verbatim}
-polygon(bob, n=7, length=70)
-\end{verbatim}
-\afterverb
-%
-These are called {\bf keyword arguments} because they include
-the parameter names as ``keywords'' (not to be confused with
-Python keywords like {\tt while} and {\tt def}).
-
-\index{keyword argument}
-\index{argument!keyword}
-
-This syntax makes the program more readable.  It is also a reminder
-about how arguments and parameters work: when you call a function, the
-arguments are assigned to the parameters.
-
-
-\section{Interface design}
-
-The next step is to write {\tt circle}, which takes a radius,
-{\tt r}, as a parameter.  Here is a simple solution that uses
-{\tt polygon} to draw a 50-sided polygon:
-
-\beforeverb
-\begin{verbatim}
-def circle(t, r):
-    circumference = 2 * math.pi * r
-    n = 50
-    length = circumference / n
-    polygon(t, n, length)
-\end{verbatim}
-\afterverb
-%
-The first line computes the circumference of a circle with radius
-{\tt r} using the formula $2 \pi r$.  Since we use {\tt math.pi}, we
-have to import {\tt math}.  By convention, {\tt import} statements
-are usually at the beginning of the script.
-
-{\tt n} is the number of line segments in our approximation of a circle,
-so {\tt length} is the length of each segment.  Thus, {\tt polygon}
-draws a 50-sides polygon that approximates a circle with radius {\tt r}.
-
-One limitation of this solution is that {\tt n} is a constant, which
-means that for very big circles, the line segments are too long, and
-for small circles, we waste time drawing very small segments.  One
-solution would be to generalize the function by taking {\tt n} as
-a parameter.  This would give the user (whoever calls {\tt circle})
-more control, but the interface would be less clean.
-
-\index{interface}
-
-The {\bf interface} of a function is a summary of how it is used: what
-are the parameters?  What does the function do?  And what is the return
-value?  An interface is ``clean'' if it is ``as simple as
-possible, but not simpler. (Einstein)''
-
-\index{Einstein, Albert}
-
-In this example, {\tt r} belongs in the interface because it
-specifies the circle to be drawn.  {\tt n} is less appropriate
-because it pertains to the details of {\em how} the circle should
-be rendered.
-
-Rather than clutter up the interface, it is better
-to choose an appropriate value of {\tt n}
-depending on {\tt circumference}:
-
-\beforeverb
-\begin{verbatim}
-def circle(t, r):
-    circumference = 2 * math.pi * r
-    n = int(circumference / 3) + 1
-    length = circumference / n
-    polygon(t, n, length)
-\end{verbatim}
-\afterverb
-%
-Now the number of segments is (approximately) {\tt circumference/3},
-so the length of each segment is (approximately) 3, which is small
-enough that the circles look good, but big enough to be efficient,
-and appropriate for any size circle.
-
-
-\section{Refactoring}
-\label{refactoring}
-\index{refactoring}
-
-When I wrote {\tt circle}, I was able to re-use {\tt polygon}
-because a many-sided polygon is a good approximation of a circle.
-But {\tt arc} is not as cooperative; we can't use {\tt polygon}
-or {\tt circle} to draw an arc.
-
-One alternative is to start with a copy
-of {\tt polygon} and transform it into {\tt arc}.  The result
-might look like this:
-
-\beforeverb
-\begin{verbatim}
-def arc(t, r, angle):
-    arc_length = 2 * math.pi * r * angle / 360
-    n = int(arc_length / 3) + 1
-    step_length = arc_length / n
-    step_angle = float(angle) / n
-    
-    for i in range(n):
-        fd(t, step_length)
-        lt(t, step_angle)
-\end{verbatim}
-\afterverb
-%
-The second half of this function looks like {\tt polygon}, but we
-can't re-use {\tt polygon} without changing the interface.  We could
-generalize {\tt polygon} to take an angle as a third argument,
-but then {\tt polygon} would no longer be an appropriate name!
-Instead, let's call the more general function {\tt polyline}:
-
-\beforeverb
-\begin{verbatim}
-def polyline(t, n, length, angle):
-    for i in range(n):
-        fd(t, length)
-        lt(t, angle)
-\end{verbatim}
-\afterverb
-%
-Now we can rewrite {\tt polygon} and {\tt arc} to use {\tt polyline}:
-
-\beforeverb
-\begin{verbatim}
-def polygon(t, n, length):
-    angle = 360.0 / n
-    polyline(t, n, length, angle)
-
-def arc(t, r, angle):
-    arc_length = 2 * math.pi * r * angle / 360
-    n = int(arc_length / 3) + 1
-    step_length = arc_length / n
-    step_angle = float(angle) / n
-    polyline(t, n, step_length, step_angle)
-\end{verbatim}
-\afterverb
-%
-Finally, we can rewrite {\tt circle} to use {\tt arc}:
-
-\beforeverb
-\begin{verbatim}
-def circle(t, r):
-    arc(t, r, 360)
-\end{verbatim}
-\afterverb
-%
-This process---rearranging a program to improve function
-interfaces and facilitate code re-use---is called {\bf refactoring}.
-In this case, we noticed that there was similar code in {\tt arc} and
-{\tt polygon}, so we ``factored it out'' into {\tt polyline}.
-
-\index{refactoring}
-
-If we had planned ahead, we might have written {\tt polyline} first
-and avoided refactoring, but often you don't know enough at the
-beginning of a project to design all the interfaces.  Once you start
-coding, you understand the problem better.  Sometimes refactoring is a
-sign that you have learned something.
-
-
-\section{A development plan}
-\index{development plan!encapsulation and generalization}
-
-A {\bf development plan} is a process for writing programs.
-The process we used
-in this case study is ``encapsulation and
-generalization.''  The steps of this process are:
-
-\begin{enumerate}
-
-\item Start by writing a small program with no function definitions.
-
-\item Once you get the program working, encapsulate it in a function
-and give it a name.
-
-\item Generalize the function by adding appropriate parameters.
-
-\item Repeat steps 1--3 until you have a set of working functions.
-Copy and paste working code to avoid retyping (and re-debugging).
-
-\item Look for opportunities to improve the program by refactoring.
-For example, if you have similar code in several places, consider
-factoring it into an appropriately general function.
-
-\end{enumerate}
-
-This process has some drawbacks---we will see alternatives later---but
-it can be useful if you don't know ahead of time how to divide the
-program into functions.  This approach lets you design as you go
-along.
-
-
-\section{docstring}
-\label{docstring}
-\index{docstring}
-
-A {\bf docstring} is a string at the beginning of a function that
-explains the interface (``doc'' is short for ``documentation'').  Here
-is an example:
-
-\beforeverb
-\begin{verbatim}
-def polyline(t, length, n, angle):
-    """Draw n line segments with the given length and
-    angle (in degrees) between them.  t is a turtle.
-    """    
-    for i in range(n):
-        fd(t, length)
-        lt(t, angle)
-\end{verbatim}
-\afterverb
-%
-This docstring is a triple-quoted string, also known
-as a multiline string because the triple quotes allow the string
-to span more than one line.
-
-\index{quotation mark}
-\index{triple-quoted string}
-\index{string!triple-quoted}
-\index{multiline string}
-\index{string!multiline}
-
-It is terse, but it contains the essential information
-someone would need to use this function.  It explains concisely what
-the function does (without getting into the details of how it does
-it).  It explains what effect each parameter has on the behavior of
-the function and what type each parameter should be (if it is not
-obvious).
-
-Writing this kind of documentation is an important part of interface
-design.  A well-designed interface should be simple to explain;
-if you are having a hard time explaining one of your functions,
-that might be a sign that the interface could be improved.
-
-
-\section{Debugging}
-\index{debugging}
-\index{interface}
-
-An interface is like a contract between a function and a caller.
-The caller agrees to provide certain parameters and the function
-agrees to do certain work.
-
-For example, {\tt polyline} requires four arguments.  The first
-has to be a Turtle.  The second has to be a number, and it should
-probably be positive, although it turns out that the function
-works even if it isn't.  The third argument should be an integer;
-{\tt range} complains otherwise (depending on which version
-of Python you are running).  The fourth has to be a number,
-which is understood to be in degrees.
-
-These requirements are called {\bf preconditions} because they
-are supposed to be true before the function starts executing.
-Conversely, conditions at the end of the function are
-{\bf postconditions}.  Postconditions include the intended
-effect of the function (like drawing line segments) and any
-side effects (like moving the Turtle or making other changes
-in the World).
-
-\index{precondition}
-\index{postcondition}
-
-Preconditions are the responsibility of the caller.  If the caller
-violates a (properly documented!) precondition and the function
-doesn't work correctly, the bug is in the caller, not the function.
-
-% Removing this because we haven't seen conditionals yet!
-%However, for purposes of debugging it is often a good idea for
-%functions to check their preconditions rather than assume they are
-%true.  If every function checks its preconditions before starting,
-%then if something goes wrong, you will know which function to blame.
-
-
-\section{Glossary}
-
-\begin{description}
-
-\item[instance:] A member of a set.  The TurtleWorld in this
-chapter is a member of the set of TurtleWorlds.
-\index{instance}
-
-\item[loop:] A part of a program that can execute repeatedly.
-\index{loop}
-
-\item[encapsulation:] The process of transforming a sequence of
-statements into a function definition.
-\index{encapsulation}
-
-\item[generalization:] The process of replacing something
-unnecessarily specific (like a number) with something appropriately
-general (like a variable or parameter).
-\index{generalization}
-
-\item[keyword argument:] An argument that includes the name of
-the parameter as a ``keyword.''
-\index{keyword argument}
-\index{argument!keyword}
-
-\item[interface:] A description of how to use a function, including
-the name and descriptions of the arguments and return value.
-\index{interface}
-
-\item[development plan:] A process for writing programs.
-\index{development plan}
-
-\item[docstring:]  A string that appears in a function definition
-to document the function's interface.
-\index{docstring}
-
-\item[precondition:] A requirement that should be satisfied by
-the caller before a function starts.
-\index{precondition}
-
-\item[postcondition:] A requirement that should be satisfied by
-the function before it ends.
-\index{precondition}
-
-\end{description}
-
-
-\section{Exercises}
-
-\begin{ex}
-
-Download the code in this chapter from
-\url{thinkpython.com/code/polygon.py}.
-
-\begin{enumerate}
-
-\item Write appropriate docstrings for {\tt polygon}, {\tt arc} and
-{\tt circle}.
-
-\index{stack diagram}
-
-\item Draw a stack diagram that shows the state of the program
-while executing {\tt circle(bob, radius)}.  You can do the
-arithmetic by hand or add {\tt print} statements to the code.
-
-
-\item The version of {\tt arc} in Section~\ref{refactoring} is not
-very accurate because the linear approximation of the
-circle is always outside the true circle.  As a result,
-the turtle ends up a few units away from the correct
-destination. My solution shows a way to reduce
-the effect of this error.  Read the code and see if it makes
-sense to you.  If you draw a diagram, you might see how it works.
-
-\end{enumerate}
-
-\end{ex}
-
-
-\begin{ex}
-\index{flower}
-
-Write an appropriately general set of functions that
-can draw flowers like this:
-
-\centerline{\includegraphics[height=1in]{figs/flowers.eps}}
-
-You can download a solution from \url{thinkpython.com/code/flower.py}.
-
-\end{ex}
-
-
-\begin{ex}
-\index{pie}
-
-Write an appropriately general set of functions that
-can draw shapes like this:
-
-\centerline{\includegraphics[height=0.9in]{figs/pies.eps}}
-
-You can download a solution from \url{thinkpython.com/code/pie.py}.
-
-\end{ex}
-
-\begin{ex}
-\index{alphabet}
-\index{turtle typewriter}
-\index{typewriter, turtle}
-
-The letters of the alphabet can be constructed from a moderate
-number of basic elements, like vertical and horizontal lines
-and a few curves.  Design a font that can be drawn with a
-minimal number of basic elements and then write functions
-that draw letters of the alphabet.
-
-You should write one function for each letter, with names
-\verb"draw_a", \verb"draw_b", etc., and put your functions
-in a file named {\tt letters.py}.  You can download a
-``turtle typewriter'' from \url{thinkpython.com/code/typewriter.py}
-to help you test your code.
-
-You can download a solution from \url{thinkpython.com/code/letters.py}.
-
-\end{ex}
-
-
+%%removed chapter using TurtleWorld. Would love to write suitable replacement.
 
 \chapter{Conditionals and recursion}
 
@@ -3375,17 +2625,15 @@ You can download a solution from \url{thinkpython.com/code/letters.py}.
 
 The {\bf modulus operator} works on integers and yields the remainder
 when the first operand is divided by the second.  In Python, the
-modulus operator is a percent sign (\verb"%").  The syntax is the same
+modulus operator is {\tt mod}. The syntax is the same
 as for other operators:
 
 \beforeverb
 \begin{verbatim}
->>> quotient = 7 / 3
->>> print quotient
-2
->>> remainder = 7 % 3
->>> print remainder
-1
+# let quotient = 7 / 3;;
+val quotient : int = 2
+# let remainder = 7 mod 3;;
+val remainder : int = 1
 \end{verbatim}
 \afterverb
 %
@@ -3393,13 +2641,13 @@ So 7 divided by 3 is 2 with 1 left over.
 
 The modulus operator turns out to be surprisingly useful.  For
 example, you can check whether one number is divisible by another---if
-{\tt x \% y} is zero, then {\tt x} is divisible by {\tt y}.
+{\tt x mod y} is zero, then {\tt x} is divisible by {\tt y}.
 
 \index{divisibility}
 
 Also, you can extract the right-most digit
-or digits from a number.  For example, {\tt x \% 10} yields the
-right-most digit of {\tt x} (in base 10).  Similarly {\tt x \% 100}
+or digits from a number.  For example, {\tt x mod 10} yields the
+right-most digit of {\tt x} (in base 10).  Similarly {\tt x mod 100}
 yields the last two digits.
 
 
@@ -3411,43 +2659,27 @@ yields the last two digits.
 
 A {\bf boolean expression} is an expression that is either true
 or false.  The following examples use the 
-operator {\tt ==}, which compares two operands and produces
-{\tt True} if they are equal and {\tt False} otherwise:
+operator {\tt <>}, which compares two operands and produces
+{\tt false} if they are equal and {\tt true} if they are:
 
 \beforeverb
 \begin{verbatim}
->>> 5 == 5
-True
->>> 5 == 6
-False
+>>> 5 <> 5;;
+- : bool = false
+>>> 5 <> 6;;
+- : bool = true
 \end{verbatim}
 \afterverb
 %
 {\tt True} and {\tt False} are special
-values that belong to the type {\tt bool}; they are not strings:
+values that belong to the type {\tt bool}; they are not strings.
 
-\index{True special value}
-\index{False special value}
-\index{special value!True}
-\index{special value!False}
-\index{bool type}
-\index{type!bool}
-
-\beforeverb
-\begin{verbatim}
->>> type(True)
-<type 'bool'>
->>> type(False)
-<type 'bool'>
-\end{verbatim}
-\afterverb
-%
-The {\tt ==} operator is one of the {\bf relational operators}; the
+The {\tt <>} operator is one of the {\bf relational operators}; the
 others are:
 
 \beforeverb
 \begin{verbatim}
-      x != y               # x is not equal to y
+      x <> y               # x is not equal to y
       x > y                # x is greater than y
       x < y                # x is less than y
       x >= y               # x is greater than or equal to y
@@ -3455,12 +2687,10 @@ others are:
 \end{verbatim}
 \afterverb
 %
-Although these operations are probably familiar to you, the Python
-symbols are different from the mathematical symbols.  A common error
-is to use a single equal sign ({\tt =}) instead of a double equal sign
-({\tt ==}).  Remember that {\tt =} is an assignment operator and
-{\tt ==} is a relational operator.   There is no such thing as
-{\tt =<} or {\tt =>}.
+Although these operations are probably familiar to you, the OCaml
+symbols are different from the mathematical symbols.
+
+
 
 \index{relational operator}
 \index{operator!relational}
@@ -3470,10 +2700,10 @@ is to use a single equal sign ({\tt =}) instead of a double equal sign
 \index{logical operator}
 \index{operator!logical}
 
-There are three {\bf logical operators}: {\tt and}, {\tt
-or}, and {\tt not}.  The semantics (meaning) of these operators is
+There are three {\bf logical operators}: {\tt &&} (and), {\tt
+||} (or), and {\tt not} (exactly as it looks).  The semantics (meaning) of these operators is
 similar to their meaning in English.  For example,
-{\tt x > 0 and x < 10} is true only if {\tt x} is greater than 0
+{\tt x > 0 && x < 10} is true only if {\tt x} is greater than 0
 {\em and} less than 10.
 
 \index{and operator}
@@ -3482,29 +2712,13 @@ similar to their meaning in English.  For example,
 \index{operator!and}
 \index{operator!or}
 \index{operator!not}
-
-{\tt n\%2 == 0 or n\%3 == 0} is true if {\em either} of the conditions
+%right here
+{\tt n mod 2 = 0 || n mod 3 = 0} is true if {\em either} of the conditions
 is true, that is, if the number is divisible by 2 {\em or} 3.
 
 Finally, the {\tt not} operator negates a boolean
 expression, so {\tt not (x > y)} is true if {\tt x > y} is false,
 that is, if {\tt x} is less than or equal to {\tt y}.
-
-Strictly speaking, the operands of the logical operators should be
-boolean expressions, but Python is not very strict.
-Any nonzero number is interpreted as ``true.''
-
-\beforeverb
-\begin{verbatim}
->>> 17 and True
-True
-\end{verbatim}
-\afterverb
-%
-This flexibility can be useful, but there are some subtleties to
-it that might be confusing.  You might want to avoid it (unless
-you know what you are doing).
-
 
 \section{Conditional execution}
 \label{conditional execution}
@@ -17516,7 +16730,7 @@ executing when it shouldn't.
 \item Is a section of code producing an effect that is not
 what you expected?  Make sure that you understand the code in
 question, especially if it involves invocations to functions or methods in
-other Python modules.  Read the documentation for the functions you invoke.
+other OCaml modules.  Read the documentation for the functions you invoke.
 Try them out by writing simple test cases and checking the results.
 
 \end{itemize}
