@@ -312,13 +312,24 @@ alternately reading lines and performing computations.
 \index{object code}
 \index{executable}
 
-A compiler reads the program and translates it completely before the program starts running.  In this context, the high-level program is called the {\bf source code}, and the translated program is called the {\bf object code} or the {\bf executable}.  Once a program is compiled, you can execute it repeatedly without further translation.
+A compiler reads the program and translates it completely before the program 
+starts running.  In this context, the high-level program is called the {\bf source 
+code}, and the translated program is called the {\bf object code} or the {\bf executable}.  
+Once a program is compiled, you can execute it repeatedly without further translation.
 
 \beforefig
 \centerline{\includegraphics[height=0.77in]{figs/compile.eps}}
 \afterfig
 
-One of the nice features of OCaml is that OCaml is both a compiled and an interpreted programming language. On the one hand, OCaml can be compiled into an executable file. This makes it easier to pass along your program to non-OCaml users, which for a new, up-and-coming programming language like OCaml, is a nice feature. On the other hand, OCaml can be treated like an interpreted programming language, meaning that an OCaml script or OCaml commands can be executed by an interpreter. There are two ways to use the interpreter: {\bf interactive mode} and {\bf script mode}. In interactive mode, you type OCaml commands into the {\bf toplevel} and the interpreter prints the result:
+One of the nice features of OCaml is that OCaml is both a compiled and an interpreted 
+programming language. On the one hand, OCaml can be compiled into an executable file. 
+This makes it easier to pass along your program to non-OCaml users, which for a new, 
+up-and-coming programming language like OCaml, is a nice feature. On the other hand, 
+OCaml can be treated like an interpreted programming language, meaning that an OCaml 
+script or OCaml commands can be executed by an interpreter. This is useful for finding 
+errors in your code and testing commands and snippits of code. There are two ways to use 
+the interpreter: {\bf interactive mode} and {\bf script mode}. In interactive mode, you 
+type OCaml commands into the {\bf toplevel} and the interpreter prints the result:
 
 \index{interactive mode}
 \index{script mode}
@@ -330,24 +341,36 @@ One of the nice features of OCaml is that OCaml is both a compiled and an interp
 \end{verbatim}
 \afterverb
 %
-The octothorp, {\tt \#}, is the {\bf prompt} the interpreter uses to indicate that it is ready. The double semi-colons indicates the end of a line. If you type {\tt 1 + 1;;}, the interpreter replies {\tt - : int = 2}.
+The octothorp, {\tt \#}, is the {\bf prompt} the interpreter uses to indicate that it is 
+ready. The double semi-colons indicates the end of a line. If you type {\tt 1 + 1;;}, the 
+interpreter replies {\tt - : int = 2}.
 
 \index{prompt}
 
-Alternatively, you can store code in a file and use the interpreter to execute the contents of the file, which is called a {\bf script}.  By convention, OCaml scripts have names that end with {\tt .ml}.
+Alternatively, you can store code in a file and use the interpreter to execute the contents 
+of the file, which is called a {\bf script}.  By convention, OCaml scripts have names that 
+end with {\tt .ml}.
 
 \index{script}
 
 \index{testing!interactive mode}
 
-Working in interactive mode is convenient for testing small pieces of code because you can type and execute them immediately.  But for anything more than a few lines, you should save your code as a script so you can modify and execute it in the future.
+Working in interactive mode is convenient for testing small pieces of code because you can type 
+and execute them immediately.  But for anything more than a few lines, you should save your code 
+as a script so you can modify and execute it in the future.
 
 \section{The OCaml Toplevel}
 
-Let's take a moment to explain how to use the OCaml toplevel. The toplevel works a little differently depending on your operating system. I will cover using the toplevel in Windows (7) and Ubuntu (10.04 Karmic). \footnote{Mac users are on their own.}
+Let's take a moment to explain how to use the OCaml toplevel. The toplevel 
+works a little differently depending on your operating system. I will cover 
+using the toplevel in Windows (7) and Ubuntu (10.04 Karmic). \footnote{Mac users are on their own.}
 
-One thing you will need to use are OCaml commands known as {\bf directives}. A list of some directives can be found at http://caml.inria.fr/pub/docs/manual-ocaml/manual023.html.
+One thing you will need to use are OCaml commands known as {\bf directives}. 
+Directives tell the interpreter or compiler to do specific tasks, like load 
+code from a file or exit. A list of some directives  can be found at 
+\url{http://caml.inria.fr/pub/docs/manual-ocaml/manual023.html}. 
 
+\index{Directive}
 \index{Toplevel}
 
 \subsection{Ubuntu (10.04)}
@@ -359,10 +382,10 @@ First off, you must install the ocaml package and its dependencies. Open the ter
  sudo apt-get install ocaml
 \end{verbatim}
 \afterverb
+It will then likely ask you for your admin password. After the installation is complete, you can 
+open the OCaml toplevel simply by typing {\tt ocaml} at the command line.
 
-Then, you can open the OCaml toplevel simply by typing ``ocaml'' at the command line.
-
-Once in the toplevel, you can open a script by using the \#use "{\it filename}";; directive:
+Once in the toplevel, you can open a script by using the {\tt \#use "{\it filename}";;} directive:
 
 \beforeverb
 \begin{verbatim}
@@ -373,24 +396,44 @@ Once in the toplevel, you can open a script by using the \#use "{\it filename}";
 Note that the toplevel's {\bf current directory} \footnote{The {\bf current directory} is the 
 directory in which ocaml will look to find files to run, outside of the standard ocaml directories.} 
 will be the current directory when you ran it within the terminal. You can change your current directory 
-using the \#cd ``{\it dirname}'';; directive.
+using the {\tt \#cd ``{\it dirname}'';;} directive.
 
 \subsection{Windows (7)}
 
-First you must install OCaml. Go to the OCaml home page (\url{caml.inria.fr}) and go to the Download page. Download the appropriate distribution - if you don't know which one to choose, go with the Windows binary ``for the port based on the Microsoft toolchain.'' Run the installer and follow the directions therein.
+First you must install OCaml. Go to the OCaml home page (\url{caml.inria.fr}) and go to the Download 
+page. Download the appropriate distribution - if you don't know which one to choose, go with the 
+Windows binary ``for the port based on the Microsoft toolchain.'' Run the installer and follow the 
+directions therein.
 
-You can now run an OCaml toplevel from the windows command line.
+You can now run an OCaml toplevel from the windows command line by typing {\tt ocaml}. Alternatively,
+OCaml has a very pretty toplevel with some nice features which you can open by running "Objective Caml"
+from Windows > All Programs > Objective Caml, or open the same program by searching from the windows 
+start menu.
 
-%right here
+Once in the toplevel, you can open a script by using the {\tt \#use "{\it filename}";;} directive:
+
+\beforeverb
+\begin{verbatim}
+ #use "myscript.ml";;
+\end{verbatim}
+\afterverb
+
+Note that the toplevel's {\bf current directory} \footnote{The {\bf current directory} is the 
+directory in which ocaml will look to find files to run, outside of the standard ocaml directories.} 
+will be the current directory when you ran it within the terminal. You can change your current directory 
+using the {\tt \#cd ``{\it dirname}'';;} directive.
 
 \section{What is a program?}
 
-A {\bf program} is a sequence of instructions that specifies how to perform a computation.  The computation might be something
-mathematical, such as solving a system of equations or finding the roots of a polynomial, but it can also be a symbolic computation, such as searching and replacing text in a document or (strangely enough) compiling a program.
+A {\bf program} is a sequence of instructions that specifies how to perform a computation.  The computation 
+might be something mathematical, such as solving a system of equations or finding the roots of a polynomial, 
+but it can also be a symbolic computation, such as searching and replacing text in a document or (strangely 
+enough) compiling a program.
 
 \index{program}
 
-The details look different in different languages, but a few basic instructions appear in just about every language:
+The details look different in different languages, but a few basic instructions appear in just about every 
+language:
 
 \begin{description}
 
@@ -406,7 +449,10 @@ The details look different in different languages, but a few basic instructions 
 
 \end{description}
 
-Believe it or not, that's pretty much all there is to it.  Every program you've ever used, no matter how complicated, is made up of instructions that look pretty much like these.  So you can think of programming as the process of breaking a large, complex task into smaller and smaller subtasks until the subtasks are simple enough to be performed with one of these basic instructions.
+Believe it or not, that's pretty much all there is to it.  Every program you've ever used, no matter how 
+complicated, is made up of instructions that look pretty much like these.  So you can think of programming 
+as the process of breaking a large, complex task into smaller and smaller subtasks until the subtasks are 
+simple enough to be performed with one of these basic instructions.
 
 \index{algorithm}
 
@@ -416,25 +462,35 @@ That may be a little vague, but we will come back to this topic when we talk abo
 \index{debugging}
 \index{bug}
 
-Programming is error-prone.  For whimsical reasons, programming errors are called {\bf bugs} and the process of tracking them down is called {\bf debugging}.
+Programming is error-prone.  For whimsical reasons, programming errors are called {\bf bugs}\footnote{It's 
+not actually true that it's named after a moth found in a computer relay, though that does make for a rather 
+amusing story. For more information on etymology, check out \url{http://en.wikipedia.org/wiki/Software_bug}.} 
+and the process of tracking them down is called {\bf debugging}.
 
 \index{debugging}
 \index{bug}
 
-Three kinds of errors can occur in a program: syntax errors, runtime errors, and semantic errors. It is useful to distinguish between them in order to track them down more quickly.
+Three kinds of errors can occur in a program: syntax errors, runtime errors, and semantic errors. It is useful 
+to distinguish between them in order to track them down more quickly.
 
 \subsection{Syntax errors}
 \index{syntax error}
 \index{error!syntax}
 \index{error message}
 
-OCaml can only execute a program if the syntax is correct; otherwise, the interpreter displays an error message. {\bf Syntax} refers to the structure of a program and the rules about that structure. For example, parentheses have to come in matching pairs, so {\tt (1 + 2)} is legal, but {\tt 8)} is a {\bf syntax error}.
+OCaml can only execute a program if the syntax is correct; otherwise, the interpreter displays an error message.  
+{\bf Syntax} refers to the structure of a program and the rules about that structure. For example, parentheses 
+have to come in matching pairs, so {\tt (1 + 2)} is legal, but {\tt 8)} is a {\bf syntax error}.
 
 \index{parentheses!matching}
 \index{syntax}
 \index{cummings, e. e.}
 
-In English readers can tolerate most syntax errors, which is why we can read the poetry of e. e. cummings without spewing error messages. OCaml is not so forgiving.  If there is a single syntax error anywhere in your program, OCaml will display an error message and quit, and you will not be able to run your program. During the first few weeks of your programming career, you will probably spend a lot of time tracking down syntax errors.  As you gain experience, you will make fewer errors and find them faster.
+In English readers can tolerate most syntax errors, which is why we can read the poetry of e. e. cummings without 
+spewing error messages. OCaml is not so forgiving.  If there is a single syntax error anywhere in your program, 
+OCaml will display an error message and quit, and you will not be able to run your program. During the first few 
+weeks of your programming career, you will probably spend a lot of time tracking down syntax errors.  As you gain 
+experience, you will make fewer errors and find them faster.
 
 \subsection{Runtime errors}
 \label{runtime}
@@ -444,9 +500,12 @@ In English readers can tolerate most syntax errors, which is why we can read the
 \index{safe language}
 \index{language!safe}
 
-The second type of error is a runtime error, so called because the error does not appear until after the program has started running. These errors are also called {\bf exceptions} because they usually indicate that something exceptional (and bad) has happened.
+The second type of error is a runtime error, so called because the error does not appear until after the 
+program has started running. These errors are also called {\bf exceptions} because they usually indicate 
+that something exceptional (and bad) has happened.
 
-Runtime errors are rare in the simple programs you will see in the first few chapters, so it might be a while before you encounter one.
+Runtime errors are rare in the simple programs you will see in the first few chapters, so it might be a 
+while before you encounter one.
 
 \subsection{Semantic errors}
 \index{semantics}
@@ -454,27 +513,42 @@ Runtime errors are rare in the simple programs you will see in the first few cha
 \index{error!semantic}
 \index{error message}
 
-The third type of error is the {\bf semantic error}.  If there is a semantic error in your program, it will run successfully in the sense that the computer will not generate any error messages, but it will not do the right thing.  It will do something else.  Specifically, it will do what you told it to do.
+The third type of error is the {\bf semantic error}.  If there is a semantic error in your program, it will 
+run successfully in the sense that the computer will not generate any error messages, but it will not do the 
+right thing.  It will do something else.  Specifically, it will do what you told it to do.
 
-The problem is that the program you wrote is not the program you wanted to write.  The meaning of the program (its semantics) is wrong. Identifying semantic errors can be tricky because it generally requires you to work backward by looking at the output of the program and trying to figure out what it is doing.
+The problem is that the program you wrote is not the program you wanted to write.  The meaning of the program 
+(its semantics) is wrong. Identifying semantic errors can be tricky because it generally requires you to work 
+backward by looking at the output of the program and trying to figure out what it is doing.
 
 \subsection{Experimental debugging}
 
-One of the most important skills you will acquire is debugging. Although it can be frustrating, debugging is one of the most intellectually rich, challenging, and interesting parts of programming.
+One of the most important skills you will acquire is debugging. Although it can be frustrating, debugging is one 
+of the most intellectually rich, challenging, and interesting parts of programming.
 
 \index{experimental debugging}
 \index{debugging!experimental}
 
-In some ways, debugging is like detective work.  You are confronted with clues, and you have to infer the processes and events that led to the results you see.
+In some ways, debugging is like detective work.  You are confronted with clues, and you have to infer the processes 
+and events that led to the results you see.
 
-Debugging is also like an experimental science.  Once you have an idea about what is going wrong, you modify your program and try again.  If your hypothesis was correct, then you can predict the result of the modification, and you take a step closer to a working program.  If your hypothesis was wrong, you have to come up with a new one.  As Sherlock Holmes pointed out, ``When you have eliminated the impossible, whatever remains, however improbable, must be the truth.'' (A. Conan Doyle, {\em The Sign of Four})
+Debugging is also like an experimental science.  Once you have an idea about what is going wrong, you modify your 
+program and try again.  If your hypothesis was correct, then you can predict the result of the modification, and 
+you take a step closer to a working program.  If your hypothesis was wrong, you have to come up with a new one.  
+As Sherlock Holmes pointed out, ``When you have eliminated the impossible, whatever remains, however improbable, 
+must be the truth.'' (A. Conan Doyle, {\em The Sign of Four})
 
 \index{Holmes, Sherlock}
 \index{Doyle, Arthur Conan}
 
-For some people, programming and debugging are the same thing.  That is, programming is the process of gradually debugging a program until it does what you want.  The idea is that you should start with a program that does {\em something} and make small modifications, debugging them as you go, so that you always have a working program.
+For some people, programming and debugging are the same thing.  That is, programming is the process of gradually 
+debugging a program until it does what you want.  The idea is that you should start with a program that does {\em 
+something} and make small modifications, debugging them as you go, so that you always have a working program.
 
-For example, Linux is an operating system that contains thousands of lines of code, but it started out as a simple program Linus Torvalds used to explore the Intel 80386 chip.  According to Larry Greenfield, ``One of Linus's earlier projects was a program that would switch between printing AAAA and BBBB.  This later evolved to Linux.'' ({\em The Linux Users' Guide} Beta Version 1).
+For example, Linux is an operating system that contains thousands of lines of code, but it started out as a simple 
+program Linus Torvalds used to explore the Intel 80386 chip.  According to Larry Greenfield, ``One of Linus's 
+earlier projects was a program that would switch between printing AAAA and BBBB.  This later evolved to Linux.'' 
+({\em The Linux Users' Guide} Beta Version 1).
 
 \index{Linux}
 
@@ -486,34 +560,53 @@ Later chapters will make more suggestions about debugging and other programming 
 \index{language!formal}
 \index{language!natural}
 
-{\bf Natural languages} are the languages people speak, such as English, Spanish, and French.  They were not designed by people (although people try to impose some order on them); they evolved naturally.
+{\bf Natural languages} are the languages people speak, such as English, Spanish, and French.  They were not 
+designed by people (although people try to impose some order on them); they evolved naturally.
 
-{\bf Formal languages} are languages that are designed by people for specific applications.  For example, the notation that mathematicians use is a formal language that is particularly good at denoting relationships among numbers and symbols.  Chemists use a formal language to represent the chemical structure of molecules.  And most importantly:
+{\bf Formal languages} are languages that are designed by people for specific applications.  For example, the 
+notation that mathematicians use is a formal language that is particularly good at denoting relationships 
+among numbers and symbols.  Chemists use a formal language to represent the chemical structure of molecules.  
+And most importantly:
 
 \begin{quote}
 {\bf Programming languages are formal languages that have been designed to express computations.}
 \end{quote}
 
-Formal languages tend to have strict rules about syntax.  For example, $3 + 3 = 6$ is a syntactically correct mathematical statement, but $3 + = 3 \mbox{\$} 6$ is not.  $H_2O$ is a syntactically correct chemical formula, but $_2Zz$ is not.
+Formal languages tend to have strict rules about syntax.  For example, $3 + 3 = 6$ is a syntactically correct 
+mathematical statement, but $3 + = 3 \mbox{\$} 6$ is not.  $H_2O$ is a syntactically correct chemical formula, 
+but $_2Zz$ is not.
 
-Syntax rules come in two flavors, pertaining to {\bf tokens} and structure.  Tokens are the basic elements of the language, such as words, numbers, and chemical elements.  One of the problems with $3 + = 3 \mbox{\$} 6$ is that $\$$ is not a legal token in mathematics (at least as far as I know).  Similarly, $_2Zz$ is not legal because there is no element with the abbreviation $Zz$.
+Syntax rules come in two flavors, pertaining to {\bf tokens} and structure.  Tokens are the basic elements of 
+the language, such as words, numbers, and chemical elements.  One of the problems with $3 + = 3 \mbox{\$} 6$ 
+is that $\$$ is not a legal token in mathematics (at least as far as I know).  Similarly, $_2Zz$ is not legal 
+because there is no element with the abbreviation $Zz$.
 
 \index{token}
 \index{structure}
 
-The second type of syntax error pertains to the structure of a statement; that is, the way the tokens are arranged.  The statement $3 + = 3 \mbox{\$} 6$ is illegal because even though $+$ and $=$ are legal tokens, you can't have one right after the other.  Similarly, in a chemical formula the subscript comes after the element name, not before.
+The second type of syntax error pertains to the structure of a statement; that is, the way the tokens are 
+arranged.  The statement $3 + = 3 \mbox{\$} 6$ is illegal because even though $+$ and $=$ are legal tokens, 
+you can't have one right after the other.  Similarly, in a chemical formula the subscript comes after the 
+element name, not before.
 
 \begin{ex}
-Write a well-structured English sentence with invalid tokens in it.  Then write another sentence with all valid tokens but with invalid structure.
+Write a well-structured English sentence with invalid tokens in it.  Then write another sentence with all 
+valid tokens but with invalid structure.
 \end{ex}
 
-When you read a sentence in English or a statement in a formal language, you have to figure out what the structure of the sentence is (although in a natural language you do this subconsciously).  This process is called {\bf parsing}.
+When you read a sentence in English or a statement in a formal language, you have to figure out what the 
+structure of the sentence is (although in a natural language you do this subconsciously).  This process 
+is called {\bf parsing}.
 
 \index{parse}
 
-For example, when you hear the sentence, ``The penny dropped,'' you understand that ``the penny'' is the subject and ``dropped'' is the predicate.  Once you have parsed a sentence, you can figure out what it means, or the semantics of the sentence.  Assuming that you know what a penny is and what it means to drop, you will understand the general implication of this sentence.
+For example, when you hear the sentence, ``The penny dropped,'' you understand that ``the penny'' is the 
+subject and ``dropped'' is the predicate.  Once you have parsed a sentence, you can figure out what it 
+means, or the semantics of the sentence.  Assuming that you know what a penny is and what it means to 
+drop, you will understand the general implication of this sentence.
 
-Although formal and natural languages have many features in common---tokens, structure, syntax, and semantics---there are some differences:
+Although formal and natural languages have many features in common---tokens, structure, syntax, and 
+semantics---there are some differences:
 
 \index{ambiguity}
 \index{redundancy}
@@ -521,30 +614,46 @@ Although formal and natural languages have many features in common---tokens, str
 
 \begin{description}
 
-\item[ambiguity:] Natural languages are full of ambiguity, which people deal with by using contextual clues and other information. Formal languages are designed to be nearly or completely unambiguous, which means that any statement has exactly one meaning, regardless of context.
+\item[ambiguity:] Natural languages are full of ambiguity, which people deal with by using contextual 
+clues and other information. Formal languages are designed to be nearly or completely unambiguous, which 
+means that any statement has exactly one meaning, regardless of context.
 
-\item[redundancy:] In order to make up for ambiguity and reduce misunderstandings, natural languages employ lots of redundancy.  As a result, they are often verbose.  Formal languages are less redundant and more concise.
+\item[redundancy:] In order to make up for ambiguity and reduce misunderstandings, natural languages employ 
+lots of redundancy.  As a result, they are often verbose.  Formal languages are less redundant and more 
+concise.
 
-\item[literalness:] Natural languages are full of idiom and metaphor. If I say, ``The penny dropped,'' there is probably no penny and nothing dropping\footnote{This idiom means that someone realized something after a period of confusion.}.  Formal languages mean exactly what they say.
+\item[literalness:] Natural languages are full of idiom and metaphor. If I say, ``The penny dropped,'' 
+there is probably no penny and nothing dropping\footnote{This idiom means that someone realized something 
+after a period of confusion.}.  Formal languages mean exactly what they say.
 
 \end{description}
 
-People who grow up speaking a natural language---everyone I know---often have a hard time adjusting to formal languages.  In some ways, the difference between formal and natural language is like the difference between poetry and prose, but more so:
+People who grow up speaking a natural language---everyone I know---often have a hard time adjusting to 
+formal languages.  In some ways, the difference between formal and natural language is like the 
+difference between poetry and prose, but more so:
 
 \index{poetry}
 \index{prose}
 
 \begin{description}
 
-\item[Poetry:] Words are used for their sounds as well as for their meaning, and the whole poem together creates an effect or emotional response.  Ambiguity is not only common but often deliberate.
+\item[Poetry:] Words are used for their sounds as well as for their meaning, and the whole poem 
+together creates an effect or emotional response.  Ambiguity is not only common but often deliberate.
 
-\item[Prose:] The literal meaning of words is more important, and the structure contributes more meaning.  Prose is more amenable to analysis than poetry but still often ambiguous.
+\item[Prose:] The literal meaning of words is more important, and the structure contributes more 
+meaning.  Prose is more amenable to analysis than poetry but still often ambiguous.
 
-\item[Programs:] The meaning of a computer program is unambiguous and literal, and can be understood entirely by analysis of the tokens and structure.
+\item[Programs:] The meaning of a computer program is unambiguous and literal, and can be understood 
+entirely by analysis of the tokens and structure.
 
 \end{description}
 
-Here are some suggestions for reading programs (and other formal languages).  First, remember that formal languages are much more dense than natural languages, so it takes longer to read them.  Also, the structure is very important, so it is usually not a good idea to read from top to bottom, left to right.  Instead, learn to parse the program in your head, identifying the tokens and interpreting the structure.  Finally, the details matter.  Small errors in spelling and punctuation, which you can get away with in natural languages, can make a big difference in a formal language.
+Here are some suggestions for reading programs (and other formal languages).  First, remember that 
+formal languages are much more dense than natural languages, so it takes longer to read them.  Also, 
+the structure is very important, so it is usually not a good idea to read from top to bottom, left 
+to right.  Instead, learn to parse the program in your head, identifying the tokens and interpreting 
+the structure.  Finally, the details matter.  Small errors in spelling and punctuation, which you can 
+get away with in natural languages, can make a big difference in a formal language.
 
 \section{The first program}
 \label{hello}
@@ -600,7 +709,7 @@ really going to use functions from that module a lot.
 
 \index{module}
 
-Really, we could get simply and just type ``Hello, World!'' and get the result ``- : string = ''Hello, World!''.''
+Really, we could get simply and just type ``Hello, World!'' and get the result ``{\tt - : string = ''Hello, World!''.}''
 
 Some people judge the quality of a programming language by the simplicity of the ``Hello, World!'' program.  By this 
 standard, OCaml does \footnote{Or can do, anyway. There are about as many different OCaml ``Hello, World!'' programs 
@@ -615,16 +724,17 @@ as there are OCaml programmers, all arguably equally valid.} about as well as po
 \index{Programming Paradigms!Object-Oriented}
 
 You may have noticed that this book is entitled ``Think OCaml: How to Think Like a (Functional) Computer Scientist.'' 
-No, this is not saying that you'll be good, but not great, at programming. Rather, it's a particular paradigm of 
+No, this is not saying that you'll be good-but-not-great, at programming. Rather, it's a particular paradigm of 
 programming. {\bf Functional Programming} is programming where the function is a first-class citizen. Now, this is of 
 course a silly definition, but it's the best we can really do for now.
-
+Categorical Abstract Machine Language
 Another popular programming paradigm is {\bf Object-Oriented}. Languages that are object-oriented, such as C++ and Python, 
 focus rather on having ``objects'' and changing them. ``Object'' is really kind of a blanket term for all kinds of 
 different, often custom, ways of storing data.
 
 OCaml is mostly a functional programming language. However, OCaml has support for some level of object-oriented programming,
- unlike it's predecessor Caml. The ``O'' in OCaml stands for ``Objective''.
+ unlike it's predecessor Caml. The ``O'' in OCaml stands for ``Objective''.\footnote{``Caml'' once stood for ``Categorical 
+Abstract Machine Language'' but it doesn't any more. Now it just represents an even-toed ungulate with humps on its back.}
 
 \section{Debugging}
 \index{debugging}
@@ -652,11 +762,17 @@ obstinate people.
 \index{debugging!emotional response}
 \index{emotional debugging}
 
-Preparing for these reactions might help you deal with them. One approach is to think of the computer as an employee with certain strengths, like speed and precision, and particular weaknesses, like lack of empathy and inability to grasp the big picture.
+Preparing for these reactions might help you deal with them. One approach is to think of the computer as an employee 
+with certain strengths, like speed and precision, and particular weaknesses, like lack of empathy and inability to 
+grasp the big picture.
 
-Your job is to be a good manager: find ways to take advantage of the strengths and mitigate the weaknesses.  And find ways to use your emotions to engage with the problem, without letting your reactions interfere with your ability to work effectively.
+Your job is to be a good manager: find ways to take advantage of the strengths and mitigate the weaknesses.  And 
+find ways to use your emotions to engage with the problem, without letting your reactions interfere with your 
+ability to work effectively.
 
-Learning to debug can be frustrating, but it is a valuable skill that is useful for many activities beyond programming.  At the end of each chapter there is a debugging section, like this one, with my thoughts about debugging.  I hope they help!
+Learning to debug can be frustrating, but it is a valuable skill that is useful for many activities beyond 
+programming.  At the end of each chapter there is a debugging section, like this one, with my thoughts about 
+debugging.  I hope they help!
 
 
 \section{Glossary}
@@ -667,7 +783,7 @@ Learning to debug can be frustrating, but it is a valuable skill that is useful 
 a solution, and expressing the solution.
 \index{problem solving}
 
-\item[high-level language:]  A programming language like Python that
+\item[high-level language:]  A programming language like OCaml that
 is designed to be easy for humans to read and write.
 \index{high-level language}
 
@@ -779,7 +895,7 @@ interpreter to display a value on the screen.
 
 \begin{ex}
 Use a web browser to go to the OCaml website \url{caml.inria.fr}.
-This page contains information about OCaml (and Caml and Caml Light) and links
+This page contains information about OCaml (and Caml Light) and links
 to OCaml-related pages, and it gives you the ability to search
 the Ocaml documentation.
 
@@ -794,11 +910,13 @@ Note that OCaml, like all good things, comes from France (hence the .fr in the u
 
  Now, create a script called ``hello.ml'' that is a ``Hello, World!'' program and run it.
 
- Experiment
+ Experiment with several different methods of writing this program. In particular,
+write at least one method using the Printf module. Use the OCaml documentation online to 
+understand enough of this module to do so.
 \end{ex}
 
 
-
+%edit here
 \chapter{Variables, expressions and statements}
 
 \section{Values and types}
@@ -807,8 +925,7 @@ Note that OCaml, like all good things, comes from France (hence the .fr in the u
 \index{string}
 
 A {\bf value} is one of the basic things a program works with,
-like a letter or a
-number.  Some values we have seen so far
+like a letter or a number.  Some values we have seen so far
 are {\tt 1}, {\tt 2}, and
 \verb"'Hello, World!'".
 
@@ -2117,10 +2234,11 @@ Functions can also take other functions as arguments. Such a function
 is called a {\em Higher-Order Function}, which is sometimes abbreviated HOF.
 
 
-\section{Functions are One Statement}
+\section{Functions are Just Renamed Expressions}
 
-In OCaml, functions have to be all one statement, hence why you must use sequence points within a 
-function definition.
+In OCaml, functions are really just expressions renamed. This means that an 
+Ocaml function must evaluate to a value, hence why you must use sequence points 
+within a function definition.
 
 Using {\tt let} within a function definition requires the in keyword:
 
@@ -2561,13 +2679,13 @@ of the display.
 
 \end{ex}
 
-%right here
+%write here
 \begin{ex}
 Write a function that takes two strings as an argument and concatenates
 them with a space in between.
 
-Now use currying to define functions that append + and - to the end of the string, 
-again with a space in between.
+Now use currying with that function to define functions that append + and - 
+to the end of the string, again with a space in between.
 
 Finally, write a function to append a symbol x number of times.
 
@@ -2712,7 +2830,7 @@ similar to their meaning in English.  For example,
 \index{operator!and}
 \index{operator!or}
 \index{operator!not}
-%right here
+
 {\tt n mod 2 = 0 || n mod 3 = 0} is true if {\em either} of the conditions
 is true, that is, if the number is divisible by 2 {\em or} 3.
 
@@ -2736,39 +2854,42 @@ simplest form is the {\tt if} statement:
 
 \beforeverb
 \begin{verbatim}
-if x > 0:
-    print 'x is positive'
+if x > 0
+then print_string "x is positive."
+else print_string "x is not certain.";;
 \end{verbatim}
 \afterverb
-%
+
 The boolean expression after the {\tt if} statement is
-called the {\bf condition}.  If it is true, then the indented
-statement gets executed.  If not, nothing happens.
+called the {\bf condition}.  If it is true, then the expression 
+after {\tt then} gets executed.  If not, then the {\tt else} expression 
+is evaluated. The only caveat is that the {\tt then} and {\tt else} expressions
+must evaluate to values of the same type, both integers for example.
 
-\index{condition}
-\index{compound statement}
-\index{statement!compound}
+The else expression can be omitted, in which case it defaults
+to {\tt else ()}. This can be problematic as it means the {\tt then} clause must
+also evaluate to the unit type.
 
-{\tt if} statements have the same structure as function definitions:
-a header followed by an indented block.  Statements like this are
-called {\bf compound statements}.
-
-There is no limit on the number of statements that can appear in
-the body, but there has to be at least one.
-Occasionally, it is useful to have a body with no statements (usually
-as a place keeper for code you haven't written yet).  In that
-case, you can use the {\tt pass} statement, which does nothing.
-
-\index{pass statement}
-\index{statement!pass}
+As with most things in OCaml, as you're probably beginning to notice, the 
+then-expression and else-expression must evaluate to one value (i.e., be expressions).
+Sometimes, though, you might want to do more than one thing within those expressions.
+For example, you might want to display the value of something. For just that, we have 
+{\tt begin} and {\tt end}...
 
 \beforeverb
 \begin{verbatim}
-if x < 0:
-    pass          # need to handle negative values!
+if x>0
+then begin
+	print_int x;
+	x
+	end
+else x+1;;
 \end{verbatim}
 \afterverb
-%
+
+Note that the first line within the {\tt begin..end} block is followed by a sequence point:
+anything returned by the first line will just be discarded (but it's considered good form
+%write here
 
 \section{Alternative execution}
 \label{alternative execution}
