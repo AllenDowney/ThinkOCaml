@@ -916,7 +916,6 @@ understand enough of this module to do so.
 \end{ex}
 
 
-%edit here
 \chapter{Variables, expressions and statements}
 
 \section{Values and types}
@@ -933,11 +932,11 @@ These values belong to different {\bf types}:
 {\tt 2} is an integer, and \verb"'Hello, World!'" is a {\bf string},
 so-called because it contains a ``string'' of letters.
 You (and the interpreter) can identify
-strings because they are enclosed in quotation marks.
+strings because they are enclosed in double quotation marks.
 
 \index{quotation mark}
 
-There's also a print statement for integers:
+You've already seen {\pring_string}. There's also a print statement for integers:
 
 \beforeverb
 \begin{verbatim}
@@ -980,11 +979,11 @@ val a : float = 3.2
 
 There's also a separate type called ``char,'' which is short for ``character.'' 
 A char is like a string, but it's only one character long (hence the name), and it's surrounded 
-by single quotes instead of double quotes. In fact, strings are comprised of lists (or strings!)
+by single quotes instead of double quotes. In fact, strings are comprised of lists
 of chars. \footnote{A note on pronunciation: most often, ``char'' is pronounced like in charcoal. 
-It's less standard, but I prefer to pronounce it like it appears in character, since that's where 
-it came from.} Usually, you'll use strings, but if you really only need one character, chars use 
-less memory.
+It's less standard, but I personally prefer to pronounce it like it appears in character, since 
+that's where it came from.} Usually, you'll use strings, but if you really only need one character, 
+chars use less memory.
 
 \index{char type}
 \index{type!char}
@@ -1005,7 +1004,8 @@ Error: Syntax error
 \end{verbatim}
 \afterverb
 
-If you enclose a number in quotes, OCaml will infer that it is a char or string, depending on the number of quotes.
+If you enclose a number in quotes, OCaml will infer that it is a char or string, 
+depending on the number of quotes.
 
 When you type a large integer, you might be tempted to use commas
 between groups of three digits, as in {\tt 1,000,000}.  This is not a
@@ -1103,12 +1103,15 @@ see why later).
 
 The underscore character (\verb"_") can appear in a name.
 It is often used in names with multiple words, such as
-\verb"my_name" or \verb"airspeed_of_unladen_swallow". So can 
-an apostraphe (\verb"'"), such as \verb"h'".
+\verb"my_name" or \verb"airspeed_of_unladen_swallow", or 
+to denote subscripts, such as \verb"y_0" as an initial 
+condition. So can an apostraphe (\verb"'"), such as 
+\verb"h'".
 
 \index{underscore character}
 
-If you give a variable an illegal name, you get a syntax error:
+If you give a variable an illegal name, you get a syntax 
+error:
 
 \beforeverb
 \begin{verbatim}
@@ -1121,7 +1124,8 @@ Error: Syntax error
 \end{verbatim}
 \afterverb
 
-At the toplevel, OCaml will be nice and even underline where the error occured for you.
+At the toplevel, OCaml will be nice and even underline 
+where the error occured for you.
 
 {\tt 7h} is illegal because it does not begin with a letter.
 {\tt more@} is illegal because it contains an illegal character, {\tt
@@ -1129,11 +1133,14 @@ At the toplevel, OCaml will be nice and even underline where the error occured f
 
 It turns out that {\tt class} is one of OCaml's {\bf keywords}.  The
 interpreter uses keywords to recognize the structure of the program,
-and they cannot be used as variable names. The full list of keywords can be found online here: \url{http://caml.inria.fr/pub/docs/manual-ocaml/manual044.html}.
+and they cannot be used as variable names. The full list of keywords 
+can be found online here: 
+\url{http://caml.inria.fr/pub/docs/manual-ocaml/manual044.html}.
 
 \index{keyword}
 
-You'll get a really interesting error if you try to use just a number as a variable:
+You'll get a really interesting error if you try to use just a 
+number as a variable:
 
 \beforeverb
 \begin{verbatim}
@@ -1145,45 +1152,9 @@ Exception: Match_failure ("", 8, -17).
 \end{verbatim}
 \afterverb
 
-That's fun. This will make a little more sense later.
-
-%\section{Statements}
-%
-%A statement is a unit of code that the Python interpreter can
-%execute.  We have seen two kinds of statements: print
-%and assignment.
-%
-%\index{statement}
-%\index{interactive mode}
-%\index{script mode}
-%
-%When you type a statement in interactive mode, the interpreter
-%executes it and displays the result, if there is one.
-%
-%A script usually contains a sequence of statements.  If there
-%is more than one statement, the results appear one at a time
-%as the statements execute.
-%
-%For example, the script
-%
-%\beforeverb
-%\begin{verbatim}
-%print 1
-%x = 2
-%print x
-%\end{verbatim}
-%\afterverb
-%%
-%produces the output
-%
-%\beforeverb
-%\begin{verbatim}
-%1
-%52
-%\end{verbatim}
-%\afterverb
-%
-%The assignment statement produces no output.
+That's fun. Technically, this is a semantic error causing a 
+syntax error. This will make a little more sense later when
+we talk about pattern-matching.
 
 \section{Operators and operands}
 \index{operator, arithmetic}
@@ -1205,7 +1176,8 @@ debugging type errors much simpler, though it seems like a pain at first.
 \index{Strictly typed}
 
 For integers, the operators {\tt +}, {\tt -}, {\tt *}, and {\tt /}
-perform addition, subtraction, multiplication, and division, as in the following examples:
+perform addition, subtraction, multiplication, and division, as in 
+the following examples:
 
 \beforeverb
 \begin{verbatim}
@@ -1217,12 +1189,11 @@ For floating-points, the operators are the same, but followed by a period, namel
 {\tt +.}, {\tt -.}, {\tt *.}, and {\tt /.}. There is also a floating point operator for
 exponentiation, namely {\tt **}. There is no integer exponention, probably because an integer
 raised to a negative integer would result in a non-integer. \footnote{This is not to say that 
-a function can't take two integers and return a float, just that it's not particularly
-preferable.}
+a function can't take two integers and return a float.}
 
 In some other languages, \verb"^" is used for exponentiation, but
-in OCaml it is used for string concatenation, meaning the two strings are added end-to-start,
-such as in the following example:
+in OCaml it is used for string concatenation, meaning the two strings 
+are added end-to-start, such as in the following example:
 
 \beforeverb
 \begin{verbatim}
@@ -1231,10 +1202,11 @@ such as in the following example:
 \end{verbatim}
 \afterverb
 
-Don't forget to put a space somewhere so your words are separated when you concatenate.
+Don't forget to put a space somewhere so your words are separated 
+when you concatenate.
 
-You can change an int to a float or a float to an int using the OCaml functions \verb"float_of_int" or
-\verb"int_of_float", like so:
+You can change an int to a float or vice versa using the 
+OCaml functions \verb"float_of_int" or \verb"int_of_float", like so:
 
 \beforeverb
 \begin{verbatim}
@@ -1246,10 +1218,10 @@ I'll leave determining which is which as an exercise to the reader.
 
 \section{Expressions}
 
-An {\bf expression} is a combination of values, variables, and operators.
-A value all by itself is considered an expression, and so is
-a variable, so the following are all legal expressions
-(assuming that the variable {\tt x} has been assigned a value):
+An {\bf expression} is a combination of values, variables, operators
+and functions that returns a particular value. A value all by itself 
+is an expression, and so is a variable, so the following are all legal 
+expressions (assuming that the variable {\tt x} has been assigned a value):
 
 \index{expression}
 \index{evaluate}
@@ -1272,8 +1244,14 @@ If you type an expression in interactive mode, the interpreter
 \end{verbatim}
 \afterverb
 
-In OCaml, lots of things are actually expressions that might not look like them.
-You'll learn more about that later, as we see more expressions.
+\index{subexpressions}
+Expressions can, and often do,\footnote{Any expression with more than just a value or 
+variable technically contains subexpressions.} contain other expressions, called {\bf 
+subexpressions}. When evaluating the value of the expression, the OCaml interpreter 
+will evaluate the embedded expression and substitute it in to the larger expression. 
+In OCaml, and many other function-oriented languages, everything must be an expression. 
+Everything up to a double semi-colon ({\tt ;;}) must be exactly one expression, with 
+arbitrarily many sub-expressions.
 
 \begin{ex}
 Type the following statements in the OCaml interpreter to see
@@ -1306,10 +1284,10 @@ What really happens when I say ``let x = 3;;'' is that the {\it expression}
 `3' is represented by `x'. `x' becomes kind of a shorthand way of writing `3'.
 
 One of the side effects of this is that you can't change the value of a variable.
-\footnote{So, really, in some sense they shouldn't be called variables at all.}
+\footnote{So, really, in some sense, they shouldn't be called variables at all.}
 
-In so-called object-oriented languages like C/C++, Java, and Python, most scripting
-involves creating and changing variables, so if you have done object-oriented programming
+In object-oriented languages like C/C++, Java, and Python, most scripting involves 
+creating and changing variables, so if you have done object-oriented programming
 before, you might find this a little weird. In function-oriented languages like OCaml, you 
 aren't really supposed to change the value of variables. You only use them as short-hand for 
 expressions. If you really want to, though, you can create a {\bf reference}, which functions
@@ -1364,6 +1342,7 @@ val x : int = 3;;
 
 See? The value of `x' changed! Didn't it?
 
+\index{scope}
 Actually, the answer is no, it didn't. What we have here is a problem of {\bf scope}. You see, variables
 all act within certain bounds, or on certain levels within a program. Every time we say ``let'', it kind of
 creates a new ``level'' of the program, within which only certain variables can be accessed. This brings up
@@ -1412,6 +1391,7 @@ exists within the expression after in. This is called a ``let-in-binding''.
  \afterverb
 \end{list}
 
+Now try them out in the interpreter and see if you were right!
 \end{ex}
 
 
@@ -1422,7 +1402,7 @@ exists within the expression after in. This is called a ``let-in-binding''.
 
 When more than one operator appears in an expression, the order of
 evaluation depends on the {\bf rules of precedence}.  For
-mathematical operators, Python follows mathematical convention.
+mathematical operators, OCaml follows mathematical convention.
 The acronym {\bf PEMDAS} is a useful way to
 remember the rules:
 
@@ -1452,6 +1432,11 @@ To divide by $2 \pi$, you can use parentheses or write {\tt degrees /. 2. /. pi}
 
 \end{itemize}
 
+Technically speaking, all operations in the programming language follow some sort
+of order of operations. However, you don't really need to know more than that 
+parentheses override all that precedence. In fact, if you need to know more about
+the order of operations than the above mathematical rules, then you're not making
+your code clear enough and should use parentheses to make things more clear.
 
 \section{String operations}
 \index{string!operation}
@@ -1469,7 +1454,7 @@ if the strings look like numbers, so the following are illegal:
 In OCaml, an operator cannot be used for two things. In some languages,
 for example Python, operators can be {\bf overloaded}, meaning they do different
 things in different situations (i.e., `+' can be used for string concatenation).
-In OCaml, this is not the case
+In OCaml, this is not the case.
 
 \index{operator!overloading}
 
@@ -1491,8 +1476,9 @@ percentage = (minute * 100) / 60
 \end{verbatim}
 \afterverb
 
-Everything between there will be ignored by the compiler. You can also put comments 
-at the end, or even in the middle, of a line of code:
+Everything between the parentheses will be ignored by the compiler. 
+You can also put comments at the end, or even in the middle, of a 
+line of code:
 
 \beforeverb
 \begin{verbatim}
@@ -1541,19 +1527,9 @@ illegal characters.
 \index{syntax error}
 \index{error!syntax}
 
-If you put a space in a variable name, Python thinks it is two
-operands without an operator:
-
-\beforeverb
-\begin{verbatim}
->>> bad name = 5
-SyntaxError: invalid syntax
-\end{verbatim}
-\afterverb
-%
 For syntax errors, the error messages don't help much.
-The most common messages are {\tt SyntaxError: invalid syntax} and
-{\tt SyntaxError: invalid token}, neither of which is very informative.
+The most common message is {\tt SyntaxError: invalid 
+syntax} which is not very informative.
 
 \index{error message}
 \index{use before def}
@@ -1592,13 +1568,13 @@ you might be tempted to write
 \afterverb
 %
 But the division happens first, so you would get $\pi / 2$, which
-is not the same thing!  There is no way for Python
+is not the same thing!  There is no way for OCaml
 to know what you meant to write, so in this case you don't
 get an error message; you just get the wrong answer.
 
 \index{order of operations}
 
-The other semantic error you might encounter is a scope error.
+Another semantic error you might encounter is a scope error.
 For example, assigning a variable for one scope and trying to use it
 in another:
 
@@ -1612,6 +1588,25 @@ val a : int = -1
 Error: unbound value god
 \end{verbatim}
 \afterverb
+
+The last common semantic error I'll mention now is attempting to create
+a variable name with a space in it, which OCaml interprets as a function
+definition:
+
+\beforeverb
+\begin{verbatim}
+# let bad name = 5;;
+val bad : 'a -> int = <fun>
+# bad 2;;
+- : int = 4
+# bad "Please, anything but 4!";;
+- : int = 4
+\end{verbatim}
+\afterverb
+
+What you've done is written a function {\tt bad} that takes one argument of 
+any type and always returns {\tt 4}. This will make more sense when we see 
+functions next chapter.
 
 \section{Glossary}
 
@@ -1668,10 +1663,6 @@ addition, multiplication, or string concatenation.
 
 \item[operand:]  One of the values on which an operator operates.
 \index{operand}
-
-%\item[floor division:] The operation that divides two numbers and chops off
-%the fraction part.
-%\index{floor division}
 
 \item[expression:]  A combination of variables, operators, and values that
 represents a single result value.
@@ -1749,7 +1740,7 @@ Practice using the OCaml interpreter as a calculator:
 
 \end{enumerate}
 \end{ex}
-
+%edit here
 \chapter{Functions}
 \label{funcchap}
 
@@ -2734,7 +2725,7 @@ You can see my solution at \url{thinkpython.com/ocaml/code/grid.ml}.
 
 %%removed chapter using TurtleWorld. Would love to write suitable replacement.
 
-\chapter{Conditionals and recursion}
+\chapter{Program Flow}
 
 \section{Modulus operator}
 
@@ -2880,47 +2871,17 @@ For example, you might want to display the value of something. For just that, we
 \begin{verbatim}
 if x>0
 then begin
-	print_int x;
-	x
-	end
+          print_int x;
+          x
+     end
 else x+1;;
 \end{verbatim}
 \afterverb
 
 Note that the first line within the {\tt begin..end} block is followed by a sequence point:
-anything returned by the first line will just be discarded (but it's considered good form
-%write here
-
-\section{Alternative execution}
-\label{alternative execution}
-
-\index{alternative execution}
-\index{else keyword}
-\index{keyword!else}
-
-A second form of the {\tt if} statement is {\bf alternative execution},
-in which there are two possibilities and the condition determines
-which one gets executed.  The syntax looks like this:
-
-\beforeverb
-\begin{verbatim}
-if x%2 == 0:
-    print 'x is even'
-else:
-    print 'x is odd'
-\end{verbatim}
-\afterverb
-%
-If the remainder when {\tt x} is divided by 2 is 0, then we
-know that {\tt x} is even, and the program displays a message to that
-effect.  If the condition is false, the second set of statements is
-executed.  Since the condition must be true or false, exactly one of
-the alternatives will be executed.  The alternatives are called
-{\bf branches}, because they are branches in the flow of execution.
-
-\index{branch}
-
-
+anything returned by the first line will just be discarded. However, it's considered good form
+for it to always return the unit, and it will spew warning errors at you if it returns anything
+else.
 
 \section{Chained conditionals}
 \index{chained conditional}
@@ -2932,32 +2893,27 @@ chained conditional}:
 
 \beforeverb
 \begin{verbatim}
-if x < y:
-    print 'x is less than y'
-elif x > y:
-    print 'x is greater than y'
-else:
-    print 'x and y are equal'
+if x > 3
+then "x is big."
+else if x = 3:
+     then "x is three."
+else "x is little.";;
 \end{verbatim}
 \afterverb
 %
-{\tt elif} is an abbreviation of ``else if.''  Again, exactly one
-branch will be executed.  There is no limit on the number of {\tt
-elif} statements.  If there is an {\tt else} clause, it has to be
-at the end, but there doesn't have to be one.
-
-\index{elif keyword}
-\index{keyword!elif}
-
+There is no limit on the number of {\tt else if} statements. However, these
+trees become harder to correctly interpret the more branches you put on, and
+the code can get very unmanagable. We'll see better ways to control program 
+flow as we go along.
 
 \beforeverb
 \begin{verbatim}
-if choice == 'a':
-    draw_a()
-elif choice == 'b':
-    draw_b()
-elif choice == 'c':
-    draw_c()
+if choice = 'a':
+then draw_a()
+else if choice = 'b':
+     then draw_b()
+else if choice = 'c':
+    then draw_c()
 \end{verbatim}
 \afterverb
 %
@@ -2965,66 +2921,135 @@ Each condition is checked in order.  If the first is false,
 the next is checked, and so on.  If one of them is
 true, the corresponding branch executes, and the statement
 ends.  Even if more than one condition is true, only the
-first true branch executes.  
+first true branch executes.
 
-
-\section{Nested conditionals}
 \index{nested conditional}
-\index{conditional!nested}
-
-One conditional can also be nested within another.  We could have
-written the trichotomy example like this:
+Because one conditional is within the body of another conditional,
+it is referred to as a {\bf nested conditional}. Nested conditionals
+can also occur within the {\tt then} clauses of if statements.
 
 \beforeverb
 \begin{verbatim}
-if x == y:
-    print 'x and y are equal'
-else:
-    if x < y:
-        print 'x is less than y'
-    else:
-        print 'x is greater than y'
+if 0 < x
+then if x < 10
+print_string "x is a positive single-digit number."
 \end{verbatim}
 \afterverb
-%
-The outer conditional contains two branches.  The
-first branch contains a simple statement.  The second branch
-contains another {\tt if} statement, which has two branches of its
-own.  Those two branches are both simple statements,
-although they could have been conditional statements as well.
-
-Although the indentation of the statements makes the structure
-apparent, {\bf nested conditionals} become difficult to read very
-quickly. In general, it is a good idea to avoid them when you can.
 
 Logical operators often provide a way to simplify nested conditional
-statements.  For example, we can rewrite the following code using a
+statements.  For example, we can rewrite the above code using a
 single conditional:
 
 \beforeverb
 \begin{verbatim}
-if 0 < x:
-    if x < 10:
-        print 'x is a positive single-digit number.'
+if 0<x && x<10
+then print_string "x is a positive single-digit number."
 \end{verbatim}
 \afterverb
-%
-The {\tt print} statement is executed only if we make it past both
-conditionals, so we can get the same effect with the {\tt and} operator:
+
+\section{Looping}
+
+In functional programming, we don't really like loops. We'd much rather
+use recursion, which I'll introduce next chapter and is one of the major
+tenets of function-oriented programming. However, it's worth talking about
+looping, both because it can be occasionally useful even in function-oriented
+programs, and because if you go on to learn any object-oriented languages, 
+it'll be very helpful to at least know what the concept is. Also, it can be 
+useful to contrast looping with recursive functions to show why recursion can
+be so cool.
+
+\index{Looping}
+\index{For loop}
+\index{While loop}
+
+There are two primary forms of loops: the {\tt for} loop and the {\tt while}
+loop. Technically speaking, a for loop is just a particular case of a very useful
+while loop, but it's also a little easier to use and a little harder to mess up, so
+we'll start with that.
+
+\subsection{For loop}
+
+Let's say we wanted to add up all the integers from one to some integer n. Of course, 
+we could use the simple analytic solution, but that would be silly.\footnote{No, it 
+wouldn't be silly. If you have a convenient analytic solution, use it, it's probably 
+more efficient, but for the sake of pedagogy, let's go ahead and not use the analytic 
+solution.}
+
+We might go about this problem by iterating through all the integers from 1 to n and 
+adding them up as we go along. Well, this is exactly for what a for loop is used.
 
 \beforeverb
 \begin{verbatim}
-if 0 < x and x < 10:
-    print 'x is a positive single-digit number.'
+let n = 10;;
+let addup = ref 0;;
+for i = 1 to n do
+     addup := !addup + i
+done;;
+print_int !addup;;
 \end{verbatim}
 \afterverb
 
+Note that I used a reference so that I could change the value of {\tt addup} every time, 
+and the use of the ! to ``get'' the value of addup in order to add to it. Also note that, 
+in OCaml, whatever occurs between the ``do'' and the ``done'' must evaluate to a unit. 
+That means for loops cannot return a value, which makes them not particularly useful. 
+Fortunately, though, the reference assignment operator (:=) does not return a value.
 
+This is a very object-oriented approach to solving this problem. You shouldn't like it.
+\footnote{Well, okay. Object-oriented solutions are very good for some problems. In this 
+particular (trivial) case, I can't really say whether functional or imperative solutions 
+are better (we'll see the function-oriented solution next chapter). There are definitely 
+situations where one is easier, or faster, or more robust then the other.}
 
+\subsection{While loop}
 
-\section{Recursion}
+While loops are a slightly more general form of for loops, that look at a condition and
+go while (hence the name) that condition is still true. Let's look at the above problem
+using a while loop:
+
+\beforeverb
+\begin{verbatim}
+let n = 10;;
+let addup = ref 0;;
+let i = ref 1;;
+while !i <= n do
+     addup := !addup + !i;
+     i := !i + 1
+done;;
+print_int !addup;;
+\end{verbatim}
+\afterverb
+
+You can probably see the similarity between the two different loops.
+
+One thing to be careful of in while loops is that the condition ceases to be true at 
+some point. If the condition of a while loop is always true, then you will never stop 
+looping (within the technical constraints of your machine). For example, if I hadn't
+made i a reference variable:
+\beforeverb
+\begin{verbatim}
+let n = 10;;
+let addup = ref 0;;
+let i = 1;;
+while i <= n do
+     addup := !addup + i;
+     i = i + 1
+done;;
+print_int !addup;;
+\end{verbatim}
+\afterverb
+then the condition is always true. This is because, in the condition of the while loop,
+i is always equal to 1. The statement {\tt i = i+1} is actually a truth test which returns
+false. This program will return a compile warning about how expressions within a while loop 
+returning should return the unit type, and then continue to loop forever. This is known as
+an {\bf infinite loop}, and they should generally be avoided.
+
+%write here
+\Chapter{Recursive Functions}
 \label{recursion}
 \index{recursion}
+
+\section{Recursion}
 
 It is legal for one function to call another;
 it is also legal for a function to call itself.  It may not be obvious
