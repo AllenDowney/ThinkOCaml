@@ -936,7 +936,7 @@ strings because they are enclosed in double quotation marks.
 
 \index{quotation mark}
 
-You've already seen {\pring_string}. There's also a print statement for integers:
+You've already seen \verb"\print_string". There's also a print statement for integers:
 
 \beforeverb
 \begin{verbatim}
@@ -2193,8 +2193,8 @@ as an argument for \verb"print_twice", so long as it evaluates to an integer:
 %
 Note that we need to tell OCaml exactly what the argument is using parentheses in this case.
 This is because if we omitted them it would read left to right, so the first function call 
-would become {\tt (print_twice 3)*4}, which doesn't make any sense, especially since
-{\tt (print_twice 3)} evaluates to a unit, which you can't really multiply by four.
+would become {\tt (\verb"print_twice" 3)*4}, which doesn't make any sense, especially since
+{\tt (\verb"print_twice" 3)} evaluates to a unit, which you can't really multiply by four.
 
 The argument is evaluated before the function is called, so
 in the examples the expressions {\tt 3*4} and
@@ -2252,7 +2252,7 @@ returns the result.
 
 
 \beforeverb
-%\begin{verbatim}
+\begin{verbatim}
 # let line1 = 'Bing tiddle ';;
 # let line2 = 'tiddle bang.';;
 # cat_twice line1 line2;;
@@ -2278,155 +2278,41 @@ such thing as {\tt bruce}.
 \index{parameter}
 
 
-% \section{Stack diagrams}
-%\label{stackdiagram}
-%\index{stack diagram}
-%\index{function frame}
-%\index{frame}
+\section{Stack diagrams}
+\label{stackdiagram}
+\index{stack diagram}
+\index{function frame}
+\index{frame}
+%edit here like a mofo!
+To keep track of which variables can be used where, it is sometimes 
+useful to draw a {\bf stack diagram}.  Like state diagrams, stack 
+diagrams show the value of each variable, but they also show the 
+function each variable belongs to.
 
-%To keep track of which variables can be used where, it is sometimes 
-%useful to draw a {\bf stack diagram}.  Like state diagrams, stack 
-%diagrams show the value of each variable, but they also show the 
-%function each variable belongs to.
+\index{stack diagram}
+\index{diagram!stack}
 
-%\index{stack diagram}
-%\index{diagram!stack}
+Each function is represented by a {\bf frame}.  A frame is a box
+with the name of a function
+beside it and the parameters and variables of the function inside it.
+The stack diagram for the
+previous example looks like this:
 
-%Each function is represented by a {\bf frame}.  A frame is a box
-%with the name of a function
-%beside it and the parameters and variables of the function inside it.
-%The stack diagram for the
-%previous example looks like this:
+\beforefig
+\centerline{\includegraphics{figs/stack.eps}}
+\afterfig
 
-%\beforefig
-%\centerline{\includegraphics{figs/stack.eps}}
-%\afterfig
+The frames are arranged in a stack that indicates which function
+called which, and so on.  In this example, \verb"print_twice"
+was called by \verb"cat_twice", and \verb"cat_twice" was called by 
+\verb"__main__", which is a special name for the topmost frame.  When
+you create a variable outside of any function, it belongs to 
+\verb"__main__".
 
-%The frames are arranged in a stack that indicates which function
-%called which, and so on.  In this example, \verb"print_twice"
-%was called by \verb"cat_twice", and \verb"cat_twice" was called by 
-%\verb"__main__", which is a special name for the topmost frame.  When
-%you create a variable outside of any function, it belongs to 
-%\verb"__main__".
-
-%Each parameter refers to the same value as its corresponding
-%argument.  So, {\tt part1} has the same value as
-%{\tt line1}, {\tt part2} has the same value as {\tt line2},
-%and {\tt bruce} has the same value as {\tt cat}.
-
-%If an error occurs during a function call, Python prints the
-%name of the function, and the name of the function that called
-%it, and the name of the function that called {\em that}, all the
-%way back to \verb"__main__".
-
-%For example, if you try to access {\tt cat} from within 
-%\verb"print_twice", you get a {\tt NameError}:
-
-%\beforeverb
-%\begin{verbatim}
-%Traceback (innermost last):
-%  File "test.py", line 13, in __main__
-%    cat_twice(line1, line2)
-%  File "test.py", line 5, in cat_twice
-%    print_twice(cat)
-%  File "test.py", line 9, in print_twice
-%    print cat
-%NameError: name 'cat' is not defined
-%\end{verbatim}
-%\afterverb
-%
-%This list of functions is called a {\bf traceback}.  It tells you what
-%program file the error occurred in, and what line, and what functions
-%were executing at the time.  It also shows the line of code that
-%caused the error.
-
-%\index{traceback}
-
-%The order of the functions in the traceback is the same as the
-%order of the frames in the stack diagram.  The function that is
-%currently running is at the bottom.
-%
-
-%\section{Fruitful functions and void functions}
-
-%\index{fruitful function}
-%\index{void function}
-%\index{function, fruitful}
-%\index{function, void} 
-
-%Some of the functions we are using, such as the math functions, yield
-%results; for lack of a better name, I call them {\bf fruitful
-%  functions}.  Other functions, like \verb"print_twice", perform an
-%action but don't return a value.  They are called {\bf void
-%  functions}. Technically speaking, in OCaml, void functions return
-%the unit value.
-
-%When you call a fruitful function, you almost always
-%want to do something with the result; for example, you might
-%assign it to a variable or use it as part of an expression:
-
-%\beforeverb
-%\begin{verbatim}
-%x = math.cos(radians)
-%golden = (math.sqrt(5) + 1) / 2
-%\end{verbatim}
-%\afterverb
-%
-%When you call a function in interactive mode, Python displays
-%the result:
-
-%\beforeverb
-%\begin{verbatim}
-%>>> math.sqrt(5)
-%2.2360679774997898
-%\end{verbatim}
-%\afterverb
-%
-%But in a script, if you call a fruitful function all by itself,
-%the return value is lost forever!
-
-%\beforeverb
-%\begin{verbatim}
-%math.sqrt(5)
-%\end{verbatim}
-%\afterverb
-%
-%This script computes the square root of 5, but since it doesn't store
-%or display the result, it is not very useful.
-
-%\index{interactive mode}
-%\index{script mode}
-
-%Void functions might display something on the screen or have some
-%other effect, but they don't have a return value.  If you try to
-%assign the result to a variable, you get a special value called
-%{\tt None}.
-
-%\index{None special value}
-%\index{special value!None}
-
-%\beforeverb
-%\begin{verbatim}
-%>>> result = print_twice('Bing')
-%Bing
-%Bing
-%>>> print result
-%None
-%\end{verbatim}
-%\afterverb
-%
-%The value {\tt None} is not the same as the string \verb"'None'". 
-%It is a special value that has its own type:
-
-%\beforeverb
-%\begin{verbatim}
-%>>> print type(None)
-%<type 'NoneType'>
-%\end{verbatim}
-%\afterverb
-%
-%The functions we have written so far are all void.  We will start
-%writing fruitful functions in a few chapters.
+Each parameter refers to the same value as its corresponding
+argument.  So, {\tt part1} has the same value as
+{\tt line1}, {\tt part2} has the same value as {\tt line2},
+and {\tt bruce} has the same value as {\tt cat}.
 
 \section{Currying Functions}
 
@@ -2809,10 +2695,10 @@ symbols are different from the mathematical symbols.
 \index{logical operator}
 \index{operator!logical}
 
-There are three {\bf logical operators}: {\tt &&} (and), {\tt
-||} (or), and {\tt not} (exactly as it looks).  The semantics (meaning) of these operators is
+There are three {\bf logical operators}: {\tt \verb"&&"} (and), {\tt
+\verb"||"} (or), and {\tt not} (exactly as it looks).  The semantics (meaning) of these operators is
 similar to their meaning in English.  For example,
-{\tt x > 0 && x < 10} is true only if {\tt x} is greater than 0
+{\tt x > 0 \verb"&&" x < 10} is true only if {\tt x} is greater than 0
 {\em and} less than 10.
 
 \index{and operator}
@@ -3044,380 +2930,6 @@ false. This program will return a compile warning about how expressions within a
 returning should return the unit type, and then continue to loop forever. This is known as
 an {\bf infinite loop}, and they should generally be avoided.
 
-%write here
-\Chapter{Recursive Functions}
-\label{recursion}
-\index{recursion}
-
-\section{Recursion}
-
-It is legal for one function to call another;
-it is also legal for a function to call itself.  It may not be obvious
-why that is a good thing, but it turns out to be one of the most
-magical things a program can do.
-For example, look at the following function:
-
-\beforeverb
-\begin{verbatim}
-def countdown(n):
-    if n <= 0:
-        print 'Blastoff!'
-    else:
-        print n
-        countdown(n-1)
-\end{verbatim}
-\afterverb
-%
-If {\tt n} is 0 or negative, it outputs the word, ``Blastoff!''
-Otherwise, it outputs {\tt n} and then calls a function named {\tt
-countdown}---itself---passing {\tt n-1} as an argument.
-
-What happens if we call this function like this?
-
-\beforeverb
-\begin{verbatim}
->>> countdown(3)
-\end{verbatim}
-\afterverb
-%
-The execution of {\tt countdown} begins with {\tt n=3}, and since
-{\tt n} is greater than 0, it outputs the value 3, and then calls itself...
-
-\begin{quote}
-The execution of {\tt countdown} begins with {\tt n=2}, and since
-{\tt n} is greater than 0, it outputs the value 2, and then calls itself...
-
-\begin{quote}
-The execution of {\tt countdown} begins with {\tt n=1}, and since
-{\tt n} is greater than 0, it outputs the value 1, and then calls itself...
-
-\begin{quote}
-The execution of {\tt countdown} begins with {\tt n=0}, and since {\tt
-n} is not greater than 0, it outputs the word, ``Blastoff!'' and then
-returns.
-\end{quote}
-
-The {\tt countdown} that got {\tt n=1} returns.
-\end{quote}
-
-The {\tt countdown} that got {\tt n=2} returns.
-\end{quote}
-
-The {\tt countdown} that got {\tt n=3} returns.
-
-And then you're back in \verb"__main__".  So, the
-total output looks like this:
-
-\beforeverb
-\begin{verbatim}
-3
-2
-1
-Blastoff!
-\end{verbatim}
-\afterverb
-%
-A function that calls itself is {\bf recursive}; the process is
-called {\bf recursion}.
-
-\index{recursion}
-\index{function!recursive}
-
-As another example, we can write a function that prints a
-string {\tt n} times.
-
-\beforeverb
-\begin{verbatim}
-def print_n(s, n):
-    if n <= 0:
-        return
-    print s
-    print_n(s, n-1)
-\end{verbatim}
-\afterverb
-%
-If {\tt n <= 0} the {\tt return} statement exits the function.  The
-flow of execution immediately returns to the caller, and the remaining
-lines of the function are not executed.
-
-\index{return statement}
-\index{statement!return}
-
-The rest of the function is similar to {\tt countdown}: if {\tt n} is
-greater than 0, it displays {\tt s} and then calls itself to display
-{\tt s} $n-1$ additional times.  So the number of lines of output
-is {\tt 1 + (n - 1)}, which adds up to
-{\tt n}.
-
-For simple examples like this, it is probably easier to use a {\tt
-for} loop.  But we will see examples later that are hard to write
-with a {\tt for} loop and easy to write with recursion, so it is
-good to start early.
-
-
-
-\section{Stack diagrams for recursive functions}
-\index{stack diagram}
-\index{function frame}
-\index{frame}
-
-In Section~\ref{stackdiagram}, we used a stack diagram to represent
-the state of a program during a function call.  The same kind of
-diagram can help interpret a recursive function.
-
-Every time a function gets called, Python creates a new function
-frame, which contains the function's local variables and parameters.
-For a recursive function, there might be more than one frame on the
-stack at the same time.
-
-This figure shows a stack diagram for {\tt countdown} called with
-{\tt n = 3}:
-
-\beforefig
-\centerline{\includegraphics{figs/stack2.eps}}
-\afterfig
-
-As usual, the top of the stack is the frame for \verb"__main__".
-It is empty because we did not create any variables in 
-\verb"__main__" or pass any arguments to it.
-
-\index{base case}
-\index{recursion!base case}
-
-The four {\tt countdown} frames have different values for the
-parameter {\tt n}.  The bottom of the stack, where {\tt n=0}, is
-called the {\bf base case}.  It does not make a recursive call, so
-there are no more frames.
-
-\begin{quote}
-Draw a stack diagram for \verb"print_n" called with
-\verb"s = 'Hello'" and {\tt n=2}.
-\end{quote}
-
-\begin{quote}
-Write a function called \verb"do_n" that takes a function
-object and a number, {\tt n}, as arguments, and that calls
-the given function {\tt n} times.
-\end{quote}
-
-
-
-\section{Infinite recursion}
-\index{infinite recursion}
-\index{recursion!infinite}
-\index{runtime error}
-\index{error!runtime}
-\index{traceback}
-
-If a recursion never reaches a base case, it goes on making
-recursive calls forever, and the program never terminates.  This is
-known as {\bf infinite recursion}, and it is generally not
-a good idea.  Here is a minimal program with an infinite recursion:
-
-\beforeverb
-\begin{verbatim}
-def recurse():
-    recurse()
-\end{verbatim}
-\afterverb
-%
-In most programming environments, a program with infinite recursion
-does not really run forever.  Python reports an error
-message when the maximum recursion depth is reached:
-
-\index{exception!RuntimeError}
-\index{RuntimeError}
-
-\beforeverb
-\begin{verbatim}
-  File "<stdin>", line 2, in recurse
-  File "<stdin>", line 2, in recurse
-  File "<stdin>", line 2, in recurse
-                  .   
-                  .
-                  .
-  File "<stdin>", line 2, in recurse
-RuntimeError: Maximum recursion depth exceeded
-\end{verbatim}
-\afterverb
-%
-This traceback is a little bigger than the one we saw in the
-previous chapter.  When the error occurs, there are 1000
-{\tt recurse} frames on the stack!
-
-
-\section{Keyboard input}
-\index{keyboard input}
-
-The programs we have written so far are a bit rude in the sense that
-they accept no input from the user.  They just do the same thing every
-time.
-
-Python provides a built-in function called \verb"raw_input" that gets
-input from the keyboard\footnote{In Python 3.0, this function is named
-  {\tt input}.}.  When this function is called, the program stops and
-waits for the user to type something.  When the user presses {\sf
-  Return} or {\sf Enter}, the program resumes and \verb"raw_input"
-returns what the user typed as a string.
-
-\index{Python 3.0}
-\index{raw\_input function}
-\index{function!raw\_input}
-
-\beforeverb
-\begin{verbatim}
->>> input = raw_input()
-What are you waiting for?
->>> print input
-What are you waiting for?
-\end{verbatim}
-\afterverb
-%
-Before getting input from the user, it is a good idea to print a
-prompt telling the user what to input.  \verb"raw_input" can take a
-prompt as an argument:
-
-\index{prompt}
-
-\beforeverb
-\begin{verbatim}
->>> name = raw_input('What...is your name?\n')
-What...is your name?
-Arthur, King of the Britons!
->>> print name
-Arthur, King of the Britons!
-\end{verbatim}
-\afterverb
-%
-The sequence \verb"\n" at the end of the prompt represents a {\bf newline},
-which is a special character that causes a line break.
-That's why the user's input appears below the prompt.
-
-\index{newline}
-
-If you expect the user to type an integer, you can try to convert
-the return value to {\tt int}:
-
-\beforeverb
-\begin{verbatim}
->>> prompt = 'What...is the airspeed velocity of an unladen swallow?\n'
->>> speed = raw_input(prompt)
-What...is the airspeed velocity of an unladen swallow?
-17
->>> int(speed)
-17
-\end{verbatim}
-\afterverb
-%
-But if the user types something other than a string of digits,
-you get an error:
-
-\beforeverb
-\begin{verbatim}
->>> speed = raw_input(prompt)
-What...is the airspeed velocity of an unladen swallow?
-What do you mean, an African or a European swallow?
->>> int(speed)
-ValueError: invalid literal for int()
-\end{verbatim}
-\afterverb
-%
-We will see how to handle this kind of error later.
-
-\index{ValueError}
-\index{exception!ValueError}
-
-
-\section{Debugging}
-\label{whitespace}
-\index{debugging}
-\index{traceback}
-
-The traceback Python displays when an error occurs contains
-a lot of information, but it can be overwhelming, especially
-when there are many frames on the stack.  The most
-useful parts are usually:
-
-\begin{itemize}
-
-\item What kind of error it was, and
-
-\item Where it occurred.
-
-\end{itemize}
-
-Syntax errors are usually easy to find, but there are a few
-gotchas.  Whitespace errors can be tricky because spaces and
-tabs are invisible and we are used to ignoring them.
-
-\index{whitespace}
-
-\beforeverb
-\begin{verbatim}
->>> x = 5
->>>  y = 6
-  File "<stdin>", line 1
-    y = 6
-    ^
-SyntaxError: invalid syntax
-\end{verbatim}
-\afterverb
-%
-In this example, the problem is that the second line is indented by
-one space.  But the error message points to {\tt y}, which is
-misleading.  In general, error messages indicate where the problem was
-discovered, but the actual error might be earlier in the code,
-sometimes on a previous line.
-
-\index{error!runtime}
-\index{runtime error}
-
-The same is true of runtime errors.  Suppose you are trying
-to compute a signal-to-noise ratio in decibels.  The formula
-is $SNR_{db} = 10 \log_{10} (P_{signal} / P_{noise})$.  In Python,
-you might write something like this:
-
-\beforeverb
-\begin{verbatim}
-import math
-signal_power = 9
-noise_power = 10
-ratio = signal_power / noise_power
-decibels = 10 * math.log10(ratio)
-print decibels
-\end{verbatim}
-\afterverb
-%
-But when you run it, you get an error message\footnote{In Python 3.0,
-  you no longer get an error message; the division operator performs
-  floating-point division even with integer operands.}:
-
-\index{exception!OverflowError}
-\index{OverflowError}
-
-\beforeverb
-\begin{verbatim}
-Traceback (most recent call last):
-  File "snr.py", line 5, in ?
-    decibels = 10 * math.log10(ratio)
-OverflowError: math range error
-\end{verbatim}
-\afterverb
-%
-The error message indicates line 5, but there is nothing
-wrong with that line.  To find the real error, it might be
-useful to print the value of {\tt ratio}, which turns out to
-be 0.  The problem is in line 4, because dividing two integers
-does floor division.  The solution is to represent signal power
-and noise power with floating-point values.
-
-\index{floor division}
-\index{division!floor}
-
-In general, error messages tell you where the problem was discovered, 
-but that is often not where it was caused.
-
-
 \section{Glossary}
 
 \begin{description}
@@ -3429,12 +2941,12 @@ number is divided by another.
 \index{operator!modulus}
 
 \item[boolean expression:]  An expression whose value is either 
-{\tt True} or {\tt False}.
+{\tt true} or {\tt false}.
 \index{boolean expression}
 \index{expression!boolean}
 
 \item[relational operator:] One of the operators that compares
-its operands: {\tt ==}, {\tt !=}, {\tt >}, {\tt <}, {\tt >=}, and {\tt <=}.
+its operands: {\tt =}, {\tt <>}, {\tt >}, {\tt <}, {\tt >=}, and {\tt <=}.
 
 \item[logical operator:] One of the operators that combines boolean
 expressions: {\tt and}, {\tt or}, and {\tt not}.
@@ -3460,28 +2972,10 @@ relative to the header.
 a conditional statement.
 \index{branch}
 
-\item[chained conditional:]  A conditional statement with a series
-of alternative branches.
-\index{chained conditional}
-\index{conditional!chained}
-
 \item[nested conditional:]  A conditional statement that appears
 in one of the branches of another conditional statement.
 \index{nested conditional}
 \index{conditional!nested}
-
-\item[recursion:]  The process of calling the function that is
-currently executing.
-\index{recursion}
-
-\item[base case:]  A conditional branch in a
-recursive function that does not make a recursive call.
-\index{base case}
-
-\item[infinite recursion:]  A recursion that doesn't have a
-base case, or never reaches it.  Eventually, an infinite recursion
-causes a runtime error.
-\index{infinite recursion}
 
 \end{description}
 
@@ -3551,86 +3045,469 @@ a triangle:
 
 \end{ex}
 
-The following exercises use TurtleWorld from Chapter~\ref{turtlechap}:
 
-\index{TurtleWorld}
+\chapter{Recursive Functions}
+\label{recursion}
+\index{recursion}
+\index{function!recursive}
 
-\begin{ex}
+In mathematics, a {\bf recursive function} has the general form:
 
-Read the following function and see if you can figure out
-what it does.  Then run it (see the examples in Chapter~\ref{turtlechap}).
+\begin{equation*}
+a_{n+1} = f(a_n,a_{n-1},a_{n-2}...)
+\end{equation*}
+
+meaning that the next term in the sequence $a$ is a function 
+of the last term in the sequence. This process is called {\bf 
+recursion}.Some recursive functions will be functions of more 
+terms than just the last term. In computer science, this idea 
+can be used for all kinds of important calculations, and can 
+be much simpler than non-recursive solutions - such as loops, 
+for example.
+
+In both mathematics and computer science, you require two 
+things: a base case, and a recursive step. The base case is 
+usually the simplest possible case - often $n = 0$ - and the
+recursive step gives the next term given the term before it.
+Usually in programming, we don't know the term before it when 
+we call for it, but we can calculate it in terms of the previous 
+case - and so on and so on recursively until the base case. The 
+recursive step can be thought of as ``wishful thinking'' - if I 
+knew the $n^{th}$ case, then the ${n+1}^{th}$ case would be simple.
+
+While usually we're looking for the $n^{th}$ case, it's often
+helpful to first think of recursion in forward terms:
+
+\begin{eqnarray*}
+a_0 && \\
+a_1 &= f(a_0) & \\
+a_2 &= f(a_1) & = f(f(a_0)) \\
+a_3 &= f(a_2) & = f(f(a_1))) = f(f(f(a_0))) \\
+\end{eqnarray*}
+and so on and so forth.
+
+So you can see, the third term can be 
+evaluated directly by applying $f$ to the second term, which is 
+an application of $f$ to the first term, which is itself an 
+application of $f$ to the base case.
+
+If this doesn't  make any sense right now, don't worry; recursion 
+can be a hard concept to wrap your mind around at first.
+
+\section{Recursion}
+
+It is legal for one function to call another; it is also legal 
+for a function to call itself. However, to define a recursive
+function in OCaml, you must tell the compiler you're going to
+do this by using {\tt let rec} instead of just {\tt let}.
+For example, look at the following function:
 
 \beforeverb
 \begin{verbatim}
-def draw(t, length, n):
-    if n == 0:
-        return
-    angle = 50
-    fd(t, length*n)
-    lt(t, angle)
-    draw(t, length, n-1)
-    rt(t, 2*angle)
-    draw(t, length, n-1)
-    lt(t, angle)
-    bk(t, length*n)
+let rec countdown n = 
+	if n <= 0
+	then (
+		print_string "Blastoff!";
+		print_newline())
+	else (
+		print_int n;
+		print_newline();
+		countdown (n-1); ());;
+\end{verbatim}
+\afterverb
+%
+If {\tt n} is 0 or negative, it outputs the word, ``Blastoff!''
+Otherwise, it outputs {\tt n} and then calls a function named {\tt
+countdown}---itself---passing {\tt n-1} as an argument. Note the else
+block ends with a (), telling the compiler that it returns a unit.
+
+What happens if we call this function like this?
+
+\beforeverb
+\begin{verbatim}
+# countdown 3;;
+\end{verbatim}
+\afterverb
+%
+The execution of {\tt countdown} begins with {\tt n=3}, and since
+{\tt n} is greater than 0, it outputs the value 3, and then calls itself...
+
+\begin{quote}
+The execution of {\tt countdown} begins with {\tt n=2}, and since
+{\tt n} is greater than 0, it outputs the value 2, and then calls itself...
+
+\begin{quote}
+The execution of {\tt countdown} begins with {\tt n=1}, and since
+{\tt n} is greater than 0, it outputs the value 1, and then calls itself...
+
+\begin{quote}
+The execution of {\tt countdown} begins with {\tt n=0}, and since {\tt
+n} is not greater than 0, it outputs the word, ``Blastoff!'' and then
+returns.
+\end{quote}
+
+The {\tt countdown} that got {\tt n=1} returns.
+\end{quote}
+
+The {\tt countdown} that got {\tt n=2} returns.
+\end{quote}
+
+The {\tt countdown} that got {\tt n=3} returns.
+
+And then you're back in \verb"__main__".  So, the
+total output looks like this:
+
+\beforeverb
+\begin{verbatim}
+3
+2
+1
+Blastoff!
+- : unit = ()
+\end{verbatim}
+\afterverb
+%
+
+As another example, we can write a function that prints a
+string {\tt n} times.
+
+\beforeverb
+\begin{verbatim}
+let rec print_n n s = 
+    if n <= 0
+    then ()
+    else (
+	print_string s;
+	print_newline();
+	print_n (n-1) s;
+	());;
+\end{verbatim}
+\afterverb
+%
+If {\tt n <= 0} the function simply returns a unit. The
+flow of execution immediately returns to the caller.
+
+The rest of the function is similar to {\tt countdown}: if {\tt n} is
+greater than 0, it displays {\tt s} and then calls itself to display
+{\tt s} $n-1$ additional times.  So the number of lines of output
+is {\tt 1 + (n - 1)}, which adds up to {\tt n}.
+
+Now, this is all fun and games, but we can also use recursive functions
+to do real work, and return an actual value. Let's reconsider the example 
+from looping of summing all the integers from 1 to n. A recursive solution 
+to this problem might look like this:
+
+\beforeverb
+\begin{verbatim}
+let rec csum n = 
+	if n = 0
+	then 0
+	else (n + csum (n-1));;
 \end{verbatim}
 \afterverb
 
-\end{ex}
-
+For simple examples like this, it is probably just as easy to use a 
+{\tt for} loop, though in OCaml it's considered much better form to 
+use recursion.  But we will see examples later that are hard to write
+with a {\tt for} loop and easy to write with recursion, so it is
+good to start early.
 
 \begin{ex}
+OCaml wil also trace a recursive function for you (or any function, really).
 
-\index{Koch curve}
-
-The Koch curve is a fractal that looks something like
-this:
-
-\beforefig
-\centerline{\includegraphics[height=1in]{figs/koch.eps}}
-\afterfig
-
-To draw a Koch curve with length $x$, all you have to do is
-
-\begin{enumerate}
-
-\item Draw a Koch curve with length $x/3$.
-
-\item Turn left 60 degrees.
-
-\item Draw a Koch curve with length $x/3$.
-
-\item Turn right 120 degrees.
-
-\item Draw a Koch curve with length $x/3$.
-
-\item Turn left 60 degrees.
-
-\item Draw a Koch curve with length $x/3$.
-
-\end{enumerate}
-
-The only exception is if $x$ is less than 3.  In that case,
-you can just draw a straight line with length $x$.
-
-\begin{enumerate}
-
-\item Write a function called {\tt koch} that takes a turtle and
-a length as parameters, and that uses the turtle to draw a Koch
-curve with the given length.
-
-\item Write a function called {\tt snowflake} that draws three
-Koch curves to make the outline of a snowflake.
-
-You can see my solution at \url{thinkpython.com/code/koch.py}.
-
-\item The Koch curve can be generalized in several ways.  See
-\url{wikipedia.org/wiki/Koch_snowflake} for examples and
-implement your favorite.
-
-\end{enumerate}
+Type {\tt \verb"#trace" csum} into the interpreter and call {\tt csum 3}. See if you 
+can interpret the result. Play around with this feature for some other functions
+to make sure you really understand what it's printing out.
 \end{ex}
 
+
+%\section{Stack diagrams for recursive functions}
+%\index{stack diagram}
+%\index{function frame}
+%\index{frame}
+
+%In Section~\ref{stackdiagram}, we used a stack diagram to represent
+%the state of a program during a function call.  The same kind of
+%diagram can help interpret a recursive function.
+
+%Every time a function gets called, OCaml creates a new function
+%frame, which contains the function's local variables and parameters.
+%For a recursive function, there might be more than one frame on the
+%stack at the same time.
+
+%This figure shows a stack diagram for {\tt countdown} called with
+%{\tt n = 3}:
+
+%\beforefig
+%\centerline{\includegraphics{figs/stack2.eps}}
+%\afterfig
+
+%\index{base case}
+%\index{recursion!base case}
+
+%The four {\tt countdown} frames have different values for the
+%parameter {\tt n}.  The bottom of the stack, where {\tt n=0}, is
+%called the {\bf base case}.  It does not make a recursive call, so
+%there are no more frames.
+
+%\begin{ex}
+%Draw a stack diagram for \verb"print_n" called with
+%\verb"s = 'Hello'" and {\tt n=2}.
+%\end{ex}
+
+\section{Infinite recursion}
+\index{infinite recursion}
+\index{recursion!infinite}
+\index{runtime error}
+\index{error!runtime}
+\index{traceback}
+
+If a recursion never reaches a base case, it goes on making
+recursive calls forever, and the program never terminates.  This is
+known as {\bf infinite recursion}, and it is generally not
+a good idea.  The most common source of infinite recursion
+is forgetting to decrement when you make the recursive call:
+
+\beforeverb
+\begin{verbatim}
+let rec csum n = 
+	if n = 0
+	then 0
+	else (n + csum n);;\end{verbatim}
+\afterverb
+%
+In most programming environments, a program with infinite recursion
+does not really run forever. Usually, you run out of what they call
+``stack space'', which is a function of your computer architecture.
+
+\index{exception!RuntimeError}
+\index{RuntimeError}
+
+\beforeverb
+\begin{verbatim}
+# csum 10;;
+Stack overflow during evaluation (looping recursion?).
+\end{verbatim}
+\afterverb
+
+The error can also occur if the program doesn't reach the base case
+for any reason. {\tt csum}, for example, isn't particularly robust:
+if we give it a negative number, it explodes.
+
+\beforeverb
+\begin{verbatim}
+# csum (-2);;
+Stack overflow during evaluation (looping recursion?).
+\end{verbatim}
+\afterverb
+
+{\tt csum} will continue subtracting from $-2$ ad infinitum without 
+ever reaching 0, so it will keep going until it runs out of space.
+This could be easily avoided by checking to make sure the argument 
+is non-negative.
+
+\section{Mutually Recursive Functions}
+
+It's not really that common, but every once in a while you might want
+to define recursive functions that call each other. Here's a trivial 
+example:\footnote{Thanks to Ryan Tarpine who submitted it to 
+ocaml-tutorial.org} 0 is an even number, and a number is defined as 
+even if its predecessor is odd. Naturally, we could easily just check
+{\tt x mod 2} to see if x is even, but that wouldn't be pedagogically
+as interesting as this:
+
+\beforeverb
+\begin{verbatim}
+let rec even x = 
+	if x = 0
+	then true
+	else odd (x-1);;
+let rec odd x = 
+	if x = 0
+	then false
+	else even (x-1);;
+\end{verbatim}
+\afterverb
+Not the prettiest solution, but it should work, right? Well, actually, no.
+Because of how OCaml compiles, it would need odd first to compile even, but
+would also need even first to compile odd. Somehow we need to tell OCaml to
+compile both files at the same time. Fortunately, OCaml comes with a syntax 
+to do this:
+
+\beforeverb
+\begin{verbatim}
+let rec even x = 
+	if x = 0
+	then true
+	else odd (x-1)
+and odd x = 
+	if x = 0
+	then false
+	else even (x-1);;
+\end{verbatim}
+\afterverb
+
+
+\section{Tail-end Recursion}
+%write here
+
+\section{Keyboard input}
+\index{keyboard input}
+
+The programs we have written so far are a bit rude in the sense that
+they accept no input from the user.  They just do the same thing every
+time.
+
+OCaml provides three built-in functions that get input from the keyboard, 
+one each for getting strings, floats, and ints. They are, respectively, 
+named {\tt \verb"read_line"}, {\tt \verb"read_float"}, and {\tt \verb"read_int"}, and all take
+a unit argument. When one of these functions is called, the program stops 
+and waits for the user to type something.  When the user presses {\sf Return} 
+or {\sf Enter}, the program resumes with the collected value.
+
+\index{User input}
+\index{Read functions}
+
+\beforeverb
+\begin{verbatim}
+# let input = read_line ();;
+What are you waiting for?
+# print_string input;;
+What are you waiting for?
+\end{verbatim}
+\afterverb
+%
+Before getting input from the user, it is a good idea to print a
+prompt telling the user what to input.
+
+\index{prompt}
+
+\beforeverb
+\begin{verbatim}
+print_string "What...is your name?\n";;
+let input = read_line();;
+\end{verbatim}
+\afterverb
+%
+
+You can then do something with the user's input. For example, we could have
+the program greet the user:
+
+\beforeverb
+\begin{verbatim}
+let greet () = print_string "What...is your name?\n";
+	let input = read_line() in
+	let greeting = "Hi "^input^"\n" in
+	print_string greeting;;
+\end{verbatim}
+\afterverb
+
+This could result in the following execution:
+
+\beforeverb
+\begin{verbatim}
+# greet ();;
+What... is your name?
+Monje
+Hi Monje
+- : unit = ()
+\end{verbatim}
+\afterverb
+where the second line is user input.
+
+\section{Debugging}
+\label{whitespace}
+\index{debugging}
+\index{traceback}
+
+The traceback OCaml displays when an error occurs contains
+a lot of information, but it can be overwhelming, especially
+when there are many frames on the stack.  The most
+useful parts are usually:
+
+\begin{itemize}
+
+\item What kind of error it was, and
+
+\item Where it occurred.
+
+\end{itemize}
+
+In general, error messages indicate where the problem was
+discovered, but the actual error might be earlier in the code,
+sometimes on a previous line.
+
+\index{error!runtime}
+\index{runtime error}
+%write here
+The same is true of runtime errors.  Suppose you are trying
+to compute a signal-to-noise ratio in decibels.  The formula
+is $SNR_{db} = 10 \log_{10} (P_{signal} / P_{noise})$.  In OCaml,
+you might write something like this:
+
+\beforeverb
+\begin{verbatim}
+import math
+signal_power = 9
+noise_power = 10
+ratio = signal_power / noise_power
+decibels = 10 * math.log10(ratio)
+print decibels
+\end{verbatim}
+\afterverb
+%
+But when you run it, you get an error message\footnote{In Python 3.0,
+  you no longer get an error message; the division operator performs
+  floating-point division even with integer operands.}:
+
+\index{exception!OverflowError}
+\index{OverflowError}
+
+\beforeverb
+\begin{verbatim}
+Traceback (most recent call last):
+  File "snr.py", line 5, in ?
+    decibels = 10 * math.log10(ratio)
+OverflowError: math range error
+\end{verbatim}
+\afterverb
+%
+The error message indicates line 5, but there is nothing
+wrong with that line.  To find the real error, it might be
+useful to print the value of {\tt ratio}, which turns out to
+be 0.  The problem is in line 4, because dividing two integers
+does floor division.  The solution is to represent signal power
+and noise power with floating-point values.
+
+\index{floor division}
+\index{division!floor}
+
+In general, error messages tell you where the problem was discovered, 
+but that is often not where it was caused.
+
+
+\section{Glossary}
+
+\begin{description}
+
+\item[recursion:]  The process of calling the function that is
+currently executing.
+\index{recursion}
+
+\item[base case:]  A conditional branch in a
+recursive function that does not make a recursive call.
+\index{base case}
+
+\item[infinite recursion:]  A recursion that doesn't have a
+base case, or never reaches it.  Eventually, an infinite recursion
+causes a runtime error.
+\index{infinite recursion}
+
+\end{description}
+
+\section{Exercises}
+
+%write here!
 
 \chapter{Fruitful functions}
 \label{fruitchap}
