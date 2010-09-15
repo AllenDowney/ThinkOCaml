@@ -20,11 +20,11 @@ all:	book.tex
 	latex book
 	makeindex book
 	latex book
-	dvips -t letter -Ppdf -o thinkpython.ps book
+	dvips -t letter -Ppdf -o thinkocaml.ps book
 #	dvips -T 6.75in,9.25in -Ppdf -o thinkpython.ps book
 #	dvips -t b5 -Ppdf -o thinkpython.ps book
 #	dvips -T 7in,10in -Ppdf -o thinkpython.ps book
-	gv thinkpython.ps
+	gv thinkocaml.ps
 
 html:	book.tex header.html footer.html
 	rm -rf html
@@ -37,7 +37,7 @@ html:	book.tex header.html footer.html
 	hacha book.html
 	mv index.html book.css book*.html book*.png *motif.gif html
 
-DEST = /home/downey/public_html/greent/thinkpython
+DEST = /home/downey/public_html/greent/thinkocaml
 
 distrib:
 	ps2pdf $(PDFFLAGS) thinkpython.ps
