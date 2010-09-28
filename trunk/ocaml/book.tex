@@ -916,7 +916,7 @@ understand enough of this module to do so.
 \end{ex}
 
 
-\chapter{Variables, expressions and statements}
+\chapter{Variables and Expressions}
 
 \section{Values and types}
 \index{value}
@@ -1740,7 +1740,7 @@ Practice using the OCaml interpreter as a calculator:
 
 \end{enumerate}
 \end{ex}
-%edit here
+
 \chapter{Functions}
 \label{funcchap}
 
@@ -1748,11 +1748,11 @@ Practice using the OCaml interpreter as a calculator:
 \label{functionchap}
 \index{function call}
 
-In the context of programming, a {\bf function} is a named sequence of
-statements that performs a computation.  When you define a function,
-you specify the name and the sequence of statements.  Later, you can
-``call'' the function by name.  
-We have already seen one example of a {\bf function call}:
+In the context of functional programming, a {\bf function} is a named 
+expression that performs a computation.  When you define a function,
+you specify the name and the expression.  Later, you can ``call'' the 
+function by name.  We have already seen one example of a {\bf function 
+call}:
 
 \beforeverb
 \begin{verbatim}
@@ -1898,7 +1898,7 @@ the square root of two divided by two:
 
 \beforeverb
 \begin{verbatim}
->>> math.sqrt(2) / 2.0
+# (sqrt 2.) /. 2.0
 0.707106781187
 \end{verbatim}
 \afterverb
@@ -1921,18 +1921,17 @@ let x = sin (degrees /. 360.0 *. 2 *. pi);;
 \end{verbatim}
 \afterverb
 %
-And even function calls:
+And even function calls:t
 
 \beforeverb
 \begin{verbatim}
-x = exp (log x+1);;
+let x = exp (log (x+.1.));;
 \end{verbatim}
 \afterverb
 %
-Note in this example that we put parentheses around the inner
-function call, to tell OCaml how to read this statement. If we just
-told it \verb"exp log x+1;;" it would try to pass both {\tt log} and {\tt x+1} as two
-separate arguments to {\tt exp}.
+Note in this example that we put parentheses around the inner function and the inner 
+expression, to tell OCaml how to read this statement. If we just told it \verb"exp log x+1;;" it would try to pass both {\tt log} and {\tt x} as two separate arguments 
+to {\tt exp} and then add one.
 
 Almost anywhere you can put a value, you can put an arbitrary
 expression, with one exception: the left side of an assignment
@@ -1964,6 +1963,7 @@ the sequence of statements that execute when the function is called.
 \index{definition!function}
 
 Here is an example:
+%edit here
 
 \beforeverb
 \begin{verbatim}
@@ -2994,9 +2994,92 @@ Hi Monje
 \afterverb
 where the second line is user input.
 
+\section{Pattern Matching}
+\index{Pattern Matching}
+
+One of the coolest features of OCaml is it's ability to 
+take some object (string, integer, anything) and match 
+it with user-determined patterns and respond accordingly. 
+This allows us to do all kinds of things, from making 
+conditionals more complicated than {\tt if... then... else} 
+without incessant nesting, to parsing text. We'll look at 
+complicated examples later, but for now let's look at the
+syntax in the abstract:
+
+\beforeverb
+\begin{verbatim}
+match object with
+	pattern a -> result a
+	| pattern b -> result b
+	| pattern c -> result c
+	...
+\end{verbatim}
+\afterverb
+
+The object can be absolutely anything. The pattern is something
+of the same type as the object, or an expression that evaluates to 
+the same type. Note that the order is significant - OCaml will take 
+the result of the first match, not necessarily the best one, though 
+generally we want cases to be mutually exclusive.
+
+The pattern needing to be the same type as the object turns out to 
+be something of a limitation. What if we wanted to determine the sign 
+of an integer? We could use if statements, but we really have three 
+possibilities - negative, 0, and positive - and nesting 
+if statements is just so ugly and hard to follow.
+
+We might start to write a pattern like this:
+
+\beforeverb
+\begin{verbatim}
+let sign i = match i with 
+	0 -> 0
+	| x -> 1 (* this will match all integers! *)
+\end{verbatim}
+\afterverb
+
+This example will compile, but it won't do what you want it to do.
+The {\tt x} case will match all integers! We need to be able to 
+distinguish between positive and negative integers. In order to do this,
+we want to {\bf guard} these patterns. This means we use {\tt when} to 
+impose a condition on the pattern, like so:
+\index{Pattern-Matching!Guarded}
+\index{Guarded Patterns}
+
+\beforeverb
+\begin{verbatim}
+let sign i = match i with
+	x when x < 0 -> -1
+	| 0 -> 0
+	| x -> 1;;
+\end{verbatim}
+\afterverb
+
+Note that the last line is not guarded even though we don't want all 
+integers to return one. However, we have already eliminated all the 
+cases we don't want to return one, so there's really no point in guarding
+this case. It will simply make it longer and harder to read. Additionally,
+if all patterns in a pattern-matching are guarded, you'll get a warning 
+message telling you it's bad style.
+
+You can also tell OCaml to match with anything using an \verb"_", and you
+can use the {\tt as} keyword to rename a pattern. The following example is
+silly, but demonstrates both of these abilities:
+
+\beforeverb
+\begin{verbatim}
+let add3 i = match i with
+	(_ as x) -> x+3;;
+\end{verbatim}
+\afterverb
+
+The underscore will match anything that fits within the pattern. The {\tt 
+as} lets us call whatever we matched there {\tt x} and then use it in the
+result side.
+
+We'll see lots more awesome examples of pattern matching as we go along.
 
 \section{Glossary}
-
 \begin{description}
 
 \item[modulus operator:]  An operator, denoted with a percent sign
@@ -3123,8 +3206,8 @@ a_{n+1} = f(a_n,a_{n-1},a_{n-2}...)
 \end{equation*}
 
 meaning that the next term in the sequence $a$ is a function 
-of previous terms in the sequence, generally just the last one.
- This process is called {\bf recursion}.Some recursive functions 
+of previous terms in the sequence, generally just the last one. 
+This process is called {\bf recursion}.Some recursive functions 
 will be functions of more terms than just the last term. In 
 computer science, this idea can be used for all kinds of 
 important calculations, and can be much simpler than 
@@ -3143,12 +3226,12 @@ knew the $n^{th}$ case, then the ${n+1}^{th}$ case would be simple.
 While usually we're looking for the $n^{th}$ case, it's often
 helpful to first think of recursion in forward terms:
 
-\begin{eqnarray*}
+\begin{align*}
 a_0 &&& \\
 a_1 &= f(a_0) && \\
 a_2 &= f(a_1) & = f(f(a_0)) &\\
 a_3 &= f(a_2) & = f(f(a_1))) &= f(f(f(a_0))) \\
-\end{eqnarray*}
+\end{align*}
 and so on and so forth.
 
 So you can see, the third term can be 
@@ -3394,11 +3477,12 @@ let rec odd x =
 	else even (x-1);;
 \end{verbatim}
 \afterverb
+
 Not the prettiest solution, but it should work, right? Well, actually, no.
 Because of how OCaml compiles, it would need odd first to compile even, but
 would also need even first to compile odd. Somehow we need to tell OCaml to
-compile both files at the same time. Fortunately, OCaml comes with a syntax 
-to do this:
+compile both functions at the same time. Fortunately, OCaml comes with a 
+syntax to do this:
 
 \beforeverb
 \begin{verbatim}
@@ -3424,7 +3508,7 @@ Remember the example from looping where we added up all the integers
 from one to $n$. Write a function that does the same thing, but uses
 recursion to do so.
 
-\end{example}
+\end{ex}
 
 One potential solution to the above problem would look like this:
 
@@ -3471,7 +3555,7 @@ let csum = csum_helper 0;;
 \end{verbatim}
 \afterverb.
 
-Note how {\tt csum_helper}'s return value is either the answer or simply the 
+Note how {\tt \verb"csum_helper"}'s return value is either the answer or simply the 
 result of the recursive call. Hence, the computer does not need to keep this 
 function around, it just needs to take the value from the recursive call. Also, 
 note how I've arranged this program: because I needed an {\tt accum} argument, 
@@ -3588,11 +3672,12 @@ return the first, last, and middle letters:
 let first_char word = word.[0];;
 
 let last_char word =
-	let i = String.legnth word - 1
-	in word.[i];;
+	let len = String.length word - 1
+	in word.[len];;
 
-def middle(word):
-    return word.[1:-1]
+let middle word = 
+	let len = String.length word - 2 in
+	String.sub word 1 len;;
 \end{verbatim}
 \afterverb
 %edit here
@@ -3601,7 +3686,7 @@ We'll see how they work in Chapter~\ref{strings}.
 
 \begin{enumerate}
 
-\item Type these functions into a file named {\tt palindrome.py}
+\item Type these functions into a file named {\tt palindrome.ml}
 and test them out.  What happens if you call {\tt middle} with
 a string with two letters?  One letter?  What about the empty
 string, which is written \verb"''" and contains no letters?
@@ -3648,10 +3733,28 @@ help, see \url{wikipedia.org/wiki/Euclidean_algorithm}.
 
 \end{ex}
 
+\begin{ex}
 
-\chapter{Iteration}
-\index{iteration}
+The Hofstadter Female and Male sequences are two sequences of integers
+defined in terms of each other, such that:
 
+\begin{align*}
+F(0) &= 1; M(0) = 0 \\
+F(n) &= n - M(F(n-1)), n>0 \\
+M(n) &= n - F(M(n-1)), n>0
+\end{align*}
+
+The first few terms of the sequences are:
+
+\begin{align*}
+F:& 1, 1, 2, 2, 3, 3, 4, 5, 5,... \\
+M:& 0, 0, 1, 2, 2, 3, 4, 4, 5,... 
+\end{align*}
+
+Write two mutually recursive functions to find the n-th term of the 
+sequences.
+
+\end{ex}
 
 \chapter{Algorithms}
 %serious edit here!!
@@ -3660,7 +3763,7 @@ help, see \url{wikipedia.org/wiki/Euclidean_algorithm}.
 
 \index{square root}
 
-Loops are often used in programs that compute
+Recursion or looping is often used in programs that compute
 numerical results by starting with an approximate answer and
 iteratively improving it.
 
@@ -3677,11 +3780,10 @@ For example, if $a$ is 4 and $x$ is 3:
 
 \beforeverb
 \begin{verbatim}
->>> a = 4.0
->>> x = 3.0
->>> y = (x + a/x) / 2
->>> print y
-2.16666666667
+# let a = 4.0;;
+# let x = 3.0;;
+# let y = (x +. a/.x) /. 2.0;;
+val y : float = 2.16666666666666652
 \end{verbatim}
 \afterverb
 %
@@ -3690,27 +3792,22 @@ repeat the process with the new estimate, it gets even closer:
 
 \beforeverb
 \begin{verbatim}
->>> x = y
->>> y = (x + a/x) / 2
->>> print y
-2.00641025641
+# let x = y;;
+# let y = (x +. a/.x) /. 2.0;;
+val y : float = 2.00641025641025639
 \end{verbatim}
 \afterverb
 %
 After a few more updates, the estimate is almost exact:
 
-\index{update}
-
 \beforeverb
 \begin{verbatim}
->>> x = y
->>> y = (x + a/x) / 2
->>> print y
-2.00001024003
->>> x = y
->>> y = (x + a/x) / 2
->>> print y
-2.00000000003
+# let x = y;;
+# let y = (x +. a/.x) /. 2;;
+val y : float = 2.00001024002621453
+# let x = y;;
+# let y = (x +. a/.x) /. 2;;
+val y : float = 2.00000000002621459
 \end{verbatim}
 \afterverb
 %
@@ -3721,29 +3818,26 @@ stops changing:
 
 \beforeverb
 \begin{verbatim}
->>> x = y
->>> y = (x + a/x) / 2
->>> print y
-2.0
->>> x = y
->>> y = (x + a/x) / 2
->>> print y
-2.0
+# let x = 2.0;;
+# let y = (x +. a/.x) /. 2;;
+val y : float = 2.
+# let x = y;;
+# let y = (x +. a/.x) /. 2;;
+val y : float = 2.
 \end{verbatim}
 \afterverb
 %
-When {\tt y == x}, we can stop.  Here is a loop that starts
+When {\tt y == x}, we can stop.  Here is a function that starts
 with an initial estimate, {\tt x}, and improves it until it
 stops changing:
 
 \beforeverb
 \begin{verbatim}
-while True:
-    print x
-    y = (x + a/x) / 2
-    if y == x:
-        break
-    x = y
+let rec sqroot a x y = 
+	if x=y
+	then y
+	else let ynew = (x +. a/.x) /. 2.0
+		in sqroot a y ynew;;
 \end{verbatim}
 \afterverb
 %
@@ -3762,24 +3856,21 @@ absolute value, or magnitude, of the difference between them:
 
 \beforeverb
 \begin{verbatim}
-    if abs(y-x) < epsilon:
-        break
+    if abs (y-x) < epsilon
 \end{verbatim}
 \afterverb
-%
-Where \verb"epsilon" has a value like {\tt 0.0000001} that
+where \verb"epsilon" has a value like {\tt 0.0000001} that
 determines how close is close enough.
 
 \begin{ex}
 \label{square_root}
 \index{encapsulation}
 
-Encapsulate this loop in a function called \verb"square_root"
+Encapsulate this recursive function called \verb"square_root"
 that takes {\tt a} as a parameter, chooses a reasonable
 value of {\tt x}, and returns an estimate of the square root
 of {\tt a}.
 \end{ex}
-
 
 \section{Algorithms}
 \index{algorithm}
@@ -3861,40 +3952,11 @@ is easy to put a check.  Then choose a spot where you
 think the chances are about the same that the bug is before
 or after the check.
 
-
-
-
 \section{Glossary}
 
 \begin{description}
-
-\item[multiple assignment:] Making more than one assignment to the same
-variable during the execution of a program.
-\index{multiple assignment}
-\index{assignment!multiple}
-
-\item[update:] An assignment where the new value of the variable
-depends on the old.
-\index{update}
-
-\item[initialization:] An assignment that gives an initial value to
-a variable that will be updated.
-\index{initialization!variable}
-
-\item[increment:] An update that increases the value of a variable
-(often by one).
-\index{increment}
-
-\item[decrement:] An update that decreases the value of a variable.
-\index{decrement}
-
-\item[iteration:] Repeated execution of a set of statements using
-either a recursive function call or a loop.
-\index{iteration}
-
-\item[infinite loop:] A loop in which the terminating condition is
-never satisfied.
-\index{infinite loop}
+%write things here!
+\item stuff
 
 \end{description}
 
@@ -3906,8 +3968,8 @@ never satisfied.
 \index{algorithm!square root}
 
 To test the square root algorithm in this chapter, you could compare
-it with {\tt math.sqrt}.  Write a function named \verb"test_square_root"
-that prints a table like this:
+it with {\tt sqrt}.  Write a function named \verb"test_square_root"
+that prints a table something like this:
 
 \beforeverb
 \begin{verbatim}
@@ -3927,40 +3989,9 @@ that prints a table like this:
 The first column is a number, $a$; the second column is
 the square root of $a$ computed with the function from
 Exercise~\ref{square_root}; the third column is the square root computed
-by {\tt math.sqrt}; the fourth column is the absolute value
+by {\tt sqrt}; the fourth column is the absolute value
 of the difference between the two estimates.
 \end{ex}
-
-
-\begin{ex}
-
-\index{eval function}
-\index{function!eval}
-
-The built-in function {\tt eval} takes a string and evaluates
-it using the Python interpreter.  For example:
-
-\beforeverb
-\begin{verbatim}
->>> eval('1 + 2 * 3')
-7
->>> import math
->>> eval('math.sqrt(5)')
-2.2360679774997898
->>> eval('type(math.pi)')
-<type 'float'>
-\end{verbatim}
-\afterverb
-%
-Write a function called \verb"eval_loop" that iteratively
-prompts the user, takes the resulting input and evaluates
-it using {\tt eval}, and prints the result.
-
-It should continue until the user enters \verb"'done'", and then
-return the value of the last expression it evaluated.
-
-\end{ex}
-
 
 \begin{ex}
 
@@ -3977,12 +4008,9 @@ approximation of $\pi$:
 \sum^\infty_{k=0} \frac{(4k)!(1103+26390k)}{(k!)^4 396^{4k}} \]
 
 Write a function called \verb"estimate_pi" that uses this formula
-to compute and return an estimate of $\pi$.  It should use a {\tt while}
-loop to compute terms of the summation until the last term is
-smaller than {\tt 1e-15} (which is Python notation for $10^{-15}$).
-You can check the result by comparing it to {\tt math.pi}.
-
-You can see my solution at \url{thinkpython.com/code/pi.py}.
+to compute and return an estimate of $\pi$.  It should use recursion 
+to compute terms of the summation until the last term is
+smaller than {\tt 10.**(-15)}.
 \end{ex}
 
 
@@ -4002,13 +4030,14 @@ bracket operator:
 
 \beforeverb
 \begin{verbatim}
->>> fruit = 'banana'
->>> letter = fruit[1]
+# let fruit = "banana";;
+# let letter = fruit.[1]
 \end{verbatim}
 \afterverb
 %
 The second statement selects character number 1 from {\tt
-fruit} and assigns it to {\tt letter}.  
+fruit} and assigns it to {\tt letter}. Note that the type 
+of {\tt letter} is {\tt char} not {\tt string}.
 
 \index{index}
 
@@ -4020,8 +4049,8 @@ But you might not get what you expect:
 
 \beforeverb
 \begin{verbatim}
->>> print letter
-a
+# letter
+- : char = 'a'
 \end{verbatim}
 \afterverb
 %
@@ -4031,9 +4060,8 @@ beginning of the string, and the offset of the first letter is zero.
 
 \beforeverb
 \begin{verbatim}
->>> letter = fruit[0]
->>> print letter
-b
+let letter = fruit.[0]
+val letter : char = 'b'
 \end{verbatim}
 \afterverb
 %
@@ -4054,19 +4082,39 @@ get:
 
 \beforeverb
 \begin{verbatim}
->>> letter = fruit[1.5]
-TypeError: string indices must be integers
+# let letter = fruit[1.5]
+Error: This expression has type float but an expression was expected of type
+	 int.
 \end{verbatim}
 \afterverb
 %
 
-\section{{\tt len}}
+Note that {\tt fruit.[i]} is the same as typing {\tt String.get fruit i}.
 
-\index{len function}
-\index{function!len}
+Strings are mutable; you can change the value of characters within the 
+string using the {\tt set} function:
 
-{\tt len} is a built-in function that returns the number of characters
-in a string:
+\beforeverb
+\begin{verbatim}
+# fruit.[1]<-'b';;
+- : unit = ()
+# fruit;;
+- : string = "bbnana"
+\end{verbatim}
+\afterverb
+
+Note that this is equivalent to writing {\tt String.set fruit 1 'b'}. If you 
+try to set a character outside of a string, then you'll get an exception error.
+
+\section{{\tt String.length}}
+
+\index{String module}
+\index{String.length function}
+\index{function!String.length}
+
+Many useful string operations can be found in the {\tt String} module.
+{\tt String.length} is a built-in function that returns the number of 
+characters in a string:
 
 \beforeverb
 \begin{verbatim}
@@ -4084,56 +4132,61 @@ like this:
 
 \beforeverb
 \begin{verbatim}
->>> length = len(fruit)
->>> last = fruit[length]
-IndexError: string index out of range
+# let len = String.legnth fruit;;
+# let last = fruit.[length];;
+Exception: Invalid_argument "index out of bounds"
 \end{verbatim}
 \afterverb
 %
-The reason for the {\tt IndexError} is that there is no letter in {\tt
+The reason for the {\tt Exception} is that there is no letter in {\tt
 'banana'} with the index 6.  Since we started counting at zero, the
 six letters are numbered 0 to 5.  To get the last character, you have
 to subtract 1 from {\tt length}:
 
 \beforeverb
 \begin{verbatim}
->>> last = fruit[length-1]
->>> print last
-a
+# let last = fruit[len-1]
+val last: char = 'a'
 \end{verbatim}
 \afterverb
 %
-Alternatively, you can use negative indices, which count backward from
-the end of the string.  The expression {\tt fruit[-1]} yields the last
-letter, {\tt fruit[-2]} yields the second to last, and so on.
 
-\index{index!negative}
-\index{negative index}
+\section{Substrings}
+
+One thing you'll want to be able to do with strings is select {\bf substrings},
+or sections of strings that are themselves strings. We saw an example of this 
+before in the palindromes exercise:
+
+\beforeverb
+\begin{verbatim}
+let middle word = 
+	let len = String.length word - 2 in
+	String.sub word 1 len
+\end{verbatim}
+\afterverb
+In this example, we're extracting the substring of all the characters between 
+the first and last character.
 
 
-\section{Traversal with a {\tt for} loop}
+\section{String Traversal}
 \label{for}
 
 \index{traversal}
-\index{loop!traversal}
-\index{for loop}
-\index{loop!for}
-\index{statement!for}
-\index{traversal}
+\index{recursion!traversal}
 
 A lot of computations involve processing a string one character at a
 time.  Often they start at the beginning, select each character in
 turn, do something to it, and continue until the end.  This pattern of
 processing is called a {\bf traversal}.  One way to write a traversal
-is with a {\tt while} loop:
-
+is with a loop:
+% write here
 \beforeverb
 \begin{verbatim}
-index = 0
-while index < len(fruit):
+let index = ref 0;;
+while index < len(fruit) (
     letter = fruit[index]
     print letter
-    index = index + 1
+    index = index + 1 );;
 \end{verbatim}
 \afterverb
 %
@@ -4148,19 +4201,6 @@ which is the last character in the string.
 Write a function that takes a string as an argument
 and displays the letters backward, one per line.
 \end{ex}
-
-Another way to write a traversal is with a {\tt for} loop:
-
-\beforeverb
-\begin{verbatim}
-for char in fruit:
-    print char
-\end{verbatim}
-\afterverb
-%
-Each time through the loop, the next character in the string is assigned
-to the variable {\tt char}.  The loop continues until no characters are
-left.
 
 \index{concatenation}
 \index{abecedarian}
