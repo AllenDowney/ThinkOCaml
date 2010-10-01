@@ -26,7 +26,7 @@ all:	book.tex
 #	dvips -T 7in,10in -Ppdf -o thinkpython.ps book
 	gv thinkocaml.ps
 
-html:	book.tex header.html footer.html
+html:	book.tex  header.html footer.html
 	rm -rf html
 	mkdir html
 	hevea -O -e latexonly htmlonly book
