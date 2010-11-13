@@ -21,12 +21,13 @@ all:	book.tex
 	makeindex book
 	latex book
 	dvips -t letter -Ppdf -o thinkocaml.ps book
-#	dvips -T 6.75in,9.25in -Ppdf -o thinkpython.ps book
-#	dvips -t b5 -Ppdf -o thinkpython.ps book
-#	dvips -T 7in,10in -Ppdf -o thinkpython.ps book
+#	dvips -T 5.5in,8in -Ppdf -o thinkocaml.ps book
+#	dvips -t b5 -Ppdf -o thinkocaml.ps book
+#	dvips -T 7in,10in -Ppdf -o thinkocaml.ps book
 	gv thinkocaml.ps
 
-html:	book.tex  header.html footer.html
+html:	book.tex  
+# header.html footer.html
 	rm -rf html
 	mkdir html
 	hevea -O -e latexonly htmlonly book
@@ -40,14 +41,14 @@ html:	book.tex  header.html footer.html
 DEST = /home/downey/public_html/greent/thinkocaml
 
 distrib:
-	ps2pdf $(PDFFLAGS) thinkpython.ps
+	ps2pdf $(PDFFLAGS) thinkocaml.ps
 	rm -rf dist
 	mkdir dist dist/tex dist/tex/figs
-	rsync -a thinkpython.pdf thinkpython.ps html dist
+	rsync -a thinkocaml.pdf thinkocaml.ps html dist
 	rsync -a Makefile book.tex latexonly htmlonly dist/tex
 	rsync -a figs/*.fig figs/*.eps dist/tex/figs
-	cd dist; zip -r thinkpython.tex.zip tex
-	cd dist; zip -r thinkpython.html.zip html
+	cd dist; zip -r thinkocaml.tex.zip tex
+	cd dist; zip -r thinkocaml.html.zip html
 	rsync -a dist/* $(DEST)
 	chmod -R o+r $(DEST)/*
 

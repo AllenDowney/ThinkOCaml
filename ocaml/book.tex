@@ -33,7 +33,7 @@
 \usepackage{upquote}
 
 \newcommand{\thetitle}{Think OCaml: How to Think Like a (Functional) Computer Scientist}
-\newcommand{\theversion}{1.1.22}
+\newcommand{\theversion}{0.1.0}
 
 \makeindex
 
@@ -1284,46 +1284,9 @@ What really happens when I say ``let x = 3;;'' is that the {\it expression}
 `3' is represented by `x'. `x' becomes kind of a shorthand way of writing `3'.
 
 One of the side effects of this is that you can't change the value of a variable.
-\footnote{So, really, in some sense, they shouldn't be called variables at all.}
+So, really, in some sense, they shouldn't be called variables at all.
 
-In object-oriented languages like C/C++, Java, and Python, most scripting involves 
-creating and changing variables, so if you have done object-oriented programming
-before, you might find this a little weird. In function-oriented languages like OCaml, you 
-aren't really supposed to change the value of variables. You only use them as short-hand for 
-expressions. If you really want to, though, you can create a {\bf reference}, which functions
-a lot more like an object-oriented variable. This is what it looks like:
-
-\beforeverb
-\begin{verbatim}
- # let my_ref = ref 100;;
-val my_ref : int ref = {contents = 100}
-\end{verbatim}
-\afterverb
-
-The output looks a little weird, but that's because, in OCaml, references take a backseat to expressions.
-
-Now, I said you could change the value of references, so let's see that.
-
-\beforeverb
-\begin{verbatim}
- # my_ref := 42;;
-- : unit = ()
-\end{verbatim}
-\afterverb
-
-Note that the operator for changing the value of a reference is `:=' instead of just `='. Also, note that
-assignment doesn't return a value, but rather returns a unit. In order to read the value of a reference, use
-the `!' operator. \footnote{In many other programming languages, `!' is used to mean ``not.'' In OCaml, it's 
-better to think of it as ``get''.}
-
-\beforeverb
-\begin{verbatim}
- # !my_ref;;
-- : int = 42
-\end{verbatim}
-\afterverb
-
-%\section{Scope}
+\section{Scope}
 
 Now, I said you couldn't change the value of variables, but in some senses it looks like you can.
 
@@ -2485,8 +2448,6 @@ of the display.
 
 \end{ex}
 
-%write here
-
 \begin{ex}
 Write a function that takes two strings as an argument and concatenates
 them with a space in between.
@@ -2679,7 +2640,7 @@ As with most things in OCaml, as you're probably beginning to notice, the
 then-expression and else-expression must evaluate to one value (i.e., be expressions).
 Sometimes, though, you might want to do more than one thing within those expressions.
 For example, you might want to display the value of something. For just that, we have 
-{\tt begin} and {\tt end}...
+{\tt begin} and {\tt end}.
 
 \beforeverb
 \begin{verbatim}
@@ -2692,7 +2653,7 @@ else x+1;;
 \end{verbatim}
 \afterverb
 
-Note that the first line within the {\tt begin..end} block is followed by a sequence point:
+Note that the first line within the {\tt begin...end} block is followed by a sequence point:
 anything returned by the first line will just be discarded. However, it's considered good form
 for it to always return the unit, and it will spew warning errors at you if it returns anything
 else.
@@ -2761,103 +2722,6 @@ then print_string "x is a positive single-digit number."
 \end{verbatim}
 \afterverb
 
-\section{Looping}
-
-In functional programming, we don't really like loops. We'd much rather
-use recursion, which I'll introduce next chapter and is one of the major
-tenets of function-oriented programming. However, it's worth talking about
-looping, both because it can be occasionally useful even in function-oriented
-programs, and because if you go on to learn any object-oriented languages, 
-it'll be very helpful to at least know what the concept is. Also, it can be 
-useful to contrast looping with recursive functions to show why recursion can
-be so cool.
-
-\index{Looping}
-\index{For loop}
-\index{While loop}
-
-There are two primary forms of loops: the {\tt for} loop and the {\tt while}
-loop. Technically speaking, a for loop is just a particular case of a very useful
-while loop, but it's also a little easier to use and a little harder to mess up, so
-we'll start with that.
-
-\subsection{For loop}
-
-Let's say we wanted to add up all the integers from one to some integer n. Of course, 
-we could use the simple analytic solution, but that would be silly.\footnote{No, it 
-wouldn't be silly. If you have a convenient analytic solution, use it, it's probably 
-more efficient, but for the sake of pedagogy, let's go ahead and not use the analytic 
-solution.}
-
-We might go about this problem by iterating through all the integers from 1 to n and 
-adding them up as we go along. Well, this is exactly for what a for loop is used.
-
-\beforeverb
-\begin{verbatim}
-let n = 10;;
-let addup = ref 0;;
-for i = 1 to n do
-     addup := !addup + i
-done;;
-print_int !addup;;
-\end{verbatim}
-\afterverb
-
-Note that I used a reference so that I could change the value of {\tt addup} every time, 
-and the use of the ! to ``get'' the value of addup in order to add to it. Also note that, 
-in OCaml, whatever occurs between the ``do'' and the ``done'' must evaluate to a unit. 
-That means for loops cannot return a value, which makes them not particularly useful. 
-Fortunately, though, the reference assignment operator (:=) does not return a value.
-
-This is a very object-oriented approach to solving this problem. You shouldn't like it.
-\footnote{Well, okay. Object-oriented solutions are very good for some problems. In this 
-particular (trivial) case, I can't really say whether functional or imperative solutions 
-are better (we'll see the function-oriented solution next chapter). There are definitely 
-situations where one is easier, or faster, or more robust then the other.}
-
-\subsection{While loop}
-
-While loops are a slightly more general form of for loops, that look at a condition and
-go while (hence the name) that condition is still true. Let's look at the above problem
-using a while loop:
-
-\beforeverb
-\begin{verbatim}
-let n = 10;;
-let addup = ref 0;;
-let i = ref 1;;
-while !i <= n do
-     addup := !addup + !i;
-     i := !i + 1
-done;;
-print_int !addup;;
-\end{verbatim}
-\afterverb
-
-You can probably see the similarity between the two different loops.
-
-One thing to be careful of in while loops is that the condition ceases to be true at 
-some point. If the condition of a while loop is always true, then you will never stop 
-looping (within the technical constraints of your machine). For example, if I hadn't
-made i a reference variable:
-\beforeverb
-\begin{verbatim}
-let n = 10;;
-let addup = ref 0;;
-let i = 1;;
-while i <= n do
-     addup := !addup + i;
-     i = i + 1
-done;;
-print_int !addup;;
-\end{verbatim}
-\afterverb
-then the condition is always true. This is because, in the condition of the while loop,
-i is always equal to 1. The statement {\tt i = i+1} is actually a truth test which returns
-false. This program will return a compile warning about how expressions within a while loop 
-returning should return the unit type, and then continue to loop forever. This is known as
-an {\bf infinite loop}, and they should generally be avoided.
-
 \section{Keyboard input}
 \index{keyboard input}
 
@@ -2896,7 +2760,6 @@ let input = read_line();;
 \end{verbatim}
 \afterverb
 %
-
 You can then do something with the user's input. For example, we could have
 the program greet the user:
 
@@ -3270,9 +3133,13 @@ greater than 0, it displays {\tt s} and then calls itself to display
 is {\tt 1 + (n - 1)}, which adds up to {\tt n}.
 
 Now, this is all fun and games, but we can also use recursive functions
-to do real work, and return an actual value. Let's reconsider the example 
-from looping of summing all the integers from 1 to n. A recursive solution 
-to this problem might look like this:
+to do real work, and return an actual value.
+
+Let's say we wanted to add up all the integers from one to some integer n. Of course, 
+we could use the simple analytic solution, but that would be silly.\footnote{No, it 
+wouldn't be silly. If you have a convenient analytic solution, use it, it's probably 
+more efficient, but for the sake of pedagogy, let's go ahead and not use the analytic 
+solution.} A recursive solution to this problem might look like this:
 
 \beforeverb
 \begin{verbatim}
@@ -3282,12 +3149,6 @@ let rec csum n =
 	else (n + csum (n-1));;
 \end{verbatim}
 \afterverb
-
-For simple examples like this, it is probably just as easy to use a 
-{\tt for} loop, though in OCaml it's considered much better form to 
-use recursion.  But we will see examples later that are hard to write
-with a {\tt for} loop and easy to write with recursion, so it is
-good to start early.
 
 \begin{ex}
 OCaml wil also trace a recursive function for you (or any function, really).
@@ -3430,15 +3291,7 @@ and odd x =
 \index{Tail-end Recursion}
 \index{Recursion!Tail-end}
 
-\begin{ex}
-
-Remember the example from looping where we added up all the integers
-from one to $n$. Write a function that does the same thing, but uses
-recursion to do so.
-
-\end{ex}
-
-One potential solution to the above problem would look like this:
+Remember {\tt csum}? Well, it looked like this:
 
 \beforeverb
 \begin{verbatim}
@@ -3561,11 +3414,24 @@ an operation pending for the result of said recursive call.
 \section{Exercises}
 
 \begin{ex}
+You've probably heard of the fibonacci numbers before, but in case you haven't, they're defined by the following recursive relationship: \footnote{Sometimes the specifics of the base cases looks a little different, but it all works out to be the same series.}
+
+\begin{eqnarray*}
+f(0) &=& 0 \\
+f(1) &=& 1 \\
+f(n+1) &=& f(n) + f(n-1)
+\end{eqnarray*}
+
+Write a recursive function to calculate these numbers. It does not need to be tail recursive.
+
+\end{ex} \label{ex:fibonacci}
+
+\begin{ex}
 \index{Ackerman function}
 \index{function!ack}
 
 The Ackermann function, $A(m, n)$, is defined\footnote{See
-  \url{wikipedia.org/wiki/Ackermann_function}.}:
+  \url{wikipedia.org/wiki/Sometimes the specifics of the base cases looks a little different, but it all works out to be the same series.Ackermann_function}.}:
 
 \begin{eqnarray}
 A(m, n) = \begin{cases} 
@@ -4107,7 +3973,7 @@ time.  Often they start at the beginning, select each character in
 turn, do something to it, and continue until the end.  This pattern of
 processing is called a {\bf traversal}.  One way to write a traversal
 is with recursion and substrings:
-% write here
+
 \beforeverb
 \begin{verbatim}
 let rec traverse_print s = 
@@ -4359,49 +4225,49 @@ you understand how they work.  {\tt index} and
 
 \end{ex}
 
-\begin{ex}
-The following functions are all {\em intended} to check whether a
-string contains any lowercase letters, but at least some of them are
-wrong.  For each function, describe what the function actually does
-(assuming that the parameter is a string).
-%edit here
-\beforeverb
-\begin{verbatim}
-def any_lowercase1(s):
-    for c in s:
-        if c.islower():
-            return True
-        else:
-            return False
-
-def any_lowercase2(s):
-    for c in s:
-        if 'c'.islower():
-            return 'True'
-        else:
-            return 'False'
-
-def any_lowercase3(s):
-    for c in s:
-        flag = c.islower()
-    return flag
-
-def any_lowercase4(s):
-    flag = False
-    for c in s:
-        flag = flag or c.islower()
-    return flag
-
-def any_lowercase5(s):
-    for c in s:
-        if not c.islower():
-            return False
-    return True
-\end{verbatim}
-\afterverb
-
-\end{ex}
-
+% \begin{ex}
+% The following functions are all {\em intended} to check whether a
+% string contains any lowercase letters, but at least some of them are
+% wrong.  For each function, describe what the function actually does
+% (assuming that the parameter is a string).
+% %edit here
+% \beforeverb
+% \begin{verbatim}
+% def any_lowercase1(s):
+%     for c in s:
+%         if c.islower():
+%             return True
+%         else:
+%             return False
+% 
+% def any_lowercase2(s):
+%     for c in s:
+%         if 'c'.islower():
+%             return 'True'
+%         else:
+%             return 'False'
+% 
+% def any_lowercase3(s):
+%     for c in s:
+%         flag = c.islower()
+%     return flag
+% 
+% def any_lowercase4(s):
+%     flag = False
+%     for c in s:
+%         flag = flag or c.islower()
+%     return flag
+% 
+% def any_lowercase5(s):
+%     for c in s:
+%         if not c.islower():
+%             return False
+%     return True
+% \end{verbatim}
+% \afterverb
+% 
+% \end{ex}
+% 
 
 \begin{ex}
 \index{letter rotation}
@@ -4432,591 +4298,585 @@ useful.
 
 Potentially offensive jokes on the Internet are sometimes encoded
 in ROT13.  If you are rather bored by not easily offended, find and 
-decode some of them. % ???
-\end{ex}
-
-%write here
-\chapter{Case study: word play}
-
-\section{Reading word lists}
-\label{wordlist}
-
-For the exercises in this chapter we need a list of English words.
-There are lots of word lists available on the Web, but the one most
-suitable for our purpose is one of the word lists collected and
-contributed to the public domain by Grady Ward as part of the Moby
-lexicon project\footnote{\url{wikipedia.org/wiki/Moby_Project}.}.  It
-is a list of 113,809 official crosswords; that is, words that are
-considered valid in crossword puzzles and other word games.  In the
-Moby collection, the filename is {\tt 113809of.fic}; I include a copy
-of this file, with the simpler name {\tt words.txt}, along with
-Swampy.
-
-\index{Swampy}
-\index{crosswords}
-
-This file is in plain text, so you can open it with a text
-editor, but you can also read it from Python.  The built-in
-function {\tt open} takes the name of the file as a parameter
-and returns a {\bf file object} you can use to read the file.
-
-\index{open function}
-\index{function!open}
-\index{plain text}
-\index{text!plain}
-\index{object!file}
-\index{file object}
-
-\beforeverb
-\begin{verbatim}
->>> fin = open('words.txt')
->>> print fin
-<open file 'words.txt', mode 'r' at 0xb7f4b380>
-\end{verbatim}
-\afterverb
-%
-{\tt fin} is a common name for a file object used for
-input.  Mode \verb"'r'" indicates that this file is open for
-reading (as opposed to \verb"'w'" for writing).
-
-\index{readline method}
-\index{method!readline}
-
-The file object provides several methods for reading, including
-{\tt readline}, which reads characters from the file
-until it gets to a newline and returns the result as a
-string:
-
-\beforeverb
-\begin{verbatim}
->>> fin.readline()
-'aa\r\n'
-\end{verbatim}
-\afterverb
-%
-The first word in this particular list is ``aa,'' which is a kind of
-lava.  The sequence \verb"\r\n" represents two whitespace characters,
-a carriage return and a newline, that separate this word from the
-next.
-
-The file object keeps track of where it is in the file, so
-if you call {\tt readline} again, you get the next word:
-
-\beforeverb
-\begin{verbatim}
->>> fin.readline()
-'aah\r\n'
-\end{verbatim}
-\afterverb
-%
-The next word is ``aah,'' which is a perfectly legitimate
-word, so stop looking at me like that.
-Or, if it's the whitespace that's bothering you,
-we can get rid of it with the string method {\tt strip}:
-
-\index{strip method}
-\index{method!strip}
-
-\beforeverb
-\begin{verbatim}
->>> line = fin.readline()
->>> word = line.strip()
->>> print word
-aahed
-\end{verbatim}
-\afterverb
-%
-You can also use a file object as part of a {\tt for} loop.
-This program reads {\tt words.txt} and prints each word, one
-per line:
-
-\index{open function}
-\index{function!open}
-
-\beforeverb
-\begin{verbatim}
-fin = open('words.txt')
-for line in fin:
-    word = line.strip()
-    print word
-\end{verbatim}
-\afterverb
-%
-
-\begin{ex}
-Write a program that reads {\tt words.txt} and prints only the
-words with more than 20 characters (not counting whitespace).
-
-\index{whitespace}
-
+decode some of them.
 \end{ex}
 
 
-\section{Exercises}
-
-There are solutions to these exercises in the next section.
-You should at least attempt each one before you read the solutions.
-
-\begin{ex}
-In 1939 Ernest Vincent Wright published a 50,000 word novel called
-{\em Gadsby} that does not contain the letter ``e.''  Since ``e'' is
-the most common letter in English, that's not easy to do.
-
-In fact, it is difficult to construct a solitary thought without using
-that most common symbol.  It is slow going at first, but with caution
-and hours of training you can gradually gain facility.
-
-All right, I'll stop now.
-
-Write a function called \verb"has_no_e" that returns {\tt True} if
-the given word doesn't have the letter ``e'' in it.
-
-Modify your program from the previous section to print only the words
-that have no ``e'' and compute the percentage of the words in the list
-have no ``e.''
-
-\index{lipogram}
-
-\end{ex}
-
-
-\begin{ex} 
-Write a function named {\tt avoids}
-that takes a word and a string of forbidden letters, and
-that returns {\tt True} if the word doesn't use any of the forbidden
-letters.
-
-Modify your program to prompt the user to enter a string
-of forbidden letters and then print the number of words that
-don't contain any of them.
-Can you find a combination of 5 forbidden letters that
-excludes the smallest number of words?
-\end{ex}
-
-
-
-\begin{ex}
-Write a function named \verb"uses_only" that takes a word and a
-string of letters, and that returns {\tt True} if the word contains
-only letters in the list.  Can you make a sentence using only the
-letters {\tt acefhlo}?  Other than ``Hoe alfalfa?''
-\end{ex}
-
-
-\begin{ex} 
-Write a function named \verb"uses_all" that takes a word and a
-string of required letters, and that returns {\tt True} if the word
-uses all the required letters at least once.  How many words are there
-that use all the vowels {\tt aeiou}?  How about {\tt aeiouy}?
-\end{ex}
-
-
-\begin{ex}
-Write a function called \verb"is_abecedarian" that returns
-{\tt True} if the letters in a word appear in alphabetical order
-(double letters are ok).  
-How many abecedarian words are there?
-\end{ex}
-
-\index{abecedarian}
-
-
-%\begin{ex}
-%\label{palindrome}
-%A palindrome is a word that reads the same
-%forward and backward, like ``rotator'' and ``noon.''
-%Write a boolean function named \verb"is_palindrome" that
-%takes a string as a parameter and returns {\tt True} if it is
-%a palindrome.
-
-%Modify your program from the previous section to print all
-%of the palindromes in the word list and then print the total
-%number of palindromes.
-%\end{ex}
-
-
-
-\section{Search}
-
-\index{search pattern}
-\index{pattern!search}
-
-All of the exercises in the previous section have something
-in common; they can be solved with the search pattern we saw
-in Section~\ref{find}.  The simplest example is:
-
-\beforeverb
-\begin{verbatim}
-def has_no_e(word):
-    for letter in word:
-        if letter == 'e':
-            return False
-    return True
-\end{verbatim}
-\afterverb
-%
-The {\tt for} loop traverses the characters in {\tt word}.  If we find
-the letter ``e'', we can immediately return {\tt False}; otherwise we
-have to go to the next letter.  If we exit the loop normally, that
-means we didn't find an ``e'', so we return {\tt True}.
-
-\index{traversal}
-
-% Removing this because we haven't seen the in operator yet.
-%\index{in operator}
-%\index{operator!in}
-
-%You could write this function more concisely using the {\tt in}
-%operator, but I started with this version because it 
-%demonstrates the logic of the search pattern.
-
-\index{generalization}
-
-{\tt avoids} is a more general version of \verb"has_no_e" but it
-has the same structure:
-
-\beforeverb
-\begin{verbatim}
-def avoids(word, forbidden):
-    for letter in word:
-        if letter in forbidden:
-            return False
-    return True
-\end{verbatim}
-\afterverb
-%
-We can return {\tt False} as soon as we find a forbidden letter;
-if we get to the end of the loop, we return {\tt True}.
-
-\verb"uses_only" is similar except that the sense of the condition
-is reversed:
-
-\beforeverb
-\begin{verbatim}
-def uses_only(word, available):
-    for letter in word: 
-        if letter not in available:
-            return False
-    return True
-\end{verbatim}
-\afterverb
-%
-Instead of a list of forbidden letters, we have a list of available
-letters.  If we find a letter in {\tt word} that is not in
-{\tt available}, we can return {\tt False}.
-
-\verb"uses_all" is similar except that we reverse the role
-of the word and the string of letters:
-
-\beforeverb
-\begin{verbatim}
-def uses_all(word, required):
-    for letter in required: 
-        if letter not in word:
-            return False
-    return True
-\end{verbatim}
-\afterverb
-%
-Instead of traversing the letters in {\tt word}, the loop
-traverses the required letters.  If any of the required letters
-do not appear in the word, we can return {\tt False}.
-
-\index{traversal}
-
-If you were really thinking like a computer scientist, you would
-have recognized that \verb"uses_all" was an instance of a
-previously-solved problem, and you would have written:
-
-\beforeverb
-\begin{verbatim}
-def uses_all(word, required):
-    return uses_only(required, word)
-\end{verbatim}
-\afterverb
-%
-This is an example of a program development method called {\bf problem
-recognition}, which means that you recognize the problem you are
-working on as an instance of a previously-solved problem, and apply a
-previously-developed solution.
-
-\index{problem recognition}
-\index{development plan!problem recognition}
-
-
-\section{Looping with indices}
-
-\index{looping!with indices}
-\index{index!looping with}
-
-I wrote the functions in the previous section with {\tt for}
-loops because I only needed the characters in the strings; I didn't
-have to do anything with the indices.
-
-For \verb"is_abecedarian" we have to compare adjacent letters,
-which is a little tricky with a {\tt for} loop:
-
-\beforeverb
-\begin{verbatim}
-def is_abecedarian(word):
-    previous = word[0]
-    for c in word:
-        if c < previous:
-            return False
-        previous = c
-    return True
-\end{verbatim}
-\afterverb
-
-
-An alternative is to
-use recursion:
-
-\beforeverb
-\begin{verbatim}
-def is_abecedarian(word):
-    if len(word) <= 1:
-        return True
-    if word[0] > word[1]:
-        return False
-    return is_abecedarian(word[1:])
-\end{verbatim}
-\afterverb
-
-Another option is to use a {\tt while} loop:
-
-\beforeverb
-\begin{verbatim}
-def is_abecedarian(word):
-    i = 0
-    while i < len(word)-1:
-        if word[i+1] < word[i]:
-            return False
-        i = i+1
-    return True
-\end{verbatim}
-\afterverb
-%
-The loop starts at {\tt i=0} and ends when {\tt i=len(word)-1}.  Each
-time through the loop, it compares the $i$th character (which you can
-think of as the current character) to the $i+1$th character (which you
-can think of as the next).
-
-If the next character is less than (alphabetically before) the current
-one, then we have discovered a break in the abecedarian trend, and
-we return {\tt False}.
-
-If we get to the end of the loop without finding a fault, then the
-word passes the test.  To convince yourself that the loop ends
-correctly, consider an example like \verb"'flossy'".  The
-length of the word is 6, so
-the last time the loop runs is when {\tt i} is 4, which is the
-index of the second-to-last character.  On the last iteration,
-it compares the second-to-last character to the last, which is
-what we want.
-
-\index{palindrome}
-
-Here is a version of \verb"is_palindrome" (see
-Exercise~\ref{palindrome}) that uses two indices; one starts at the
-beginning and goes up; the other starts at the end and goes down.
-
-\beforeverb
-\begin{verbatim}
-def is_palindrome(word):
-    i = 0
-    j = len(word)-1
-
-    while i<j:
-        if word[i] != word[j]:
-            return False
-        i = i+1
-        j = j-1
-
-    return True
-\end{verbatim}
-\afterverb
-
-Or, if you noticed that this is an instance of a previously-solved
-problem, you might have written:
-
-\beforeverb
-\begin{verbatim}
-def is_palindrome(word):
-    return is_reverse(word, word)
-\end{verbatim}
-\afterverb
-
-\index{problem recognition}
-\index{development plan!problem recognition}
-
-Assuming you did Exercise~\ref{is_reverse}.
-
-
-\section{Debugging}
-
-\index{debugging}
-\index{testing!is hard}
-\index{program testing}
-
-Testing programs is hard.  The functions in this chapter are
-relatively easy to test because you can check the results by hand.
-Even so, it is somewhere between difficult and impossible to choose a
-set of words that test for all possible errors.
-
-Taking \verb"has_no_e" as an example, there are two obvious
-cases to check: words that have an 'e' should return {\tt False};
-words that don't should return {\tt True}.  You should have no
-trouble coming up with one of each.
-
-Within each case, there are some less obvious subcases.  Among the
-words that have an ``e,'' you should test words with an ``e'' at the
-beginning, the end, and somewhere in the middle.  You should test long
-words, short words, and very short words, like the empty string.  The
-empty string is an example of a {\bf special case}, which is one of
-the non-obvious cases where errors often lurk.
-
-\index{special case}
-
-In addition to the test cases you generate, you can also test
-your program with a word list like {\tt words.txt}.  By scanning
-the output, you might be able to catch errors, but be careful:
-you might catch one kind of error (words that should not be
-included, but are) and not another (words that should be included,
-but aren't).
-
-In general, testing can help you find bugs, but it is not easy to
-generate a good set of test cases, and even if you do, you can't
-be sure your program is correct.
-
-\index{testing!and absence of bugs}
-
-According to a legendary computer scientist:
-
-\begin{quote}
-Program testing can be used to show the presence of bugs, but never to
-show their absence!
-
---- Edsger W. Dijkstra
-\end{quote}
-
-\index{Dijkstra, Edsger}
-
-
-\section{Glossary}
-
-\begin{description}
-
-\item[file object:] A value that represents an open file.
-\index{file object}
-\index{object!file}
-
-\item[problem recognition:] A way of solving a problem by
-expressing it as an instance of a previously-solved problem.
-\index{problem recognition}
-
-\item[special case:] A test case that is atypical or non-obvious
-(and less likely to be handled correctly).
-\index{special case}
-
-\end{description}
-
-
-\section{Exercises}
-
-\begin{ex}
-
-\index{Car Talk}
-\index{Puzzler}
-\index{double letters}
-
-This question is based on a Puzzler that was broadcast on the radio
-program {\em Car
-  Talk}\footnote{\url{www.cartalk.com/content/puzzler/transcripts/200725}.}:
-
-\begin{quote}
-Give me a word with three consecutive double letters. I'll give you a
-couple of words that almost qualify, but don't. For example, the word
-committee, c-o-m-m-i-t-t-e-e. It would be great except for the `i' that
-sneaks in there. Or Mississippi: M-i-s-s-i-s-s-i-p-p-i. If you could
-take out those i's it would work. But there is a word that has three
-consecutive pairs of letters and to the best of my knowledge this may
-be the only word. Of course there are probably 500 more but I can only
-think of one. What is the word?
-\end{quote}
-
-Write a program to find it.  You can see my solution at
-\url{thinkpython.com/code/cartalk.py}.
-
-\end{ex}
-
-
-\begin{ex}
-Here's another {\em Car Talk}
-Puzzler\footnote{\url{www.cartalk.com/content/puzzler/transcripts/200803}.}:
-
-\index{Car Talk}
-\index{Puzzler}
-\index{odometer}
-\index{palindrome}
-
-\begin{quote}
-``I was driving on the highway the other day and I happened to
-notice my odometer. Like most odometers, it shows six digits,
-in whole miles only. So, if my car had 300,000
-miles, for example, I'd see 3-0-0-0-0-0.
-
-``Now, what I saw that day was very interesting. I noticed that the
-last 4 digits were palindromic; that is, they read the same forward as
-backward. For example, 5-4-4-5 is a palindrome, so my odometer
-could have read 3-1-5-4-4-5.
-
-``One mile later, the last 5 numbers were palindromic. For example, it
-could have read 3-6-5-4-5-6.  One mile after that, the middle 4 out of
-6 numbers were palindromic.  And you ready for this? One mile later,
-all 6 were palindromic!
-
-``The question is, what was on the odometer when I first looked?''
-\end{quote}
-
-Write a Python program that tests all the six-digit numbers and prints
-any numbers that satisfy these requirements.  You can see my solution
-at \url{thinkpython.com/code/cartalk.py}.
-
-\end{ex}
-
-
-\begin{ex}
-Here's another {\em Car Talk} Puzzler you can solve with a
-search\footnote{\url{www.cartalk.com/content/puzzler/transcripts/200813}}:
-
-\index{Car Talk}
-\index{Puzzler}
-\index{palindrome}
-
-\begin{quote}
-``Recently I had a visit with my mom and we realized that
-the two digits that make up my age when reversed resulted in her
-age. For example, if she's 73, I'm 37. We wondered how often this has
-happened over the years but we got sidetracked with other topics and
-we never came up with an answer.
-
-``When I got home I figured out that the digits of our ages have been
-reversible six times so far. I also figured out that if we're lucky it
-would happen again in a few years, and if we're really lucky it would
-happen one more time after that. In other words, it would have
-happened 8 times over all. So the question is, how old am I now?''
-
-\end{quote}
-
-Write a Python program that searches for solutions to this Puzzler.
-Hint: you might find the string method {\tt zfill} useful.
-
-You can see my solution at \url{thinkpython.com/code/cartalk.py}.
-
-\end{ex}
-
-
+% \chapter{Case study: word play}
+% 
+% \section{Reading word lists}
+% \label{wordlist}
+% 
+% For the exercises in this chapter we need a list of English words.
+% There are lots of word lists available on the Web, but the one most
+% suitable for our purpose is one of the word lists collected and
+% contributed to the public domain by Grady Ward as part of the Moby
+% lexicon project\footnote{\url{wikipedia.org/wiki/Moby_Project}.}.  It
+% is a list of 113,809 official crosswords; that is, words that are
+% considered valid in crossword puzzles and other word games.  In the
+% Moby collection, the filename is {\tt 113809of.fic}; I include a copy
+% of this file, with the simpler name {\tt words.txt}, along with
+% Swampy.
+% 
+% \index{Swampy}
+% \index{crosswords}
+% 
+% This file is in plain text, so you can open it with a text
+% editor, but you can also read it from Python.  The built-in
+% function {\tt open} takes the name of the file as a parameter
+% and returns a {\bf file object} you can use to read the file.
+% 
+% \index{open function}
+% \index{function!open}
+% \index{plain text}
+% \index{text!plain}
+% \index{object!file}
+% \index{file object}
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> fin = open('words.txt')
+% >>> print fin
+% <open file 'words.txt', mode 'r' at 0xb7f4b380>
+% \end{verbatim}
+% \afterverb
+% %
+% {\tt fin} is a common name for a file object used for
+% input.  Mode \verb"'r'" indicates that this file is open for
+% reading (as opposed to \verb"'w'" for writing).
+% 
+% \index{readline method}
+% \index{method!readline}
+% 
+% The file object provides several methods for reading, including
+% {\tt readline}, which reads characters from the file
+% until it gets to a newline and returns the result as a
+% string:
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> fin.readline()
+% 'aa\r\n'
+% \end{verbatim}
+% \afterverb
+% %
+% The first word in this particular list is ``aa,'' which is a kind of
+% lava.  The sequence \verb"\r\n" represents two whitespace characters,
+% a carriage return and a newline, that separate this word from the
+% next.
+% 
+% The file object keeps track of where it is in the file, so
+% if you call {\tt readline} again, you get the next word:
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> fin.readline()
+% 'aah\r\n'
+% \end{verbatim}
+% \afterverb
+% %
+% The next word is ``aah,'' which is a perfectly legitimate
+% word, so stop looking at me like that.
+% Or, if it's the whitespace that's bothering you,
+% we can get rid of it with the string method {\tt strip}:
+% 
+% \index{strip method}
+% \index{method!strip}
+% 
+% \beforeverb
+% \begin{verbatim}
+% >>> line = fin.readline()
+% >>> word = line.strip()
+% >>> print word
+% aahed
+% \end{verbatim}
+% \afterverb
+% %
+% You can also use a file object as part of a {\tt for} loop.
+% This program reads {\tt words.txt} and prints each word, one
+% per line:
+% 
+% \index{open function}
+% \index{function!open}
+% 
+% \beforeverb
+% \begin{verbatim}
+% fin = open('words.txt')
+% for line in fin:
+%     word = line.strip()
+%     print word
+% \end{verbatim}
+% \afterverb
+% %
+% 
+% \begin{ex}
+% Write a program that reads {\tt words.txt} and prints only the
+% words with more than 20 characters (not counting whitespace).
+% 
+% \index{whitespace}
+% 
+% \end{ex}
+% 
+% \section{Exercises}
+% 
+% There are solutions to these exercises in the next section.
+% You should at least attempt each one before you read the solutions.
+% 
+% \begin{ex}
+% In 1939 Ernest Vincent Wright published a 50,000 word novel called
+% {\em Gadsby} that does not contain the letter ``e.''  Since ``e'' is
+% the most common letter in English, that's not easy to do.
+% 
+% In fact, it is difficult to construct a solitary thought without using
+% that most common symbol.  It is slow going at first, but with caution
+% and hours of training you can gradually gain facility.
+% 
+% All right, I'll stop now.
+% 
+% Write a function called \verb"has_no_e" that returns {\tt True} if
+% the given word doesn't have the letter ``e'' in it.
+% 
+% Modify your program from the previous section to print only the words
+% that have no ``e'' and compute the percentage of the words in the list
+% have no ``e.''
+% 
+% \index{lipogram}
+% 
+% \end{ex}
+% 
+% 
+% \begin{ex} 
+% Write a function named {\tt avoids}
+% that takes a word and a string of forbidden letters, and
+% that returns {\tt True} if the word doesn't use any of the forbidden
+% letters.
+% 
+% Modify your program to prompt the user to enter a string
+% of forbidden letters and then print the number of words that
+% don't contain any of them.
+% Can you find a combination of 5 forbidden letters that
+% excludes the smallest number of words?
+% \end{ex}
+% 
+% \begin{ex}
+% Write a function named \verb"uses_only" that takes a word and a
+% string of letters, and that returns {\tt True} if the word contains
+% only letters in the list.  Can you make a sentence using only the
+% letters {\tt acefhlo}?  Other than ``Hoe alfalfa?''
+% \end{ex}
+% 
+% \begin{ex} 
+% Write a function named \verb"uses_all" that takes a word and a
+% string of required letters, and that returns {\tt True} if the word
+% uses all the required letters at least once.  How many words are there
+% that use all the vowels {\tt aeiou}?  How about {\tt aeiouy}?
+% \end{ex}
+% 
+% \begin{ex}
+% Write a function called \verb"is_abecedarian" that returns
+% {\tt True} if the letters in a word appear in alphabetical order
+% (double letters are ok).  
+% How many abecedarian words are there?
+% \end{ex}
+% 
+% \index{abecedarian}
+% 
+% 
+% %\begin{ex}
+% %\label{palindrome}
+% %A palindrome is a word that reads the same
+% %forward and backward, like ``rotator'' and ``noon.''
+% %Write a boolean function named \verb"is_palindrome" that
+% %takes a string as a parameter and returns {\tt True} if it is
+% %a palindrome.
+% 
+% %Modify your program from the previous section to print all
+% %of the palindromes in the word list and then print the total
+% %number of palindromes.
+% %\end{ex}
+% 
+% 
+% 
+% \section{Search}
+% 
+% \index{search pattern}
+% \index{pattern!search}
+% 
+% All of the exercises in the previous section have something
+% in common; they can be solved with the search pattern we saw
+% in Section~\ref{find}.  The simplest example is:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def has_no_e(word):
+%     for letter in word:
+%         if letter == 'e':
+%             return False
+%     return True
+% \end{verbatim}
+% \afterverb
+% %
+% The {\tt for} loop traverses the characters in {\tt word}.  If we find
+% the letter ``e'', we can immediately return {\tt False}; otherwise we
+% have to go to the next letter.  If we exit the loop normally, that
+% means we didn't find an ``e'', so we return {\tt True}.
+% 
+% \index{traversal}
+% 
+% % Removing this because we haven't seen the in operator yet.
+% %\index{in operator}
+% %\index{operator!in}
+% 
+% %You could write this function more concisely using the {\tt in}
+% %operator, but I started with this version because it 
+% %demonstrates the logic of the search pattern.
+% 
+% \index{generalization}
+% 
+% {\tt avoids} is a more general version of \verb"has_no_e" but it
+% has the same structure:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def avoids(word, forbidden):
+%     for letter in word:
+%         if letter in forbidden:
+%             return False
+%     return True
+% \end{verbatim}
+% \afterverb
+% %
+% We can return {\tt False} as soon as we find a forbidden letter;
+% if we get to the end of the loop, we return {\tt True}.
+% 
+% \verb"uses_only" is similar except that the sense of the condition
+% is reversed:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def uses_only(word, available):
+%     for letter in word: 
+%         if letter not in available:
+%             return False
+%     return True
+% \end{verbatim}
+% \afterverb
+% %
+% Instead of a list of forbidden letters, we have a list of available
+% letters.  If we find a letter in {\tt word} that is not in
+% {\tt available}, we can return {\tt False}.
+% 
+% \verb"uses_all" is similar except that we reverse the role
+% of the word and the string of letters:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def uses_all(word, required):
+%     for letter in required: 
+%         if letter not in word:
+%             return False
+%     return True
+% \end{verbatim}
+% \afterverb
+% %
+% Instead of traversing the letters in {\tt word}, the loop
+% traverses the required letters.  If any of the required letters
+% do not appear in the word, we can return {\tt False}.
+% 
+% \index{traversal}
+% 
+% If you were really thinking like a computer scientist, you would
+% have recognized that \verb"uses_all" was an instance of a
+% previously-solved problem, and you would have written:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def uses_all(word, required):
+%     return uses_only(required, word)
+% \end{verbatim}
+% \afterverb
+% %
+% This is an example of a program development method called {\bf problem
+% recognition}, which means that you recognize the problem you are
+% working on as an instance of a previously-solved problem, and apply a
+% previously-developed solution.
+% 
+% \index{problem recognition}
+% \index{development plan!problem recognition}
+% 
+% 
+% \section{Looping with indices}
+% 
+% \index{looping!with indices}
+% \index{index!looping with}
+% 
+% I wrote the functions in the previous section with {\tt for}
+% loops because I only needed the characters in the strings; I didn't
+% have to do anything with the indices.
+% 
+% For \verb"is_abecedarian" we have to compare adjacent letters,
+% which is a little tricky with a {\tt for} loop:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def is_abecedarian(word):
+%     previous = word[0]
+%     for c in word:
+%         if c < previous:
+%             return False
+%         previous = c
+%     return True
+% \end{verbatim}
+% \afterverb
+% 
+% 
+% An alternative is to
+% use recursion:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def is_abecedarian(word):
+%     if len(word) <= 1:
+%         return True
+%     if word[0] > word[1]:
+%         return False
+%     return is_abecedarian(word[1:])
+% \end{verbatim}
+% \afterverb
+% 
+% Another option is to use a {\tt while} loop:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def is_abecedarian(word):
+%     i = 0
+%     while i < len(word)-1:
+%         if word[i+1] < word[i]:
+%             return False
+%         i = i+1
+%     return True
+% \end{verbatim}
+% \afterverb
+% %
+% The loop starts at {\tt i=0} and ends when {\tt i=len(word)-1}.  Each
+% time through the loop, it compares the $i$th character (which you can
+% think of as the current character) to the $i+1$th character (which you
+% can think of as the next).
+% 
+% If the next character is less than (alphabetically before) the current
+% one, then we have discovered a break in the abecedarian trend, and
+% we return {\tt False}.
+% 
+% If we get to the end of the loop without finding a fault, then the
+% word passes the test.  To convince yourself that the loop ends
+% correctly, consider an example like \verb"'flossy'".  The
+% length of the word is 6, so
+% the last time the loop runs is when {\tt i} is 4, which is the
+% index of the second-to-last character.  On the last iteration,
+% it compares the second-to-last character to the last, which is
+% what we want.
+% 
+% \index{palindrome}
+% 
+% Here is a version of \verb"is_palindrome" (see
+% Exercise~\ref{palindrome}) that uses two indices; one starts at the
+% beginning and goes up; the other starts at the end and goes down.
+% 
+% \beforeverb
+% \begin{verbatim}
+% def is_palindrome(word):
+%     i = 0
+%     j = len(word)-1
+% 
+%     while i<j:
+%         if word[i] != word[j]:
+%             return False
+%         i = i+1
+%         j = j-1
+% 
+%     return True
+% \end{verbatim}
+% \afterverb
+% 
+% Or, if you noticed that this is an instance of a previously-solved
+% problem, you might have written:
+% 
+% \beforeverb
+% \begin{verbatim}
+% def is_palindrome(word):
+%     return is_reverse(word, word)
+% \end{verbatim}
+% \afterverb
+% 
+% \index{problem recognition}
+% \index{development plan!problem recognition}
+% 
+% Assuming you did Exercise~\ref{is_reverse}.
+% 
+% 
+% \section{Debugging}
+% 
+% \index{debugging}
+% \index{testing!is hard}
+% \index{program testing}
+% 
+% Testing programs is hard.  The functions in this chapter are
+% relatively easy to test because you can check the results by hand.
+% Even so, it is somewhere between difficult and impossible to choose a
+% set of words that test for all possible errors.
+% 
+% Taking \verb"has_no_e" as an example, there are two obvious
+% cases to check: words that have an 'e' should return {\tt False};
+% words that don't should return {\tt True}.  You should have no
+% trouble coming up with one of each.
+% 
+% Within each case, there are some less obvious subcases.  Among the
+% words that have an ``e,'' you should test words with an ``e'' at the
+% beginning, the end, and somewhere in the middle.  You should test long
+% words, short words, and very short words, like the empty string.  The
+% empty string is an example of a {\bf special case}, which is one of
+% the non-obvious cases where errors often lurk.
+% 
+% \index{special case}
+% 
+% In addition to the test cases you generate, you can also test
+% your program with a word list like {\tt words.txt}.  By scanning
+% the output, you might be able to catch errors, but be careful:
+% you might catch one kind of error (words that should not be
+% included, but are) and not another (words that should be included,
+% but aren't).
+% 
+% In general, testing can help you find bugs, but it is not easy to
+% generate a good set of test cases, and even if you do, you can't
+% be sure your program is correct.
+% 
+% \index{testing!and absence of bugs}
+% 
+% According to a legendary computer scientist:
+% 
+% \begin{quote}
+% Program testing can be used to show the presence of bugs, but never to
+% show their absence!
+% 
+% --- Edsger W. Dijkstra
+% \end{quote}
+% 
+% \index{Dijkstra, Edsger}
+% 
+% 
+% \section{Glossary}
+% 
+% \begin{description}
+% 
+% \item[file object:] A value that represents an open file.
+% \index{file object}
+% \index{object!file}
+% 
+% \item[problem recognition:] A way of solving a problem by
+% expressing it as an instance of a previously-solved problem.
+% \index{problem recognition}
+% 
+% \item[special case:] A test case that is atypical or non-obvious
+% (and less likely to be handled correctly).
+% \index{special case}
+% 
+% \end{description}
+% 
+% 
+% \section{Exercises}
+% 
+% \begin{ex}
+% 
+% \index{Car Talk}
+% \index{Puzzler}
+% \index{double letters}
+% 
+% This question is based on a Puzzler that was broadcast on the radio
+% program {\em Car
+%   Talk}\footnote{\url{www.cartalk.com/content/puzzler/transcripts/200725}.}:
+% 
+% \begin{quote}
+% Give me a word with three consecutive double letters. I'll give you a
+% couple of words that almost qualify, but don't. For example, the word
+% committee, c-o-m-m-i-t-t-e-e. It would be great except for the `i' that
+% sneaks in there. Or Mississippi: M-i-s-s-i-s-s-i-p-p-i. If you could
+% take out those i's it would work. But there is a word that has three
+% consecutive pairs of letters and to the best of my knowledge this may
+% be the only word. Of course there are probably 500 more but I can only
+% think of one. What is the word?
+% \end{quote}
+% 
+% Write a program to find it.  You can see my solution at
+% \url{thinkpython.com/code/cartalk.py}.
+% 
+% \end{ex}
+% 
+% 
+% \begin{ex}
+% Here's another {\em Car Talk}
+% Puzzler\footnote{\url{www.cartalk.com/content/puzzler/transcripts/200803}.}:
+% 
+% \index{Car Talk}
+% \index{Puzzler}
+% \index{odometer}
+% \index{palindrome}
+% 
+% \begin{quote}
+% ``I was driving on the highway the other day and I happened to
+% notice my odometer. Like most odometers, it shows six digits,
+% in whole miles only. So, if my car had 300,000
+% miles, for example, I'd see 3-0-0-0-0-0.
+% 
+% ``Now, what I saw that day was very interesting. I noticed that the
+% last 4 digits were palindromic; that is, they read the same forward as
+% backward. For example, 5-4-4-5 is a palindrome, so my odometer
+% could have read 3-1-5-4-4-5.
+% 
+% ``One mile later, the last 5 numbers were palindromic. For example, it
+% could have read 3-6-5-4-5-6.  One mile after that, the middle 4 out of
+% 6 numbers were palindromic.  And you ready for this? One mile later,
+% all 6 were palindromic!
+% 
+% ``The question is, what was on the odometer when I first looked?''
+% \end{quote}
+% 
+% Write a Python program that tests all the six-digit numbers and prints
+% any numbers that satisfy these requirements.  You can see my solution
+% at \url{thinkpython.com/code/cartalk.py}.
+% 
+% \end{ex}
+% 
+% 
+% \begin{ex}
+% Here's another {\em Car Talk} Puzzler you can solve with a
+% search\footnote{\url{www.cartalk.com/content/puzzler/transcripts/200813}}:
+% 
+% \index{Car Talk}
+% \index{Puzzler}
+% \index{palindrome}
+% 
+% \begin{quote}
+% ``Recently I had a visit with my mom and we realized that
+% the two digits that make up my age when reversed resulted in her
+% age. For example, if she's 73, I'm 37. We wondered how often this has
+% happened over the years but we got sidetracked with other topics and
+% we never came up with an answer.
+% 
+% ``When I got home I figured out that the digits of our ages have been
+% reversible six times so far. I also figured out that if we're lucky it
+% would happen again in a few years, and if we're really lucky it would
+% happen one more time after that. In other words, it would have
+% happened 8 times over all. So the question is, how old am I now?''
+% 
+% \end{quote}
+% 
+% Write a Python program that searches for solutions to this Puzzler.
+% Hint: you might find the string method {\tt zfill} useful.
+% 
+% You can see my solution at \url{thinkpython.com/code/cartalk.py}.
+% 
+% \end{ex}
+% 
 
 \chapter{Lists}
 
@@ -5035,23 +4895,23 @@ a list are called {\bf elements} or sometimes {\bf items}.
 \index{item}
 
 There are several ways to create a new list; the simplest is to
-enclose the elements in square brackets (\verb"[" and \verb"]"):
+enclose the elements in square brackets (\verb"[" and \verb"]")
+and separate them by semi-colons:
 
 \beforeverb
 \begin{verbatim}
-[10, 20, 30, 40]
-['crunchy frog', 'ram bladder', 'lark vomit']
+[10; 20; 30; 40]
+['crunchy frog'; 'ram bladder'; 'lark vomit']
 \end{verbatim}
 \afterverb
 %
-The first example is a list of four integers.  The second is a list of
-three strings.  The elements of a list don't have to be the same type.
-The following list contains a string, a float, an integer, and
-(lo!) another list:
+The first example is a list of four integers, and has type {\tt int list}.  The second is a list of
+three strings, and has type {\tt string list}.  The elements of a list must be the same type. Note that
+these elements could be more lists:
 
 \beforeverb
 \begin{verbatim}
-['spam', 2.0, 5, [10, 20]]
+[[10; 20]l[30;40]]
 \end{verbatim}
 \afterverb
 %
@@ -5062,7 +4922,8 @@ A list within another list is {\bf nested}.
 
 A list that contains no elements is
 called an empty list; you can create one with empty
-brackets, \verb"[]".
+brackets, \verb"[]". The empty list is, unsurprisingly, polymorphic and so
+has type {\tt 'a list}.
 
 \index{empty list}
 \index{list!empty}
@@ -5071,121 +4932,178 @@ As you might expect, you can assign list values to variables:
 
 \beforeverb
 \begin{verbatim}
->>> cheeses = ['Cheddar', 'Edam', 'Gouda']
->>> numbers = [17, 123]
->>> empty = []
->>> print cheeses, numbers, empty
-['Cheddar', 'Edam', 'Gouda'] [17, 123] []
+# let cheeses = ["Cheddar"; "Edam"; "Gouda"; "Tomme de Savoie"];;
+# let numbers = [17; 123];;
+# let empty = [];;
 \end{verbatim}
 \afterverb
-%
 
-\index{assignment}
+Another way to construct a list is using the {\bf cons} operator, \verb"::", which
+appends an element to the beginning of a list. The following are all equivalent:
 
-% From Jeff: write sum for a nested list?
+\index{cons operator}
+\index{operator!cons}
 
+\beforeverb
+\begin{verbatim}
+['a';'b';'c']
+'a'::['b';'c']
+'a'::'b'::['c']
+'a'::'b'::'c'::[]
+\end{verbatim}
+\afterverb
+However, the following are {\it not} equivalent to the above:
+\beforeverb
+\begin{verbatim}
+['a';'b']::['c']
+'a'::'b'::'c'
+['a';'b';'c']::[]
+\end{verbatim}
+\afterverb
+Test them in the interpreter and see what these do.
 
-\section{Lists are mutable}
+It's very common in functional programming to refer to the first element 
+of a list as the {\bf head} and the rest of the elements as the {\bf tail}. This
+concept is so common, in fact, that ocaml has a built-in function to extract them:
+
+\beforeverb
+\begin{verbatim}
+# List.hd cheeses;;
+- : string = "Cheddar"
+#List.tl cheeses;;
+- : string list = ["Edam";"Gouda";"Tomme de Savoie"]
+\end{verbatim}
+\afterverb
 
 \index{list!element}
 \index{access}
 \index{index}
-\index{bracket operator}
-\index{operator!bracket}
 
-The syntax for accessing the elements of a list is the same as for
-accessing the characters of a string---the bracket operator.  The
-expression inside the brackets specifies the index.  Remember that the
-indices start at 0:
+We can access any element of the list by using {\tt List.nth <list> <index>. 
+Remember that the indices start at 0:
 
 \beforeverb
 \begin{verbatim}
->>> print cheeses[0]
-Cheddar
+# List.nth cheeses 0
+- : string = "Cheddar"
 \end{verbatim}
 \afterverb
 %
-Unlike strings, lists are mutable.  When the bracket operator appears
-on the left side of an assignment, it identifies the element of the
-list that will be assigned.
+Unlike strings, lists aren't mutable.
 
-\index{mutability}
+\section{List operations}
+\index{list!operation}
+
+The {\tt @} operator concatenates lists:
+
+\index{concatenation!list}
+\index{list!concatenation}
 
 \beforeverb
 \begin{verbatim}
->>> numbers = [17, 123]
->>> numbers[1] = 5
->>> print numbers
-[17, 5]
+# let a = [1; 2; 3];;
+# let b = [4; 5; 6];;
+# let c = a@b;;
+val c : int list = [1; 2; 3; 4; 5; 6]
 \end{verbatim}
 \afterverb
 %
-The one-eth element of {\tt numbers}, which
-used to be 123, is now 5.
 
-\index{index!starting at zero}
-\index{zero, index starting at}
-
-You can think of a list as a relationship between indices and
-elements.  This relationship is called a {\bf mapping}; each index
-``maps to'' one of the elements.  Here is a state diagram showing {\tt
-cheeses}, {\tt numbers} and {\tt empty}:
-
-\index{state diagram}
-\index{diagram!state}
-\index{mapping}
-
-\beforefig
-\centerline{\includegraphics{figs/list_state.eps}}
-\afterfig
-
-Lists are represented by boxes with the word ``list'' outside
-and the elements of the list inside.  {\tt cheeses} refers to
-a list with three elements indexed 0, 1 and 2.
-{\tt numbers} contains two elements; the diagram shows that the
-value of the second element has been reassigned from 123 to 5.
-{\tt empty} refers to a list with no elements.
-
-\index{item assignment}
-\index{assignment!item}
-
-List indices work the same way as string indices:
-
-\begin{itemize}
-
-\item Any integer expression can be used as an index.
-
-\item If you try to read or write an element that does not exist, you
-get an {\tt IndexError}.
-
-\index{exception!IndexError}
-\index{IndexError}
-
-\item If an index has a negative value, it counts backward from the
-end of the list.
-
-\end{itemize}
-
-\index{list!index}
-
-
-\index{list!membership}
-\index{membership!list}
-\index{in operator}
-\index{operator!in}
-
-The {\tt in} operator also works on lists.
+If you want to make a list of lists flat (i.e., turn it into a list of 
+just elements, you can use {\tt List.flatten <list>}:
 
 \beforeverb
 \begin{verbatim}
->>> cheeses = ['Cheddar', 'Edam', 'Gouda']
->>> 'Edam' in cheeses
-True
->>> 'Brie' in cheeses
-False
+# let c = [[1; 2; 3]; [3; 4; 5]];;
+# List.flatten c;;
+- : int list = [1; 2; 3; 4; 5; 6]
 \end{verbatim}
 \afterverb
 
+You can also reverse a list:
+
+\beforeverb
+\begin{verbatim}
+# let forward = [1; 2; 3; 4; 5];;
+# let backward = List.rev forward;;
+val backward : int list = [5; 4; 3; 2; 1];
+\end{verbatim}
+\afterverb
+
+\section{List iteration, mapping and folding}
+
+If you want to apply a function to every element in a list, 
+you can use {\tt List.iter function list}. For example, let's say I wanted 
+to add print every element of a list:
+
+\beforeverb
+\begin{verbatim}
+# let f elem = 
+    print_int elem; print_newline()
+in
+  List.iter f forward;;
+1
+2
+3
+4
+5
+- : unit = ()
+\end{verbatim}
+\afterverb
+
+However, the function given to {\tt List.iter} must return a 
+unit type. If we want to do something more productive - for 
+example, adding a constant to a list, we need to use {\tt List.map}:
+
+\beforeverb
+\begin{verbatim}
+# let add3 e = e+3 in List.map add3 forward;;
+- : int list = [4; 5; 6; 7; 8]
+\end{verbatim}
+\afterverb
+
+Now, what if we wanted to sum together the elements of a list? 
+We could write a recursive function to add together the elements, 
+or would could {\bf fold} the list:
+
+\beforeverb
+\begin{verbatim}
+# List.fold_left (+) 0 forward;;
+- : int = 15
+\end{verbatim}
+\afterverb
+
+Note that this is {\tt \verb"fold_left"}, which operates from left to right. 
+There's also {\tt \verb"fold_right"}, which operates the opposite direction. 
+Naturally, for addition, there's no difference when you're adding, but 
+in some cases the result will be different.
+
+We haven't seen the syntax for the first argument before - putting an operator 
+between parentheses turns it into a regular function.
+
+The second argument is the initial value - if we had used an empty list, we 
+would have returned this value. If we instead used 2, we would have gotten the 
+result of 17.
+
+The last argument is the list, of course. We can encapsulate this as a function:
+
+\beforeverb
+\begin{verbatim}
+let summer = List.fold_left (+) 0;;
+\end{verbatim}
+\afterverb
+
+Let's break down what's going down here a little bit more. Essentially what we're 
+doing is inserting a plus sign between each element of the list and evaluating the 
+expression. Of course, the process is actually recursive: it adds the first element 
+to the result of the folding the rest of the list, so on and so forth until it reaches 
+the last element, which it adds to the initial condition.
+
+\begin{ex}
+Now use {\tt \verb"fold_left"} to write a function that finds the product of 
+all the elements of a list. Consider carefully - what's your initial 
+condition here? How do you want to handle the empty list?
+\end{ex}
 
 \section{Traversing a list}
 \index{list!traversal}
@@ -5193,977 +5111,258 @@ False
 \index{for loop}
 \index{loop!for}
 \index{statement!for}
-
-The most common way to traverse the elements of a list is
-with a {\tt for} loop.  The syntax is the same as for strings:
-
-\beforeverb
-\begin{verbatim}
-for cheese in cheeses:
-    print cheese
-\end{verbatim}
-\afterverb
-%
-This works well if you only need to read the elements of the
-list.  But if you want to write or update the elements, you
-need the indices.  A common way to do that is to combine
-the functions {\tt range} and {\tt len}:
-
-\index{looping!with indices}
-\index{index!looping with}
+The most common way to traverse the elements of a list is, 
+in case you couldn't guess by now, is with recursion.  This 
+is where list-builder notation and the idea of the head and 
+the tail becomes useful.
 
 \beforeverb
 \begin{verbatim}
-for i in range(len(numbers)):
-    numbers[i] = numbers[i] * 2
+let rec printer lst = match lst with
+	[] -> print_string "All done! \n"
+	| hd::tl -> print_string hd;
+		print_newline();
+		printer tl;;
+
+let cheeses = ["Cheddar"; "Edam"; "Gouda"; "Tomme de Savoie"]
+
+# printer cheeses;;
+Cheddar
+Edam
+Gouda
+Tomme de Savoie
+All done!
+- : unit = ()
+
 \end{verbatim}
 \afterverb
 %
-This loop traverses the list and updates each element.  {\tt len}
-returns the number of elements in the list.  {\tt range} returns
-a list of indices from 0 to $n-1$, where $n$ is the length of
-the list.  Each time through the loop {\tt i} gets the index
-of the next element.  The assignment statement in the body uses
-{\tt i} to read the old value of the element and to assign the
-new value.
+
+Though recursive list traversal is often very useful, if you
+are thinking about doing it, you should first stop and think 
+about whether or not you really want {\tt List.iter}, {\tt List.map},
+or list folding.
 
 \index{item update}
 \index{update!item}
 
-A {\tt for} loop over an empty list never executes the body:
-
-\beforeverb
-\begin{verbatim}
-for x in empty:
-    print 'This never happens.'
-\end{verbatim}
-\afterverb
-%
-Although a list can contain another list, the nested
-list still counts as a single element.  The length of this list is
-four:
-
-\index{nested list}
-\index{list!nested}
-
-\beforeverb
-\begin{verbatim}
-['spam', 1, ['Brie', 'Roquefort', 'Pol le Veq'], [1, 2, 3]]
-\end{verbatim}
-\afterverb
-
-
-
-\section{List operations}
-\index{list!operation}
-
-The {\tt +} operator concatenates lists:
-
-\index{concatenation!list}
-\index{list!concatenation}
-
-\beforeverb
-\begin{verbatim}
->>> a = [1, 2, 3]
->>> b = [4, 5, 6]
->>> c = a + b
->>> print c
-[1, 2, 3, 4, 5, 6]
-\end{verbatim}
-\afterverb
-%
-Similarly, the {\tt *} operator repeats a list a given number of times:
-
-\index{repetition!list}
-\index{list!repetition}
-
-\beforeverb
-\begin{verbatim}
->>> [0] * 4
-[0, 0, 0, 0]
->>> [1, 2, 3] * 3
-[1, 2, 3, 1, 2, 3, 1, 2, 3]
-\end{verbatim}
-\afterverb
-%
-The first example repeats {\tt [0]} four times.  The second example
-repeats the list {\tt [1, 2, 3]} three times.
-
-
-\section{List slices}
-
-\index{slice operator}
-\index{operator!slice}
-\index{index!slice}
-\index{list!slice}
-\index{slice!list}
-
-The slice operator also works on lists:
-
-\beforeverb
-\begin{verbatim}
->>> t = ['a', 'b', 'c', 'd', 'e', 'f']
->>> t[1:3]
-['b', 'c']
->>> t[:4]
-['a', 'b', 'c', 'd']
->>> t[3:]
-['d', 'e', 'f']
-\end{verbatim}
-\afterverb
-%
-If you omit the first index, the slice starts at the beginning.
-If you omit the second, the slice goes to the end.  So if you
-omit both, the slice is a copy of the whole list.
-
-\index{list!copy}
-\index{slice!copy}
-\index{copy!slice}
-
-\beforeverb
-\begin{verbatim}
->>> t[:]
-['a', 'b', 'c', 'd', 'e', 'f']
-\end{verbatim}
-\afterverb
-%
-Since lists are mutable, it is often useful to make a copy
-before performing operations that fold, spindle or mutilate
-lists.
-
-\index{mutability}
-
-A slice operator on the left side of an assignment
-can update multiple elements:
-
-\index{slice!update}
-\index{update!slice}
-
-\beforeverb
-\begin{verbatim}
->>> t = ['a', 'b', 'c', 'd', 'e', 'f']
->>> t[1:3] = ['x', 'y']
->>> print t
-['a', 'x', 'y', 'd', 'e', 'f']
-\end{verbatim}
-\afterverb
-%
-
-% You can add elements to a list by squeezing them into an empty
-% slice:
-
-% \beforeverb
-% \begin{verbatim}
-% >>> t = ['a', 'd', 'e', 'f']
-% >>> t[1:1] = ['b', 'c']
-% >>> print t
-% ['a', 'b', 'c', 'd', 'e', 'f']
-% \end{verbatim}
-% \afterverb
-%
-% And you can remove elements from a list by assigning the empty list to
-% them:
-
-% \beforeverb
-% \begin{verbatim}
-% >>> t = ['a', 'b', 'c', 'd', 'e', 'f']
-% >>> t[1:3] = []
-% >>> print t
-% ['a', 'd', 'e', 'f']
-% \end{verbatim}
-% \afterverb
-%
-% But both of those operations can be expressed more clearly
-% with list methods.
-
-
-\section{List methods}
-
-\index{list!method}
-\index{method, list}
-
-Python provides methods that operate on lists.  For example,
-{\tt append} adds a new element to the end of a list:
-
-\index{append method}
-\index{method!append}
-
-\beforeverb
-\begin{verbatim}
->>> t = ['a', 'b', 'c']
->>> t.append('d')
->>> print t
-['a', 'b', 'c', 'd']
-\end{verbatim}
-\afterverb
-%
-{\tt extend} takes a list as an argument and appends all of
-the elements:
-
-\index{extend method}
-\index{method!extend}
-
-\beforeverb
-\begin{verbatim}
->>> t1 = ['a', 'b', 'c']
->>> t2 = ['d', 'e']
->>> t1.extend(t2)
->>> print t1
-['a', 'b', 'c', 'd', 'e']
-\end{verbatim}
-\afterverb
-%
-This example leaves {\tt t2} unmodified.
-
-{\tt sort} arranges the elements of the list from low to high:
-
-\index{sort method}
-\index{method!sort}
-
-\beforeverb
-\begin{verbatim}
->>> t = ['d', 'c', 'e', 'b', 'a']
->>> t.sort()
->>> print t
-['a', 'b', 'c', 'd', 'e']
-\end{verbatim}
-\afterverb
-%
-List methods are all void; they modify the list and return {\tt None}.
-If you accidentally write {\tt t = t.sort()}, you will be disappointed
-with the result.
-
-\index{void method}
-\index{method!void}
-\index{None special value}
-\index{special value!None}
-
-
-\section{Map, filter and reduce}
-
-To add up all the numbers in a list, you can use a loop like this:
-
-% see add.py
-
-\beforeverb
-\begin{verbatim}
-def add_all(t):
-    total = 0
-    for x in t:
-        total += x
-    return total
-\end{verbatim}
-\afterverb
-%
-{\tt total} is initialized to 0.  Each time through the loop,
-{\tt x} gets one element from the list.  The {\tt +=} operator
-provides a short way to update a variable.  This 
-{\bf augmented assignment statement}:
-
-\index{update operator}
-\index{operator!update}
-
-\index{assignment!augmented}
-\index{augmented assignment}
-
-\beforeverb
-\begin{verbatim}
-    total += x
-\end{verbatim}
-\afterverb
-%
-is equivalent to:
-
-\beforeverb
-\begin{verbatim}
-    total = total + x
-\end{verbatim}
-\afterverb
-%
-As the loop executes, {\tt total} accumulates the sum of the
-elements; a variable used this way is sometimes called an
-{\bf accumulator}.
-
-\index{accumulator!sum}
-
-Adding up the elements of a list is such a common operation
-that Python provides it as a built-in function, {\tt sum}:
-
-\beforeverb
-\begin{verbatim}
->>> t = [1, 2, 3]
->>> sum(t)
-6
-\end{verbatim}
-\afterverb
-%
-An operation like this that combines a sequence of elements into
-a single value is sometimes called {\bf reduce}.
-
-\index{reduce pattern}
-\index{pattern!reduce}
-\index{traversal}
-
-Sometimes you want to traverse one list while building
-another.  For example, the following function takes a list of strings
-and returns a new list that contains capitalized strings:
-
-\beforeverb
-\begin{verbatim}
-def capitalize_all(t):
-    res = []
-    for s in t:
-        res.append(s.capitalize())
-    return res
-\end{verbatim}
-\afterverb
-%
-{\tt res} is initialized with an empty list; each time through
-the loop, we append the next element.  So {\tt res} is another
-kind of accumulator.
-
-\index{accumulator!list}
-
-An operation like \verb"capitalize_all" is sometimes called a {\bf
-map} because it ``maps'' a function (in this case the method {\tt
-capitalize}) onto each of the elements in a sequence.
-
-\index{map pattern}
-\index{pattern!map}
-\index{filter pattern}
-\index{pattern!filter}
-
-Another common operation is to select some of the elements from
-a list and return a sublist.  For example, the following
-function takes a list of strings and returns a list that contains
-only the uppercase strings:
-
-\beforeverb
-\begin{verbatim}
-def only_upper(t):
-    res = []
-    for s in t:
-        if s.isupper():
-            res.append(s)
-    return res
-\end{verbatim}
-\afterverb
-%
-{\tt isupper} is a string method that returns {\tt True} if
-the string contains only upper case letters.
-
-An operation like \verb"only_upper" is called a {\bf filter} because
-it selects some of the elements and filters out the others.
-
-Most common list operations can be expressed as a combination
-of map, filter and reduce.  Because these operations are
-so common, Python provides language features to support them,
-including the built-in function {\tt map} and an operator
-called a ``list comprehension.''
-
-\index{list!comprehension}
+\section{List sorting}
 
 \begin{ex}
-\label{cumulative}
-\index{cumulative sum}
+Write a function that takes a list of integers as an argument 
+and returns a list of the same elements in increasing numeric 
+order.
 
-Write a function that takes a list of numbers and returns the
-cumulative sum; that is, a new list where the $i$th element
-is the sum of the first $i+1$ elements from the original list.
-For example, the cumulative sum of {\tt [1, 2, 3]} is
-{\tt [1, 3, 6]}. 
+Note: if you look at the OCaml List module, you'll find several
+useful functions that will make this trivial. In general, it's 
+always a good idea to see if somebody has already coded solutions 
+relating to your problem, but for pedagogy's sake, don't do that 
+right now. We'll talk about some of those built-ins later.
 \end{ex}
 
+OCaml provides a few useful built-in functions to help with list 
+sorting. The most useful of these is, unsurprisingly, {\tt List.sort}.
+This is an example of a higher-order function: it takes two arguments, 
+a function to use to determine the sort order, and the list itself.
+\footnote{Experienced programmers will be interested to know that this 
+built-in function uses a merge sort and is not tail-recursive.}
 
-\section{Deleting elements}
+The sorting function must take two arguments of the same type, whatever 
+the type of the list to be sorted is (or polymorphic), and it must return
+a positive integer if the first element comes after the second element, 
+zero if they are equal, and a negative integer if the first element comes 
+first.
 
-\index{element deletion}
-\index{deletion, element of list}
-
-There are several ways to delete elements from a list.  If you
-know the index of the element you want, you can use
-{\tt pop}:
-
-\index{pop method}
-\index{method!pop}
-
-\beforeverb
-\begin{verbatim}
->>> t = ['a', 'b', 'c']
->>> x = t.pop(1)
->>> print t
-['a', 'c']
->>> print x
-b
-\end{verbatim}
-\afterverb
-%
-{\tt pop} modifies the list and returns the element that was removed.
-If you don't provide an index, it deletes and returns the
-last element.
-
-If you don't need the removed value, you can use the {\tt del}
-operator:
-
-\index{del operator}
-\index{operator!del}
+Let's look at an example of sorting a list of integers in increasing order:
 
 \beforeverb
 \begin{verbatim}
->>> t = ['a', 'b', 'c']
->>> del t[1]
->>> print t
-['a', 'c']
+let sort_help e1 e2 = if e1>e2
+	then 1
+	else if e1=e2
+	then 0
+	else -1;;
+
+let sorter lst = List.sort sort_help lst;;
+
+let l1 = [4; 6; 8; 3; 5; 1; 2];;
+
+# sorter l1;;
+- : int list =[1; 2; 3; 4; 5; 6; 8]
 \end{verbatim}
 \afterverb
-%
 
-If you know the element you want to remove (but not the index), you
-can use {\tt remove}:
-
-\index{remove method}
-\index{method!remove}
+You may have noticed, if you loaded the code above, that
+\verb"sort_help" and sorter are both polymorphic. This makes sense, 
+since {\tt >} is polymorphic. In fact, the sort we just wrote
+works on any basic data type:
 
 \beforeverb
 \begin{verbatim}
->>> t = ['a', 'b', 'c']
->>> t.remove('b')
->>> print t
-['a', 'c']
+let cheeses = ["Gouda"; "Cheddar"; "Tomme de Savoie"; "Edam"];;
+
+# sorter cheeses;;
+- : string list = ["Cheddar"; "Edam"; "Gouda"; "Tomme de Savoie"]
 \end{verbatim}
 \afterverb
-%
-The return value from {\tt remove} is {\tt None}.
-
-\index{None special value}
-\index{special value!None}
-
-To remove more than one element, you can use {\tt del} with
-a slice index:
+Our sort function sorted the list into increasing alphabetical order!
+However, as you might expect from before, lower case doesn't work quite 
+right:
 
 \beforeverb
 \begin{verbatim}
->>> t = ['a', 'b', 'c', 'd', 'e', 'f']
->>> del t[1:5]
->>> print t
-['a', 'f']
+let cheeses = ["Gouda"; "Cheddar"; "Tomme de Savoie"; "edam"];;
+
+#sorter cheeses;
+- : string list = ["Cheddar"; "Gouda"; "Tomee de Savoie"; "edam"]
 \end{verbatim}
 \afterverb
-%
-As usual, the slice selects all the elements up to, but not
-including, the second index.
+As a computer, that makes perfect sense, but as a human, it's not 
+quite what we'd usually expect. If you want to sort a list alphabetically,
+you'll have to do a little more work. Often it's easiest just to make 
+everything lower case.
 
+OCaml also has a built-in function {\tt compare} that works on most 
+data types for sorting.
 
-\section{Lists and strings}
-
-\index{list}
-\index{string}
-\index{sequence}
-
-A string is a sequence of characters and a list is a sequence
-of values, but a list of characters is not the same as a
-string.  To convert from a string to a list of characters,
-you can use {\tt list}:
-
-\index{list!function}
-\index{function!list}
+\index{Anonymous functions}
+\index{Functions!Anonymous}
+This is where {\bf anonymous functions} can be useful. An anonymous function
+is just like any other function, but we don't assign it a name. However, 
+wherever we would put a function call, we can put an anonymous function to 
+achieve the same effect. For example, if we want to square a number, we could
+write a function {\tt square} that would do that for us, but if we only need 
+to do it once, we can just write an anonymous function:
 
 \beforeverb
 \begin{verbatim}
->>> s = 'spam'
->>> t = list(s)
->>> print t
-['s', 'p', 'a', 'm']
+# (fun x -> x*x) 3;;
+- : int = 9
 \end{verbatim}
 \afterverb
-%
-Because {\tt list} is the name of a built-in function, you should
-avoid using it as a variable name.  I also avoid {\tt l} because
-it looks too much like {\tt 1}.  So that's why I use {\tt t}.
 
-The {\tt list} function breaks a string into individual letters.  If
-you want to break a string into words, you can use the {\tt split}
-method:
-
-\index{split method}
-\index{method!split}
+It may not be immediately apparent why this is useful, but you'll see.
+In the meantime, note the syntax - {\tt fun} lets the compiler know that
+this is a function. Then, the left-hand side of the arrow operator (of 
+pattern-matching fame) is the arguments taken by the function, and the
+right-hand side is what the function returns. We can use this to define
+named functions, by the way:
 
 \beforeverb
 \begin{verbatim}
->>> s = 'pining for the fjords'
->>> t = s.split()
->>> print t
-['pining', 'for', 'the', 'fjords']
+# let square = fun x -> x*x;;
+val square : int -> int = <fun>
 \end{verbatim}
 \afterverb
-%
-An optional argument called a {\bf delimiter} specifies which
-characters to use as word boundaries.
-The following example
-uses a hyphen as a delimiter:
+This is completely equivalent to our previous function-defining syntax. It's
+not normally used, but is actually kind of a good way of thinking about what's
+going on when you define a function.
 
-\index{optional argument}
-\index{argument!optional}
-\index{delimiter}
+We can use anonymous functions to within defining {\tt sorter} to make our
+code a little more concise:
 
 \beforeverb
 \begin{verbatim}
->>> s = 'spam-spam-spam'
->>> delimiter = '-'
->>> s.split(delimiter)
-['spam', 'spam', 'spam']
+let sorter lst = List.sort (fun e1 e2 -> e1-e2) lst;; 
 \end{verbatim}
 \afterverb
-%
-{\tt join} is the inverse of {\tt split}.  It
-takes a list of strings and
-concatenates the elements.  {\tt join} is a string method,
-so you have to invoke it on the delimiter and pass the
-list as a parameter:
 
-\index{join method}
-\index{method!join}
-\index{concatenation}
+\section{Lists and Recursion}
+
+Recursion and lists go together like bagels and cream cheese, 
+but less fattening.
+
+One thing we might want to do is use a loop to build up a list. 
+Let's say you wanted to write a function {\tt range} 
+that takes two integer arguments and returns a list of all integers
+in between the two arguments, inclusive. You might write a function 
+that looks a bit like this:
 
 \beforeverb
 \begin{verbatim}
->>> t = ['pining', 'for', 'the', 'fjords']
->>> delimiter = ' '
->>> delimiter.join(t)
-'pining for the fjords'
+let rec range_helper m n accum = 
+	if m=n
+	then n::accum
+	else (range_helper m (n-1) (n::accum));;
+
+let range m n = 
+	if m>n 
+	then range_helper n m []
+	else range_helper m n [];;
 \end{verbatim}
 \afterverb
-%
-In this case the delimiter is a space character, so
-{\tt join} puts a space between words.  To concatenate
-strings without spaces, you can use the empty string,
-\verb"''", as a delimiter. 
 
-\index{empty string}
-\index{string!empty}
-
-
-\section{Objects and values}
-
-\index{object}
-\index{value}
-
-If we execute these assignment statements:
+We can also use recursion over the elements of a list 
+to return a result. For instance, we could add up all 
+the elements of a list:\footnote{You could, of course, 
+also use list folding to do this.}
 
 \beforeverb
 \begin{verbatim}
-a = 'banana'
-b = 'banana'
-\end{verbatim}
-\afterverb
-%
-We know that {\tt a} and {\tt b} both refer to a
-string, but we don't
-know whether they refer to the {\em same} string.
-There are two possible states:
+let rec sum_help lst accum = 
+	match lst with
+	[] -> accum
+	| h::t -> sum_help t (h+accum);;
 
-\index{aliasing}
-
-\beforefig
-\centerline{\includegraphics{figs/list1.eps}}
-\afterfig
-
-In one case, {\tt a} and {\tt b} refer to two different objects that
-have the same value.  In the second case, they refer to the same
-object.
-
-\index{is operator}
-\index{operator!is}
-
-To check whether two variables refer to the same object, you can
-use the {\tt is} operator.
-
-\beforeverb
-\begin{verbatim}
->>> a = 'banana'
->>> b = 'banana'
->>> a is b
-True
-\end{verbatim}
-\afterverb
-%
-In this example, Python only created one string object,
-and both {\tt a} and {\tt b} refer to it.
-
-But when you create two lists, you get two objects:
-
-\beforeverb
-\begin{verbatim}
->>> a = [1, 2, 3]
->>> b = [1, 2, 3]
->>> a is b
-False
-\end{verbatim}
-\afterverb
-%
-So the state diagram looks like this:
-
-\index{state diagram}
-\index{diagram!state}
-
-\beforefig
-\centerline{\includegraphics{figs/list2.eps}}
-\afterfig
-
-In this case we would say that the two lists are {\bf equivalent},
-because they have the same elements, but not {\bf identical}, because
-they are not the same object.  If two objects are identical, they are
-also equivalent, but if they are equivalent, they are not necessarily
-identical.
-
-\index{equivalence}
-\index{identity}
-
-Until now, we have been using ``object'' and ``value''
-interchangeably, but it is more precise to say that an object has a
-value.  If you execute {\tt [1,2,3]}, you get a list
-object whose value is a sequence of integers.  If another
-list has the same elements, we say it has the same value, but
-it is not the same object.
-
-\index{object}
-\index{value}
-
-
-\section{Aliasing}
-
-\index{aliasing}
-\index{reference!aliasing}
-
-If {\tt a} refers to an object and you assign {\tt b = a},
-then both variables refer to the same object:
-
-\beforeverb
-\begin{verbatim}
->>> a = [1, 2, 3]
->>> b = a
->>> b is a
-True
-\end{verbatim}
-\afterverb
-%
-The state diagram looks like this:
-
-\index{state diagram}
-\index{diagram!state}
-
-\beforefig
-\centerline{\includegraphics{figs/list3.eps}}
-\afterfig
-
-The association of a variable with an object is called a {\bf
-reference}.  In this example, there are two references to the same
-object.
-
-\index{reference}
-
-An object with more than one reference has more
-than one name, so we say that the object is {\bf aliased}.
-
-\index{mutability}
-
-If the aliased object is mutable, 
-changes made with one alias affect
-the other:
-
-\beforeverb
-\begin{verbatim}
->>> b[0] = 17
->>> print a
-[17, 2, 3]
-\end{verbatim}
-\afterverb
-%
-Although this behavior can be useful, it is error-prone.  In general,
-it is safer to avoid aliasing when you are working with mutable
-objects.
-
-\index{immutability}
-
-For immutable objects like strings, aliasing is not as much of a
-problem.  In this example:
-
-\beforeverb
-\begin{verbatim}
-a = 'banana'
-b = 'banana'
-\end{verbatim}
-\afterverb
-%
-It almost never makes a difference whether {\tt a} and {\tt b} refer
-to the same string or not.
-
-
-\section{List arguments}
-
-\index{list!as argument}
-\index{argument}
-\index{argument!list}
-\index{reference}
-\index{parameter}
-
-When you pass a list to a function, the function gets a reference
-to the list.
-If the function modifies a list parameter, the caller sees the change.
-For example, \verb"delete_head" removes the first element from a list:
-
-\beforeverb
-\begin{verbatim}
-def delete_head(t):
-    del t[0]
-\end{verbatim}
-\afterverb
-%
-Here's how it is used:
-
-\beforeverb
-\begin{verbatim}
->>> letters = ['a', 'b', 'c']
->>> delete_head(letters)
->>> print letters
-['b', 'c']
-\end{verbatim}
-\afterverb
-%
-The parameter {\tt t} and the variable {\tt letters} are
-aliases for the same object.  The stack diagram looks like
-this:
-
-\index{stack diagram}
-\index{diagram!stack}
-
-\beforefig
-\centerline{\includegraphics{figs/stack5.eps}}
-\afterfig
-
-Since the list is shared by two frames, I drew
-it between them.
-
-It is important to distinguish between operations that
-modify lists and operations that create new lists.  For
-example, the {\tt append} method modifies a list, but the
-{\tt +} operator creates a new list:
-
-\index{append method}
-\index{method!append}
-\index{list!concatenation}
-\index{concatenation!list}
-
-\beforeverb
-\begin{verbatim}
->>> t1 = [1, 2]
->>> t2 = t1.append(3)
->>> print t1
-[1, 2, 3]
->>> print t2
-None
-
->>> t3 = t1 + [3]
->>> print t3
-[1, 2, 3]
->>> t2 is t3
-False
+let summer lst = 
+	sum_help lst 0;;
 \end{verbatim}
 \afterverb
 
-This difference is important when you write functions that
-are supposed to modify lists.  For example, this function
-{\em does not} delete the head of a list:
-
-\beforeverb
-\begin{verbatim}
-def bad_delete_head(t):
-    t = t[1:]              # WRONG!
-\end{verbatim}
-\afterverb
-
-The slice operator creates a new list and the assignment
-makes {\tt t} refer to it, but none of that has any effect
-on the list that was passed as an argument.
-
-\index{slice operator}
-\index{operator!slice}
-
-An alternative is to write a function that creates and
-returns a new list.  For
-example, {\tt tail} returns all but the first
-element of a list:
-
-\beforeverb
-\begin{verbatim}
-def tail(t):
-    return t[1:]
-\end{verbatim}
-\afterverb
-%
-This function leaves the original list unmodified.
-Here's how it is used:
-
-\beforeverb
-\begin{verbatim}
->>> letters = ['a', 'b', 'c']
->>> rest = tail(letters)
->>> print rest
-['b', 'c']
-\end{verbatim}
-\afterverb
-
-
-\begin{ex}
-
-Write a function called {\tt chop} that takes a list and modifies
-it, removing the first and last elements, and returns {\tt None}.
-
-Then write a function called {\tt middle} that takes a list and
-returns a new list that contains all but the first and last
-elements.
-
-\end{ex}
-
+Both of these patterns are very important in functional 
+programming in OCaml.
 
 \section{Debugging}
 \index{debugging}
+% write here
 
-Careless use of lists (and other mutable objects)
-can lead to long hours of debugging.  Here are some common
-pitfalls and ways to avoid them:
-
-\begin{enumerate}
-
-\item Don't forget that most list methods modify the argument and
-  return {\tt None}.  This is the opposite of the string methods,
-  which return a new string and leave the original alone.
-
-If you are used to writing string code like this:
-
-\beforeverb
-\begin{verbatim}
-word = word.strip()
-\end{verbatim}
-\afterverb
-
-It is tempting to write list code like this:
-
-\beforeverb
-\begin{verbatim}
-t = t.sort()           # WRONG!
-\end{verbatim}
-\afterverb
-
-\index{sort method}
-\index{method!sort}
-
-Because {\tt sort} returns {\tt None}, the
-next operation you perform with {\tt t} is likely to fail.
-
-Before using list methods and operators, you should read the
-documentation carefully and then test them in interactive mode.  The
-methods and operators that lists share with other sequences (like
-strings) are documented at
-\url{docs.python.org/lib/typesseq.html}.  The
-methods and operators that only apply to mutable sequences
-are documented at \url{docs.python.org/lib/typesseq-mutable.html}.
-
-
-\item Pick an idiom and stick with it.
-
-Part of the problem with lists is that there are too many
-ways to do things.  For example, to remove an element from
-a list, you can use {\tt pop}, {\tt remove}, {\tt del},
-or even a slice assignment.
-
-To add an element, you can use the {\tt append} method or
-the {\tt +} operator.  But don't forget that these are right: 
-
-\beforeverb
-\begin{verbatim}
-t.append(x)
-t = t + [x]
-\end{verbatim}
-\afterverb
-
-And these are wrong:
-
-\beforeverb
-\begin{verbatim}
-t.append([x])          # WRONG!
-t = t.append(x)        # WRONG!
-t + [x]                # WRONG!
-t = t + x              # WRONG!
-\end{verbatim}
-\afterverb
-
-Try out each of these examples in interactive mode to make sure
-you understand what they do.  Notice that only the last
-one causes a runtime error; the other three are legal, but they
-do the wrong thing.
-
-
-\item Make copies to avoid aliasing.
-
-\index{aliasing!copying to avoid}
-\index{copy!to avoid aliasing}
-
-If you want to use a method like {\tt sort} that modifies
-the argument, but you need to keep the original list as
-well, you can make a copy.
-
-\beforeverb
-\begin{verbatim}
-orig = t[:]
-t.sort()
-\end{verbatim}
-\afterverb
-
-In this example you could also use the built-in function {\tt sorted},
-which returns a new, sorted list and leaves the original alone.
-But in that case you should avoid using {\tt sorted} as a variable
-name!
-
-\end{enumerate}
-
+% OCaml's choice to make lists immutable avoids a lot of 
+% possible careless mistatkes. Nonetheless, Careless use 
+% of lists can lead to long hours of debugging.  Here are 
+% some common pitfalls and ways to avoid them:
+% 
+% \begin{enumerate}
+% 
+% 
+% \end{enumerate}
+% 
 
 
 \section{Glossary}
 
 \begin{description}
 
-\item[list:] A sequence of values.
+\item[list:] An ordered sequence of values.
 \index{list}
 
 \item[element:] One of the values in a list (or other sequence),
 also called items.
 \index{element}
 
-\item[index:] An integer value that indicates an element in a list.
-\index{index}
-
+% \item[index:] An integer value that indicates an element in a list.
+% \index{index}
+% 
 \item[nested list:] A list that is an element of another list.
 \index{nested list}
 
 \item[list traversal:] The sequential accessing of each element in a list.
 \index{list!traversal}
 
-\item[mapping:] A relationship in which each element of one set
-corresponds to an element of another set.  For example, a list is
-a mapping from indices to elements.
-\index{mapping}
-
-\item[accumulator:] A variable used in a loop to add up or
-accumulate a result.
-\index{accumulator}
-
-\item[augmented assignment:] A statement that updates the value
-of a variable using an operator like \verb"+=".
-\index{assignment!augmented}
-\index{augmented assignment}
-
-\index{traversal}
+% \item[mapping:] A relationship in which each element of one set
+% corresponds to an element of another set.  For example, a list is
+% a mapping from indices to elements.
+% \index{mapping}
+% 
+% \item[accumulator:] A variable used in a loop to add up or
+% accumulate a result.
+% \index{accumulator}
+% 
+% \item[augmented assignment:] A statement that updates the value
+% of a variable using an operator like \verb"+=".
+% \index{assignment!augmented}
+% \index{augmented assignment}
+% 
+% \index{traversal}
 
 \item[reduce:] A processing pattern that traverses a sequence 
 and accumulates the elements into a single result.
@@ -6180,31 +5379,50 @@ selects the elements that satisfy some criterion.
 \index{filter pattern}
 \index{pattern!filter}
 
-\item[object:] Something a variable can refer to.  An object
-has a type and a value.
-\index{object}
-
-\item[equivalent:] Having the same value.
-\index{equivalent}
-
-\item[identical:] Being the same object (which implies equivalence).
-\index{identical}
-
-\item[reference:] The association between a variable and its value.
-\index{reference}
-
-\item[aliasing:] A circumstance where two or more variables refer to the same
-object.
-\index{aliasing}
-
-\item[delimiter:] A character or string used to indicate where a
-string should be split.
-\index{delimiter}
-
+% \item[object:] Something a variable can refer to.  An object
+% has a type and a value.
+% \index{object}
+% 
+% \item[equivalent:] Having the same value.
+% \index{equivalent}
+% 
+% \item[identical:] Being the same object (which implies equivalence).
+% \index{identical}
+% 
+% \item[reference:] The association between a variable and its value.
+% \index{reference}
+% 
+% \item[aliasing:] A circumstance where two or more variables refer to the same
+% object.
+% \index{aliasing}
+% 
+% \item[delimiter:] A character or string used to indicate where a
+% string should be split.
+% \index{delimiter}
+% 
 \end{description}
 
 
 \section{Exercises}
+
+\begin{ex}
+Write a function that takes a list of numbers and returns the
+cumulative sum; that is, a new list where the $i$th element
+is the sum of the first $i+1$ elements from the original list.
+For example, the cumulative sum of {\tt [1, 2, 3]} is
+{\tt [1, 3, 6]}. 
+\end{ex}
+
+\begin{ex}
+Write a function that removes the nth element of a list.
+\end{ex}
+
+\begin{ex}
+Write a function that removes the first element of a list that
+matches a provided argument. Modify it to remove all matching 
+elements of the list.
+\end{ex}
+
 
 \begin{ex}
 Write a function called \verb"is_sorted" that takes a list as a
@@ -6215,10 +5433,14 @@ operators {\tt <}, {\tt >}, etc.
 
 \index{precondition}
 
-For example, \verb"is_sorted([1,2,2])" should return {\tt True}
-and \verb"is_sorted(['b','a'])" should return {\tt False}.
+For example, \verb"is_sorted [1; 2; 2]" should return {\tt True}
+and \verb"is_sorted ['b'; 'a']" should return {\tt False}.
 \end{ex}
 
+\begin{ex}
+Write a function to turn a list of characters into a string. Write
+another function to do the reverse task.
+\end{ex}
 
 \begin{ex}
 \label{anagram}
@@ -6249,8 +5471,8 @@ list.
 \item If there are 23 students in your class, what are the chances
 that two of you have the same birthday?  You can estimate this
 probability by generating random samples of 23 birthdays
-and checking for matches.  Hint: you can generate random birthdays
-with the {\tt randint} function in the {\tt random} module.
+and checking for matches.
+Hint: you can generate random birthdays with the {\tt Random} module.
 
 \index{random module}
 \index{module!random}
@@ -6260,8 +5482,8 @@ with the {\tt randint} function in the {\tt random} module.
 \end{enumerate}
 
 You can read about this problem at
-\url{wikipedia.org/wiki/Birthday_paradox}, and you can see my solution
-at \url{thinkpython.com/code/birthday.py}.
+\url{wikipedia.org/wiki/Birthday_paradox}.%, and you can see my solution
+%at \url{thinkpython.com/code/birthday.py}.
 
 \end{ex}
 
@@ -6273,29 +5495,31 @@ at \url{thinkpython.com/code/birthday.py}.
 
 Write a function called \verb"remove_duplicates" that takes
 a list and returns a new list with only the unique elements from
-the original.  Hint: they don't have to be in the same order.
+the original. Hint: they don't have to be in the same order.
 \end{ex}
 
 
-\begin{ex}
-\index{append method}
-\index{method append}
-\index{list!concatenation}
-\index{concatenation!list}
-
-Write a function that reads the file {\tt words.txt} and builds
-a list with one element per word.  Write two versions of
-this function, one using the {\tt append} method and the
-other using the idiom {\tt t = t + [x]}.  Which one takes
-longer to run?  Why?
-
-You can see my solution at \url{thinkpython.com/code/wordlist.py}.
-\end{ex}
-
+% \begin{ex}
+% \index{append method}
+% \index{method append}
+% \index{list!concatenation}
+% \index{concatenation!list}
+% 
+% Write a function that reads the file {\tt words.txt} and builds
+% a list with one element per word.  Write two versions of
+% this function, one using the {\tt append} method and the
+% other using the idiom {\tt t = t + [x]}.  Which one takes
+% longer to run?  Why?
+% 
+% You can see my solution at \url{thinkpython.com/code/wordlist.py}.
+% \end{ex}
+% 
 
 \begin{ex}
 \label{wordlist1}
 \label{bisection}
+
+%edit here - move to arrays section
 
 \index{membership!bisection search}
 \index{bisection search}
@@ -6305,8 +5529,8 @@ You can see my solution at \url{thinkpython.com/code/wordlist.py}.
 \index{binary search}
 \index{search, binary}
 
-To check whether a word is in the word list, you could use
-the {\tt in} operator, but it would be slow because it searches
+To check whether a word is in a word list, you could use
+the {\tt List.exists} function, but it would be slow because it searches
 through the words in order.
 
 Because the words are in alphabetical order, we can speed things up
@@ -6322,14 +5546,19 @@ word list has 113,809 words, it will take about 17 steps to
 find the word or conclude that it's not there.
 
 Write a function called {\tt bisect} that takes a sorted list
-and a target value and returns the index of the value
-in the list, if it's there, or {\tt None} if it's not.
+and a target value and returns {\tt true} if it is in the list
+and {\tt false} if it's not. Bonus points if the funciton is 
+polymorphic.
 
-\index{bisect module}
-\index{module!bisect}
+In trying to do this, you may find that it's exceptionally difficult
+with a list. We'll see better data structures for doing this in a 
+moment.
 
-Or you could read the documentation of the {\tt bisect} module
-and use that!
+% \index{bisect module}
+% \index{module!bisect}
+% 
+% Or you could read the documentation of the {\tt bisect} module
+% and use that!
 \end{ex}
 
 \begin{ex}
@@ -6360,170 +5589,504 @@ interlock to form ``schooled.''
 \end{enumerate}
 \end{ex}
 
+\chapter{Putting the O in OCaml, Part 1: Imperative programming}
 
-\chapter{Dictionaries}
-\index{dictionary}
+Thus far, everything we've learned has been (relatively) completely functional.
+However, OCaml is a practical language, and uses object-oriented functionality 
+when it's, well, practical to do so. There's a lot to object-oriented programming,
+but for now let's just start with the basics.
 
-\index{dictionary}
-\index{type!dict}
+The first thing we're going to do to make OCaml objective is learn how to make 
+and manipulate dynamic variables. Technically speaking, this process is imperative 
+programming. However, object-oriented and imperative programming are closely tied - 
+object-oriented might be thought of as built upon imperative programming - and for 
+the sake of this book, I'll use the two almost interchangeably.
+
+\section{References}
+
+\index{References}
+
+In function-oriented languages like OCaml, you 
+aren't really supposed to change the value of 
+variables. You only use them as short-hand for 
+expressions. If you really want to, though, you 
+can create a {\bf reference}, which functions
+a lot more like an object-oriented variable. 
+This is what it looks like:
+
+\beforeverb
+\begin{verbatim}
+ # let my_ref = ref 100;;
+val my_ref : int ref = {contents = 100}
+\end{verbatim}
+\afterverb
+
+The output looks a little weird, but that's because, 
+in OCaml, references take a backseat to expressions.
+
+Now, I said you could change the value of references, 
+so let's see that.
+
+\beforeverb
+\begin{verbatim}
+ # my_ref := 42;;
+- : unit = ()
+\end{verbatim}
+\afterverb
+
+Note that the operator for changing the value of a reference is `:=' instead of just `='. Also, note that
+assignment doesn't return a value, but rather returns a unit. In order to read the value of a reference, use
+the `!' operator. \footnote{In many other programming languages, `!' is used to mean ``not.'' In OCaml, it's 
+better to think of it as ``get''.}
+
+\beforeverb
+\begin{verbatim}
+ # !my_ref;;
+- : int = 42
+\end{verbatim}
+\afterverb
+
+This is all fine and well. But references aren't really any more useful than variables
+unless you have a more meaningful way to modify them. The most accessible
+method of modifying references is using loops.
+
+\section{Looping}
+
+In functional programming, we don't really like loops. We'd much rather
+use recursion, and you can usually use recursion instead. However, looping
+can occasionally be very useful, even in otherwise mostly-functional programs.
+
+\index{Looping}
+\index{For loop}
+\index{While loop}
+
+There are two primary forms of loops: the {\tt for} loop and the {\tt while}
+loop. Technically speaking, a for loop is just a particular case of a very useful
+while loop, but it's also a little easier to use and a little harder to mess up, so
+we'll start with that.
+
+\subsection{For loop}
+
+Let's look at the problem of adding itegers from 1 to n again. 
+We might go about this problem by iterating through all the integers from 1 to n and 
+adding them up as we go along. Well, this is exactly what a for loop is used for.
+
+\beforeverb
+\begin{verbatim}
+let n = 10;;
+let addup = ref 0;;
+for i = 1 to n do
+     addup := !addup + i
+done;;
+print_int !addup;;
+\end{verbatim}
+\afterverb
+
+Note that I used a reference so that I could change the value of {\tt addup} every time, 
+and the use of the ! to ``get'' the value of addup in order to add to it. Also note that, 
+in OCaml, whatever occurs between the ``do'' and the ``done'' must evaluate to a unit. 
+That means for loops cannot return a value, which makes them not particularly useful. 
+Fortunately, though, the reference assignment operator (:=) does not return a value.
+
+This is a very object-oriented approach to solving this problem. You shouldn't like it.
+\footnote{Well, okay. Object-oriented solutions are very good for some problems. In this 
+particular (trivial) case, I can't really say whether functional or imperative solutions 
+are better (we'll see the function-oriented solution next chapter). There are definitely 
+situations where one is easier, or faster, or more robust then the other.}
+
+\subsection{While loop}
+
+While loops are a slightly more general form of for loops, that look at a condition and
+go while (hence the name) that condition is still true. Let's look at the above problem
+using a while loop:
+
+\beforeverb
+\begin{verbatim}
+let n = 10;;
+let addup = ref 0;;
+let i = ref 1;;
+while !i <= n do
+     addup := !addup + !i;
+     i := !i + 1
+done;;
+print_int !addup;;
+\end{verbatim}
+\afterverb
+
+You can probably see the similarity between the two different loops.
+
+One thing to be careful of in while loops is that the condition ceases to be true at 
+some point. If the condition of a while loop is always true, then you will never stop 
+looping (within the technical constraints of your machine). For example, if I hadn't
+made i a reference variable:
+\beforeverb
+\begin{verbatim}
+let n = 10;;
+let addup = ref 0;;
+let i = 1;;
+while i <= n do
+     addup := !addup + i;
+     i = i + 1
+done;;
+print_int !addup;;
+\end{verbatim}
+\afterverb
+then the condition is always true. This is because, in the condition of the while loop,
+i is always equal to 1. The statement {\tt i = i+1} is actually an equality test which will always
+return false. This program will return a compile warning about how expressions within a while loop 
+returning should return the unit type, and then continue to loop forever. This is known as
+an {\bf infinite loop}, and they should generally be avoided.
+
+This is all I'm going to cover for now. There's a lot more to object-oriented 
+programming than this, of course, but we'll need a couple more things before
+we can really cover those topics.
+
+\section{Examples}
+
+%write here
+
+\chapter{Arrays}
+
+OCaml arrays are quite a bit like lists, but with some very significant
+differences, that make them suited to different tasks. The primary difference
+is that while lists are immutable, arrays are not. Arrays are also much better
+for selecting a random element, rather than just the first. As you might expect,
+most array functions are in the {\tt Array} module. In general terms, arrays are 
+a much more object-oriented data structure.
+
+\section{Making Arrays}
+
+In order to create an array, you can write it out as a list with vertical bars inside the square brackets, or use the {\tt make} or {\tt init} functions:
+
+\beforeverb
+\begin{verbatim}
+# let arr = [|6; 7; 3; 1; 2|];;
+val arr : int array = [|6; 7; 3; 1; 2|]
+# let arr = Array.init 5 (fun i -> i*i);;
+val arr : int array = [|0; 1; 4; 9; 16|]
+# let arr = Array.make 5 1;;
+val arr : int array = [|1; 1; 1; 1; 1|]
+\end{verbatim}
+\afterverb
+As you can probably see from the examples, each way has different uses. If you want to specify every element, you'll want to write it out, though this is generally not advantageous in most applications of arrays. If there's a pattern to your elements, you want to {\tt init} the array, which takes two arguments, the length of the array and a function that takes as an argument the index of the element (starting at 0!) and returning the element (not necessarily an integer!) that goes in that spot. If you want an array with all the same element, you'll want to {\tt make} the array - the first argument is the length of the array, and the second argument is the element to fill the array. This gets more interesting when you fill it with a variable, especially a reference.
+
+\beforeverb
+\begin{verbatim}
+# let x = ref 1;;
+# let xarr = Array.make 4 x;;
+- : int ref array  = 
+[|{contents = 1}; {contents = 1}; {contents = 1}; {contents = 1}|]
+# x := 2;;
+- : unit = ()
+# xarr;;
+- : int ref array  = 
+[|{contents = 2}; {contents = 2}; {contents = 2}; {contents = 2}|]
+\end{verbatim}
+\afterverb
+
+This is quite interesting. The array doesn't contain four ones, it contains
+four pointers to the object x. This can be useful, but it can also be dangerous.
+It is an instance of a phenomenon called {\bf aliasing}, which I will discuss more
+later, but the jist is that we have many ways to refer to the same object, and we 
+must be careful about changing that object from one way and affecting another unexpectedly.
+
+You can also convert arrays to lists and vice versa using 
+the {\tt \verb"Array.to_list"} and {\tt 
+\verb"Array.of_list"} functions.
+
+\section{Array Operations}
+
+You can call a specific element of an array using {\tt get} 
+or an equivalent array syntax:
+
+\beforeverb
+\begin{verbatim}
+# arr;;
+- : int array = [|0; 1; 4; 9; 16|]
+# Array.get arr 0;;
+- : int = 0
+# arr.(2);;
+- : int = 4
+\end{verbatim}
+\afterverb
+Again, indices start at 0.
+
+Arrays are mutable. To change the value of an array 
+element, you can use the {\tt set} function or the 
+assignment operator:
+
+\beforeverb
+\begin{verbatim}
+# arr;;
+- : int array = [|0; 1; 4; 9; 16|]
+# Array.set arr 3 5;;
+- : unit = ()
+# arr;;
+- : int array = [|0; 1; 4; 5; 16|]
+# arr.(3) <- 7
+- : unit = ()
+# arr;;
+- : int array = [|0; 1; 4; 7; 16|]
+\end{verbatim}
+\afterverb
+
+Even though arrays are mutable, you can't change the length 
+of arrays directly. There are handy ways to append arrays 
+or take subarrays as new arrays, though.
+
+\beforeverb
+\begin{verbatim}
+# let arr1 = [|0; 1; 2|];;
+# let arr2 = [|3; 4|];;
+# let subarr1 = Array.sub arr1 0 2;;
+val subarr1 : int array = [|0; 1|]
+# let apparr12 = Array.append arr1 arr2;;
+val apparr12 = int array [|0; 1; 2; 3; 4|]
+# let conarr12 = Array.concat [arr1,arr2];;
+val conarr12 = int array [|0; 1; 2; 3; 4|]
+\end{verbatim}
+\afterverb
+{\tt sub} takes an array and two integers and returns a 
+subarray of that array starting at the first integer 
+argument, with the length specified in the second argument. 
+{\tt append} appends two arrays end-to-start. {\tt concat} 
+does the same thing as {\tt append} for a list of arrays.
+
+\section{Array Iteration, Mapping, and Folding}
+
+Much like in lists, the Array module defines functions {\tt 
+iter}, {\tt map}, {\tt \verb"fold_left"} and {\tt \verb"fold_right"}. 
+They work in exactly the same way:
+
+\beforeverb
+\begin{verbatim}
+let arr = [| 1; 3; 6; 2; 5|];;
+
+print_string "Iter results:"; print_newline();
+Array.iter (fun el -> print_int el; print_newline()) arr;;
+
+print_string "Map results:"; print_newline();
+Array.map (fun el -> 2*el) arr;;
+
+print_string "Fold results:"; print_newline();
+Array.fold_left (fun el1 el2 -> el1+el2) 0 arr;;
+
+Iter results:
+1
+3
+6
+2
+5
+- : unit = ()
+Map results:
+- : int array = [|2; 6; 12; 4; 10|]
+Fold results:
+- : int = 17
+\end{verbatim}
+\afterverb
+
+\section{Array Sorting}
+
+You can sort arrays much like you can sort lists, using
+{\tt sort}. However, it might not work as you expect:
+
+\beforeverb
+\begin{verbatim}
+# let arr = [| 1; 3; 6; 2; 5|];;
+# let sortarr = Array.sort compare arr;;
+val sortarr : unit = ()
+\end{verbatim}
+\afterverb
+Well, that's not right. We've sorted it into oblivion! 
+But, wait, what's {\tt arr} again?
+
+\beforeverb
+\begin{verbatim}
+# arr;;
+- : int array = [|1; 2; 3; 5; 6|]
+\end{verbatim}
+\afterverb
+let max arr = 
+	Array.sort compare arr;
+	let n = Array.length arr - 1 in 	
+	arr.(n);;
+{\tt arr} is sorted! This is the first example we've seen of 
+{\bf side effects}, which are very common in object-oriented 
+programming, but do not exist in functional programming. {\tt 
+Array.sort} doesn't return a sorted array. In fact, it doesn't
+really return anything - though that's not always the case in 
+a function with side effects. The important part is that the 
+function causes something {\it else} to happen. In this case, 
+it sorts the array.
+
+Sometimes side effects aren't the main point. For example, let's
+say we wanted the largest element of an array. We might define a 
+function to do it like this: 
+
+\beforeverb
+\begin{verbatim}
+let max arr = 
+	Array.sort compare arr;
+	let n = Array.length arr - 1 in 	
+	arr.(n);;
+\end{verbatim}
+\afterverb
+
+This function would have the (presumably unintended) consequence of
+changing the array {\tt arr} (specifically, it would sort it).
+
+\section{Array Traversal}
+
+Seeing as arrays are somewhat object-oriented data types, it makes sense to 
+talk about traversing them in object-oriented ways. In general, you 
+can, and should, use the {\tt iter} and {\tt map} functions. But this 
+is a chance to show that looping can be useful.
+
+Let's rewrite our {\tt max} function in a way that's more object-oriented - 
+using a while loop:
+
+\beforeverb
+\begin{verbatim}
+let max arr = 
+	let curmax = ref arr.(0) and i = ref 1 in
+	while !i < Array.length arr do
+		if (arr.(!i) > (!curmax)) then curmax := arr.(!i);
+		i := !i + 1
+	done;
+	!curmax;;
+\end{verbatim}
+\afterverb
+
+This function traverses the loop, looking at each element, processing it,
+then moves on to the next element. Note that this isn't as pretty as it 
+could be - there are lots of exclamation points and the like. This is because 
+OCaml is, first and foremost, a functional language, with object-oriented 
+capabilities taking a back seat. Nonetheless, these kinds of patterns can be 
+very useful.
+
+\section{Glossary}
+
+\chapter{Hashtables}
+\index{hashtable}
+
+\index{type!hashtable}
 \index{key}
 \index{key-value pair}
 \index{index}
 
-A {\bf dictionary} is like a list, but more general.  In a list,
-the indices have to be integers; in a dictionary they can
-be (almost) any type.
+A {\bf hashtable} is like an array, but more general.  In a list,
+the indices have to be integers; in a hashtable they can
+be (almost) any type. Hashtable functions are in the {\tt Hashtbl} 
+module - a great example of how computer scientists are lazy and don't 
+want to write out more letters than absolutely necessary.
 
-You can think of a dictionary as a mapping between a set of indices
+You can think of a hashtable as a mapping between a set of indices
 (which are called {\bf keys}) and a set of values.  Each key maps to a
 value.  The association of a key and a value is called a {\bf
   key-value pair} or sometimes an {\bf item}.
 
-As an example, we'll build a dictionary that maps from English
-to Spanish words, so the keys and the values are all strings.
+As an example, we'll build a hashtable that maps from English
+to French words, so the keys and the values are all strings.
 
-The function {\tt dict} creates a new dictionary with no items.
-Because {\tt dict} is the name of a built-in function, you
-should avoid using it as a variable name.
-
-\index{dict function}
-\index{function!dict}
-
-\beforeverb
-\begin{verbatim}
->>> eng2sp = dict()
->>> print eng2sp
-{}
-\end{verbatim}
-\afterverb
-
-The squiggly-brackets, \verb"{}", represent an empty dictionary.
-To add items to the dictionary, you can use square brackets:
-
-\index{squiggly bracket}
-\index{bracket!squiggly}
+The function {\tt Hashtbl.create} creates a new hashtable with no items.
+It takes one argument, an integer, that is the initial size of the table.
+The hashtable will grow as necessary, but we have to start with something.
+Adding elements above this initial guess is slower than merely
+changing the preallocated ``empty'' elements. However, it is always better
+to guess low and add more than preallocate too much. Think of this argument 
+as a lower bound for your hashtable size.
 
 \beforeverb
 \begin{verbatim}
->>> eng2sp['one'] = 'uno'
+# let eng2fr = Hashtbl.create 10;;
+val eng2fr ('_a','_b') Hashtbl.t = <abstr>
 \end{verbatim}
 \afterverb
-%
-This line creates an item that maps from the key
-{\tt 'one'} to the value \verb"'uno'".  If we print the
-dictionary again, we see a key-value pair with a colon
-between the key and value:
+
+Note that the type of the hashtable is {\tt Hashtbl.t}. To add an element, use the 
+{\tt add} function:
 
 \beforeverb
 \begin{verbatim}
->>> print eng2sp
-{'one': 'uno'}
+# Hashtbl.add eng2fr "hello" "bonjour";;
+- : unit = ()
 \end{verbatim}
 \afterverb
-%
-This output format is also an input format.  For example,
-you can create a new dictionary with three items:
+
+Note that hashtables are mutable - we didn't create a new table and assign it to 
+a variable, we changed the old value, and the function returned a unit.
+
+To view an element, we use the {\tt find} function.
 
 \beforeverb
 \begin{verbatim}
->>> eng2sp = {'one': 'uno', 'two': 'dos', 'three': 'tres'}
+# Hashtbl.find "hello";;
+- : string = "bonjour"
 \end{verbatim}
 \afterverb
-%
-But if you print {\tt eng2sp}, you might be surprised:
+
+We can also replace or remove elements:
 
 \beforeverb
 \begin{verbatim}
->>> print eng2sp
-{'one': 'uno', 'three': 'tres', 'two': 'dos'}
+# Hashtbl.replace eng2fr "hello" "salut";;
+- : unit = ()
+# Hashtbl.find eng2fr "hello";;
+- : string = "salut"
+# Hashtbl.remove eng2fr "hello";;
+- : unit = ()
+# Hashtbl.find eng2fr "hello";;
+Exception: not_found
 \end{verbatim}
 \afterverb
-%
-The order of the key-value pairs is not the same.  In fact, if
-you type the same example on your computer, you might get a
-different result.  In general, the order of items in
-a dictionary is unpredictable.
 
-But that's not a problem because
-the elements of a dictionary are never indexed with integer indices.
-Instead, you use the keys to look up the corresponding values:
+You don't need to make keys unique. For example, we can have
+multiple translations for ``hello'':
 
 \beforeverb
 \begin{verbatim}
->>> print eng2sp['two']
-'dos'
+# Hashtbl.add eng2fr "hello" "bonjour";;
+# Hashtbl.find eng2fr "hello";;
+ - : string = "bonjour"
+# Hashtbl.add eng2fr "hello" "salut";;
+# Hashtbl.find eng2fr "hello";;
+ - : string = "salut"
+# Hashtbl.find_all eng2fr "hello";;
+ - : string list = ["bonjour"; "salut"]
 \end{verbatim}
 \afterverb
-%
-The key {\tt 'two'} always maps to the value \verb"'dos'" so the order
-of the items doesn't matter.
+When you add twice, the most recent add is what will be used, unless
+you use a function that specifically works with all the values, such 
+as {\tt \verb"find_all"}, which returns a list of all values. {\tt replace} 
+and {\tt remove}, however, only work on the most recent value - so
+if you remove a second value, you'll now be working with the first.
 
-If the key isn't in the dictionary, you get an exception:
-
-\index{exception!KeyError}
-\index{KeyError}
+The {\tt length} function returns the number of mappings (not necessarily
+the number of keys):
 
 \beforeverb
 \begin{verbatim}
->>> print eng2sp['four']
-KeyError: 'four'
+# Hashtbl.length eng2fr
+- : int = 2
 \end{verbatim}
 \afterverb
-%
-The {\tt len} function works on dictionaries; it returns the
-number of key-value pairs:
 
-\index{len function}
-\index{function!len}
+To check whether or not something is a key in a hashtable, use the {\tt mem}
+function:
 
 \beforeverb
 \begin{verbatim}
->>> len(eng2sp)
-3
+# Hashtbl.mem eng2fr "hello";;
+- : bool = true
 \end{verbatim}
 \afterverb
-%
-The {\tt in} operator works on dictionaries; it tells you whether
-something appears as a {\em key} in the dictionary (appearing
-as a value is not good enough).
 
-\index{membership!dictionary}
-\index{in operator}
-\index{operator!in}
+\index{membership!hashtable}
 
-\beforeverb
-\begin{verbatim}
->>> 'one' in eng2sp
-True
->>> 'uno' in eng2sp
-False
-\end{verbatim}
-\afterverb
-%
-To see whether something appears as a value in a dictionary, you
-can use the method {\tt values}, which returns the values as
-a list, and then use the {\tt in} operator:
-
-\index{values method}
-\index{method!values}
-
-\beforeverb
-\begin{verbatim}
->>> vals = eng2sp.values()
->>> 'uno' in vals
-True
-\end{verbatim}
-\afterverb
-%
-The {\tt in} operator uses different algorithms for lists and
-dictionaries.  For lists, it uses a search algorithm, as in
-Section~\ref{find}.  As the list gets longer, the search time gets
-longer in direct proportion.  For dictionaries, Python uses an
-algorithm called a {\bf hashtable} that has a remarkable property: the
-{\tt in} operator takes about the same amount of time no matter how
-many items there are in a dictionary.  I won't explain how that's
-possible, but you can read more about it at
-\url{wikipedia.org/wiki/Hash_table}.
+When finding items in a list, the amount of time it took to find an element
+grew proportionally to the length of that list. For remarkable reasons I won't
+explain, this isn't true for hashtables - it takes about the same amount of time
+to find a given element no longer how large the hashtable is!
 
 \index{hashtable}
 
@@ -6534,19 +6097,18 @@ possible, but you can read more about it at
 \index{membership!set}
 
 Write a function that reads the words in {\tt words.txt} and
-stores them as keys in a dictionary.  It doesn't matter what the
-values are.  Then you can use the {\tt in} operator
+stores them as keys in a hashtable.  It doesn't matter what the
+values are.  Then you can use the {\tt mem} function
 as a fast way to check whether a string is in
-the dictionary.
+the hashtable.
 
 If you did Exercise~\ref{wordlist1}, you can compare the speed
-of this implementation with the list {\tt in} operator and the
-bisection search.
+of this implementation with the list equivalent.
 
 \end{ex}
 
 
-\section{Dictionary as a set of counters}
+\section{Hashtable as a set of counters}
 \label{histogram}
 
 \index{counter}
@@ -6559,14 +6121,13 @@ times each letter appears.  There are several ways you could do it:
 \item You could create 26 variables, one for each letter of the
 alphabet.  Then you could traverse the string and, for each
 character, increment the corresponding counter, probably using
-a chained conditional.
+pattern matching.
 
 \item You could create a list with 26 elements.  Then you could
-convert each character to a number (using the built-in function
-{\tt ord}), use the number as an index into the list, and increment
-the appropriate counter.
+convert each character to a number, use the number as an index 
+into the list, and increment the appropriate counter.
 
-\item You could create a dictionary with characters as keys
+\item You could create a hashtable with characters as keys
 and counters as the corresponding values.  The first time you
 see a character, you would add an item to the dictionary.  After
 that you would increment the value of an existing item.
@@ -6588,30 +6149,38 @@ Here is what the code might look like:
 
 \beforeverb
 \begin{verbatim}
-def histogram(s):
-    d = dict()
-    for c in s:
-        if c not in d:
-            d[c] = 1
-        else:
-            d[c] += 1
-    return d
-\end{verbatim}
+#load "str.cma";;
+
+let histogram s = 
+	let wordlist = Str.split (Str.regexp "[ \t\n]") s in
+	let hist = Hashtbl.create 1 in
+	let addfunct e = 
+		if (Hashtbl.mem hist e)
+		then let cntr = (Hashtbl.find hist e + 1)
+			in Hashtbl.replace hist e cntr
+		else Hashtbl.add hist e 1
+	in
+	List.iter addfunct wordlist;
+	hist
+;;\end{verbatim}
 \afterverb
 %
-The name of the function is {\bf histogram}, which is a statistical
-term for a set of counters (or frequencies).
+Note that I use the {\tt Str} module for a couple of its useful functions.
+Nevermind what it is - for now, just trust that the fist line within this 
+function takes a string and splits it into a list of words. You could write 
+your own code to do this, but that'd just be silly. The name of the 
+function is {\bf histogram}, which is a statistical term for a set of 
+counters (or frequencies).
 
 \index{histogram}
 \index{frequency}
-\index{traversal}
 
-The first line of the
-function creates an empty dictionary.  The {\tt for} loop traverses
-the string.  Each time through the loop, if the character {\tt c} is
-not in the dictionary, we create a new item with key {\tt c} and the
-initial value 1 (since we have seen this letter once).  If {\tt c} is
-already in the dictionary we increment {\tt d[c]}.
+The first line of the function creates an empty Hashtable, with assumed 
+length of 1. If you know more information about the string you're going 
+to pass to histogram, you might pass a more intelligent guess. It then 
+iterates over the list, for each element either adding the previously-unseen
+element to the hashtable, or else increasing the counter for that 
+element by one.
 
 \index{histogram}
 
@@ -6619,89 +6188,81 @@ Here's how it works:
 
 \beforeverb
 \begin{verbatim}
->>> h = histogram('brontosaurus')
->>> print h
-{'a': 1, 'b': 1, 'o': 2, 'n': 1, 's': 2, 'r': 2, 'u': 2, 't': 1}
+let histprint tbl = 
+	Hashtbl.iter (fun key value ->
+			print_string (key^":"^(string_of_int value)^"\n"))
+		tbl;;
+		
+let hist = histogram "hello day, the sun says hello";;
+
+# histprint hist;;
+sun:1
+the:1
+says:1
+hello:2
+day,:1
+- : unit = ()
 \end{verbatim}
 \afterverb
 %
-The histogram indicates that the letters {\tt 'a'} and \verb"'b'"
-appear once; \verb"'o'" appears twice, and so on.
+The histogram indicates that ``sun'', ``the'', and ``says'' all appear once, and hello appears twice. Note that it doesn't really handle punctuation the way we'd probably want it to, so the word ``day,'' appears once, not just the word ``day''.
 
-\begin{ex}
-
-\index{get method}
-\index{method!get}
-
-Dictionaries have a method called {\tt get} that takes a key
-and a default value.  If the key appears in the dictionary,
-{\tt get} returns the corresponding value; otherwise it returns
-the default value.  For example:
-
-\beforeverb
-\begin{verbatim}
->>> h = histogram('a')
->>> print h
-{'a': 1}
->>> h.get('a', 0)
-1
->>> h.get('b', 0)
-0
-\end{verbatim}
-\afterverb
-%
-Use {\tt get} to write {\tt histogram} more concisely.  You
-should be able to eliminate the {\tt if} statement.
-\end{ex}
-
-
-\section{Looping and dictionaries}
+\section{Iteration and Hashtables}
 
 \index{dictionary!looping with}
 \index{looping!with dictionaries}
 \index{traversal}
 
-If you use a dictionary in a {\tt for} statement, it traverses
-the keys of the dictionary.  For example, \verb"print_hist"
-prints each key and the corresponding value:
+We just saw an instance of using iteration over hashtables. Let's break it down a little more:
 
 \beforeverb
 \begin{verbatim}
-def print_hist(h):
-    for c in h:
-        print c, h[c]
-\end{verbatim}
-\afterverb
-%
-Here's what the output looks like:
+let histprint tbl = 
+	Hashtbl.iter (fun key value ->
+			print_string (key^":"^(string_of_int value)^"\n"))
+		tbl;;
 
-\beforeverb
-\begin{verbatim}
->>> h = histogram('parrot')
->>> print_hist(h)
-a 1
-p 1
-r 2
-t 1
-o 1
+# histprint hist;;
+sun:1
+the:1
+says:1
+hello:2
+day,:1
+- : unit = ()
 \end{verbatim}
 \afterverb
-%
-Again, the keys are in no particular order.
+
+Iteration in hashtables works not unlike that of lists and arrays.
+The only real difference is that the function argument takes two 
+arguments - first the key and then the value.
 
 \begin{ex}
 
-\index{keys method}
-\index{method!keys}
-
-Dictionaries have a method called {\tt keys} that returns
-the keys of the dictionary, in no particular order, as a list.
-
 Modify \verb"print_hist" to print the keys and their values
 in alphabetical order.
+
 \end{ex}
 
+\section{Folding and Hashtables}
 
+You can also fold hashtables, which, again, is kind of what you
+would expect. Let's say we wanted to add up the number of words 
+in our histogram that begin with the letter s:
+
+\beforeverb
+\begin{verbatim}
+let addSes tbl = 
+	Hashtbl.fold (fun key value acc -> 
+			if key.[0] = 's'
+			then acc+value
+			else acc)
+			tbl 0 ;;
+\end{verbatim}
+\afterverb
+
+One thing to note, there is no {\tt \verb"fold_left"} or {\tt \verb"fold_right"}
+for hashtables. This is because the mappings in the hashtable are not stored in 
+a particular order.
 
 \section{Reverse lookup}
 
@@ -6721,238 +6282,108 @@ you might be able to pick one, or you might have to make
 a list that contains all of them.  Second, there is no
 simple syntax to do a {\bf reverse lookup}; you have to search.
 
-Here is a function that takes a value and returns the first
-key that maps to that value:
+Here is a function that takes a value and returns a reference list of 
+keys :
 
 \beforeverb
 \begin{verbatim}
-def reverse_lookup(d, v):
-    for k in d:
-        if d[k] == v:
-            return k
-    raise ValueError
+let reverse_lookup tbl v = 
+	let lst = ref [] in
+	Hashtbl.iter
+		(fun key value ->
+			if value==v
+			then lst := key::!lst )
+		tbl;
+	lst;;
 \end{verbatim}
 \afterverb
-%
-This function is yet another example of the search pattern, but it
-uses a feature we haven't seen before, {\tt raise}.  The {\tt raise}
-statement causes an exception; in this case it causes a {\tt
-  ValueError}, which generally indicates that there is something wrong
-with the value of a parameter.
 
-\index{search}
-\index{pattern!search}
-\index{raise statement}
-\index{statement!raise}
-\index{exception!ValueError}
-\index{ValueError}
 
-If we get to the end of the loop, that means {\tt v}
-doesn't appear in the dictionary as a value, so we raise an
-exception.
 
 Here is an example of a successful reverse lookup:
 
 \beforeverb
 \begin{verbatim}
->>> h = histogram('parrot')
->>> k = reverse_lookup(h, 2)
->>> print k
-r
+# let hist = histogram "hello day the sun says hello";;
+# reverse_lookup hist 1;;
+- : string list ref = {contents = "says"; "day"; "the"; "sun"}
 \end{verbatim}
 \afterverb
 %
-And an unsuccessful one:
+Note again how they are out of order.
+
+And a couple unsuccessful ones:
 
 \beforeverb
 \begin{verbatim}
->>> k = reverse_lookup(h, 3)
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-  File "<stdin>", line 5, in reverse_lookup
-ValueError
+# reverse_lookup hist 3;;
+- : string list ref = {contents = []}
+# reverse_lookup hist 'a';;
+Error: This expression has type char but an expression was expected of type int
 \end{verbatim}
 \afterverb
 %
-The result when you raise an exception is the same as when
-Python raises one: it prints a traceback and an error message.
-
-\index{traceback}
-\index{optional argument}
-\index{argument!optional}
-
-The {\tt raise} statement takes a detailed error message as an
-optional argument.  For example:
+In some situations, this is probably the behavior you want: an error if the lookup is impossible, and an empty list if there are no keys. However, it's also possible that you'd want to raise an error if a key isn't found, rather than letting the program go on with an empty list. For this, there's the {\tt exception} and {\tt raise} functions:
 
 \beforeverb
 \begin{verbatim}
->>> raise ValueError, 'value does not appear in the dictionary'
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-ValueError: value does not appear in the dictionary
+exception UnfoundValue;;
+
+let reverse_lookup tbl v = 
+	let lst = ref [] in
+	Hashtbl.iter
+		(fun key value ->
+			if value==v
+			then lst := key::!lst )
+		tbl;
+	match !lst with
+		[] -> raise UnfoundValue
+		| h::t -> ();
+	!lst;;
 \end{verbatim}
 \afterverb
-%
-A reverse lookup is much slower than a forward lookup; if you
+{\tt exception} defines a cnew exception. Note that the argument isn't exactly a string - it is not between quotes. This is actually a new type we haven't seen before, namely that of an exception. We can then raise this exception with the {\tt raise} function.
+
+Now, when we run the search with a value that doesn't exist, it will throw an exception error:
+
+\beforeverb
+\begin{verbatim}
+# reverse_lookup hist 3;;
+Exception: UnfoundValue
+\end{verbatim}
+\afterverb
+
+You should always try to name exceptions such that they will make sense to your user. Remember that whoever else works with your code can't read your brain. Be nice to them.
+
+In general, a reverse lookup is much slower than a forward lookup; if you
 have to do it often, or if the dictionary gets big, the performance
 of your program will suffer.
 
 \begin{ex}
-Modify \verb"reverse_lookup" so that it builds and returns a list
-of {\em all} keys that map to {\tt v}, or an empty list if there
-are none.
+Modify \verb"reverse_lookup" so that it returns only the first key that points to the value, then so it points to the greatest-valued (in the built-in {\tt compare} function sense) key.
 \end{ex}
-
-
-\section{Dictionaries and lists}
-
-Lists can appear as values in a dictionary.  For example, if you
-were given a dictionary that maps from letters to frequencies, you
-might want to invert it; that is, create a dictionary that maps
-from frequencies to letters.  Since there might be several letters
-with the same frequency, each value in the inverted dictionary
-should be a list of letters.
-
-\index{invert dictionary}
-\index{dictionary!invert}
-
-Here is a function that inverts a dictionary:
-
-\beforeverb
-\begin{verbatim}
-def invert_dict(d):
-    inv = dict()
-    for key in d:
-        val = d[key]
-        if val not in inv:
-            inv[val] = [key]
-        else:
-            inv[val].append(key)
-    return inv
-\end{verbatim}
-\afterverb
-%
-Each time through the loop, {\tt key} gets a key from {\tt d} and 
-{\tt val} gets the corresponding value.  If {\tt val} is not in {\tt inv},
-that means we haven't seen it before, so we create a new item and
-initialize it with a {\bf singleton} (a list that contains a
-single element).  Otherwise we have seen this value before, so we
-append the corresponding key to the list.
-
-\index{singleton}
-
-Here is an example:
-
-\beforeverb
-\begin{verbatim}
->>> hist = histogram('parrot')
->>> print hist
-{'a': 1, 'p': 1, 'r': 2, 't': 1, 'o': 1}
->>> inv = invert_dict(hist)
->>> print inv
-{1: ['a', 'p', 't', 'o'], 2: ['r']}
-\end{verbatim}
-\afterverb
-%
-And here is a diagram showing {\tt hist} and {\tt inv}:
-
-\index{state diagram}
-\index{diagram!state}
-
-\beforefig
-\centerline{\includegraphics{figs/dict1.eps}}
-\afterfig
-
-A dictionary is represented as a box with the type {\tt dict} above it
-and the key-value pairs inside.  If the values are integers, floats or
-strings, I usually draw them inside the box, but I usually draw lists
-outside the box, just to keep the diagram simple.
-
-Lists can be values in a dictionary, as this example shows, but they
-cannot be keys.  Here's what happens if you try:
-
-\index{TypeError}
-\index{exception!TypeError}
-
-
-\beforeverb
-\begin{verbatim}
->>> t = [1, 2, 3]
->>> d = dict()
->>> d[t] = 'oops'
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-TypeError: list objects are unhashable
-\end{verbatim}
-\afterverb
-%
-I mentioned earlier that a dictionary is implemented using
-a hashtable and that means that the keys have to be {\bf hashable}.
-
-\index{hash function}
-\index{hashable}
-
-A {\bf hash} is a function that takes a value (of any kind)
-and returns an integer.  Dictionaries use these integers,
-called hash values, to store and look up key-value pairs.
-
-\index{immutability}
-
-This system works fine if the keys are immutable.  But if the
-keys are mutable, like lists, bad things happen.  For example,
-when you create a key-value pair, Python hashes the key and 
-stores it in the corresponding location.  If you modify the
-key and then hash it again, it would go to a different location.
-In that case you might have two entries for the same key,
-or you might not be able to find a key.  Either way, the
-dictionary wouldn't work correctly.
-
-That's why the keys have to be hashable, and why mutable types like
-lists aren't.  The simplest way to get around this limitation is to
-use tuples, which we will see in the next chapter.
-
-Since dictionaries are mutable, they can't be used as keys,
-but they {\em can} be used as values.
-
-\begin{ex}
-Read the documentation of the dictionary method {\tt setdefault}
-and use it to write a more concise version of \verb"invert_dict".
-
-\index{setdefault method}
-\index{method!setdefault}
-
-\end{ex}
-
 
 \section{Memos}
-
-If you played with the {\tt fibonacci} function from
-Section~\ref{one more example}, you might have noticed that the bigger
+If you wrote and played with the {\tt fibonacci} function from
+Exercise~\ref{ex:fibonacci}, you probably wrote a function that looks something like this:
+\beforeverb
+\begin{verbatim}
+let rec fibonacci n = match n with
+	x when x=0 -> 0
+	| x when x=1 -> 1
+	| x -> (fibonacci (n-1)) + (fibonacci (n-2));;
+\end{verbatim}
+\afterverb
+and you might have noticed that the bigger
 the argument you provide, the longer the function takes to run.
-Furthermore, the run time increases very quickly.
+Furthermore, the run time increases very quickly. This is because the
+number of function calls required grows exponentially with each call.
 
 \index{fibonacci function}
 \index{function!fibonacci}
 
-To understand why, consider this {\bf call graph} for
-{\tt fibonacci} with {\tt n=4}:
-
-\beforefig
-\centerline{\includegraphics[height=2in]{figs/fibonacci.eps}}
-\afterfig
-
-A call graph shows a set of function frames, with lines connecting each
-frame to the frames of the functions it calls.  At the top of the
-graph, {\tt fibonacci} with {\tt n=4} calls {\tt fibonacci} with {\tt
-n=3} and {\tt n=2}.  In turn, {\tt fibonacci} with {\tt n=3} calls
-{\tt fibonacci} with {\tt n=2} and {\tt n=1}.  And so on.
-
-\index{function frame}
-\index{frame}
-\index{call graph}
-
-Count how many times {\tt fibonacci(0)} and {\tt fibonacci(1)} are
-called.  This is an inefficient solution to the problem, and it gets
+In particular, consider how many times {\tt fibonacci(0)} and {\tt fibonacci(1)} 
+are called. This is an inefficient solution to the problem, and it gets
 worse as the argument gets bigger.
 
 \index{memo}
@@ -6965,170 +6396,69 @@ implementation of {\tt fibonacci} using memos:
 
 \beforeverb
 \begin{verbatim}
-known = {0:0, 1:1}
+let known = Hashtbl.create 2;;
+Hashtbl.add known 0 1;;
+Hashtbl.add known 1 1;;
+let rec fibonacci n =
+	if Hashtbl.mem known n
+	then Hashtbl.find known n
+	else let fn = (fibonacci (n-1)) + (fibonacci (n-2)) in
+		Hashtbl.add known n fn;
+		fn;;
 
-def fibonacci(n):
-    if n in known:
-        return known[n]
-
-    res = fibonacci(n-1) + fibonacci(n-2)
-    known[n] = res
-    return res
+let printknown () = 
+	let n = ref 0 in
+	while Hashtbl.mem known !n do
+		print_string ("f("^(string_of_int !n)^"):"^
+			(string_of_int (Hashtbl.find known !n)));
+		print_newline ();
+		n := !n+1
+	done;;
 \end{verbatim}
 \afterverb
 %
-{\tt known} is a dictionary that keeps track of the Fibonacci
+{\tt known} is a hashtable that keeps track of the Fibonacci
 numbers we already know.  It starts with
 two items: 0 maps to 0 and 1 maps to 1.
 
 Whenever {\tt fibonacci} is called, it checks {\tt known}.
 If the result is already there, it can return
 immediately.  Otherwise it has to 
-compute the new value, add it to the dictionary, and return it.
+compute the new value, add it to the hashtable, and return it. 
+Thus, we build up a record of all the fibonacci numbers up to 
+a highest call. We can view our record by calling {\tt printknown}:
+
+\beforeverb
+\begin{verbatim}
+# fibonacci 10;;
+- : int = 89http://en.literateprograms.org/Fibonacci_numbers_(OCaml)#Arbitrary_Precision
+# printknown();;
+f(0):0
+f(1):1
+f(2):2
+f(3):3
+f(4):5
+f(5):8
+f(6):13
+f(7):21
+f(8):34
+f(9):55
+f(10):89
+\end{verbatim}
+\afterverb
 
 \begin{ex}
 Run this version of {\tt fibonacci} and the original with
 a range of parameters and compare their run times.
 \end{ex}
 
-
-\section{Global variables}
-
-\index{global variable}
-\index{variable!global}
-
 In the previous example, {\tt known} is created outside the function,
-so it belongs to the special frame called \verb"__main__".
-Variables in \verb"__main__" are sometimes called {\bf global}
+so it belongs to the special frame that is the highest scope.
+Variables in this scope are sometimes called {\bf global}
 because they can be accessed from any function.  Unlike local
 variables, which disappear when their function ends, global variables
-persist from one function call to the next.
-
-\index{flag}
-
-It is common to use global variables for {\bf flags}; that is, 
-boolean variables that indicate (``flag'') whether a condition
-is true.  For example, some programs use
-a flag named {\tt verbose} to control the level of detail in the
-output:
-
-\beforeverb
-\begin{verbatim}
-verbose = True
-
-def example1():
-    if verbose:
-        print 'Running example1'
-\end{verbatim}
-\afterverb
-%
-If you try to reassign a global variable, you might be surprised.
-The following example is supposed to keep track of whether the
-function has been called:
-
-\index{multiple assignment}
-\index{assignment!multiple}
-
-\beforeverb
-\begin{verbatim}
-been_called = False
-
-def example2():
-    been_called = True         # WRONG
-\end{verbatim}
-\afterverb
-%
-But if you run it you will see that the value of \verb"been_called"
-doesn't change.  The problem is that {\tt example2} creates a new local
-variable named \verb"been_called".  The local variable goes away when
-the function ends, and has no effect on the global variable.
-
-\index{global statement}
-\index{statement!global}
-\index{declaration}
-
-To reassign a global variable inside a function you have to
-{\bf declare} the global variable before you use it:
-
-\beforeverb
-\begin{verbatim}
-been_called = False
-
-def example2():
-    global been_called 
-    been_called = True
-\end{verbatim}
-\afterverb
-%
-The {\tt global} statement tells the interpreter
-something like, ``In this function, when I say \verb"been_called", I
-mean the global variable; don't create a local one.''
-
-\index{update!global variable}
-\index{global variable!update}
-
-Here's an example that tries to update a global variable:
-
-\beforeverb
-\begin{verbatim}
-count = 0
-
-def example3():
-    count = count + 1          # WRONG
-\end{verbatim}
-\afterverb
-%
-If you run it you get:
-
-\index{UnboundLocalError}
-\index{exception!UnboundLocalError}
-
-\beforeverb
-\begin{verbatim}
-UnboundLocalError: local variable 'count' referenced before assignment
-\end{verbatim}
-\afterverb
-%
-Python assumes that {\tt count} is local, which means
-that you are reading it before writing it.  The solution, again,
-is to declare {\tt count} global.
-
-\index{counter}
-
-\beforeverb
-\begin{verbatim}
-def example3():
-    global count
-    count += 1
-\end{verbatim}
-\afterverb
-%
-If the global value is mutable, you can modify it without
-declaring it:
-
-\index{mutability}
-
-\beforeverb
-\begin{verbatim}
-known = {0:0, 1:1}
-
-def example4():
-    known[2] = 1
-\end{verbatim}
-\afterverb
-%
-So you can add, remove and replace elements of a global list or
-dictionary, but if you want to reassign the variable, you
-have to declare it:
-
-\beforeverb
-\begin{verbatim}
-def example5():
-    global known
-    known = dict()
-\end{verbatim}
-\afterverb
-%
+persist from one function call to the next. They are an example of using 
+scope to your advantage, but you must always be careful when using scope.
 
 \section{Long integers}
 
@@ -7136,43 +6466,27 @@ def example5():
 \index{integer!long}
 \index{type!long}
 
-If you compute {\tt fibonacci(50)}, you get:
+If I compute {\tt fibonacci(50)}, I get:
 
 \beforeverb
 \begin{verbatim}
 >>> fibonacci(50)
-12586269025L
+- : int=1037658242
 \end{verbatim}
 \afterverb
 %
-The {\tt L} at the end indicates that the result is a long
-integer\footnote{In Python 3.0, type {\tt long} is gone; all integers,
-  even really big ones, are type {\tt int}.}, or type {\tt long}.
-
-\index{Python 3.0}
-
-Values with type {\tt int} have a limited range;
-long integers can be arbitrarily big, but as they get bigger
-they consume more space and time.
-
-The mathematical operators work on long integers, and the functions
-in the {\tt math} module, too, so in general any code that
-works with {\tt int} will also work with {\tt long}.
-
-Any time the result of a computation is too big to be represented with
-an integer, Python converts the result as a long integer:
+which isn't too suspicious. It's the wrong answer, but it gets worse. Let's look at the record 
+and see:
 
 \beforeverb
 \begin{verbatim}
->>> 1000 * 1000
-1000000
->>> 100000 * 100000
-10000000000L
+...
+f(48):-811192543
+f(49):-298632863
+f(50):1037658242
 \end{verbatim}
 \afterverb
-%
-In the first case the result has type {\tt int}; in the
-second case it is {\tt long}.
+Well, that doesn't look good at all. the 48-th and 49-th term are clearly not right, and they also clearly don't add up to f(50). Values with type {\tt int} have a limited range, which we've exceeded. There are ways around this problem, but I won't bother with them here. If you want to find out more, I recommend looking at \url{http://en.literateprograms.org/Fibonacci_numbers_(OCaml)#Arbitrary_Precision}.
 
 \begin{ex}
 
@@ -7190,7 +6504,7 @@ and write functions to encode and decode messages.
 
 \section{Debugging}
 \index{debugging}
-
+%write here
 As you work with bigger datasets it can become unwieldy to
 debug by printing and checking data by hand.  Here are some
 suggestions for debugging large datasets:
@@ -7200,7 +6514,7 @@ suggestions for debugging large datasets:
 \item[Scale down the input:] If possible, reduce the size of the
 dataset.  For example if the program reads a text file, start with
 just the first 10 lines, or with the smallest example you can find.
-You can either edit the files themselves, or (better) modify the
+You can either edit the files themselves, or modify the
 program so it reads only the first {\tt n} lines.
 
 If there is an error, you can reduce {\tt n} to the smallest
@@ -7230,10 +6544,9 @@ computations to see if they are consistent.  This is called a
 ``consistency check.''
 
 \item[Pretty print the output:] Formatting debugging output
-can make it easier to spot an error.  We saw an example in
-Section~\ref{factdebug}.  The {\tt pprint} module provides
-a {\tt pprint} function that displays built-in types in
-a more human-readable format.
+can make it easier to spot an error. Writing (or, better yet,
+finding built-in or distributed) functions to print things in
+human-readable ways can make your life a lot easier.
 
 \index{pretty print}
 \index{pprint module}
@@ -7250,22 +6563,22 @@ the time you spend debugging.
 
 \begin{description}
 
-\item[dictionary:] A mapping from a set of keys to their
+\item[hashtable:] A mapping from a set of keys to their
 corresponding values.
-\index{dictionary}
+\index{hashtable}
 
 \item[key-value pair:] The representation of the mapping from
 a key to a value.
 \index{key-value pair}
 
 \item[item:] Another name for a key-value pair.
-\index{item!dictionary}
+\index{item!hashtable}
 
-\item[key:] An object that appears in a dictionary as the
+\item[key:] An object that appears in a hashtable as the
 first part of a key-value pair.
 \index{key}
 
-\item[value:] An object that appears in a dictionary as the
+\item[value:] An object that appears in a hashtable as the
 second part of a key-value pair.  This is more specific than
 our previous use of the word ``value.''
 \index{value}
@@ -7274,35 +6587,35 @@ our previous use of the word ``value.''
 \index{implementation}
 
 \item[hashtable:] The algorithm used to implement Python
-dictionaries.
+hashtables.
 \index{hashtable}
 
 \item[hash function:] A function used by a hashtable to compute the
 location for a key.
 \index{hash function}
+% 
+% \item[hashable:] A type that has a hash function.  Immutable
+% types like integers,
+% floats and strings are hashable; mutable types like lists and
+% dictionaries are not.
+% \index{hashable}
 
-\item[hashable:] A type that has a hash function.  Immutable
-types like integers,
-floats and strings are hashable; mutable types like lists and
-dictionaries are not.
-\index{hashable}
-
-\item[lookup:] A dictionary operation that takes a key and finds
+\item[lookup:] A hashtable operation that takes a key and finds
 the corresponding value.
 \index{lookup}
 
-\item[reverse lookup:] A dictionary operation that takes a value and finds
+\item[reverse lookup:] A hashtable operation that takes a value and finds
 one or more keys that map to it.
-\index{reverse lookup, dictionary}
-
-\item[singleton:] A list (or other sequence) with a single element.
-\index{singleton}
-
-\item[call graph:] A diagram that shows every frame created during
-the execution of a program, with an arrow from each caller to
-each callee. 
-\index{call graph}
-\index{diagram!call graph}
+\index{reverse lookup, hashtable}
+% 
+% \item[singleton:] A list (or other sequence) with a single element.
+% \index{singleton}
+% 
+% \item[call graph:] A diagram that shows every frame created during
+% the execution of a program, with an arrow from each caller to
+% each callee. 
+% \index{call graph}
+% \index{diagram!call graph}
 
 \item[histogram:] A set of counters.
 \index{histogram}
@@ -7394,21 +6707,15 @@ whether a string is in the word list.
 
 To check whether two words are homophones, you can use the CMU
 Pronouncing Dictionary.  You can download it from
-\url{www.speech.cs.cmu.edu/cgi-bin/cmudict} or from
-\url{thinkpython.com/code/c06d} and you can also download
-\url{thinkpython.com/code/pronounce.py}, which provides a function
-named \verb"read_dictionary" that reads the pronouncing dictionary and
-returns a Python dictionary that maps from each word to a string that
-describes its primary pronunciation.
+\url{www.speech.cs.cmu.edu/cgi-bin/cmudict}.
 
 Write a program that lists all the words that solve the Puzzler.
-You can see my solution at \url{thinkpython.com/code/homophone.py}.
 
 \end{ex}
 
 
 
-\chapter{Tuples}
+\chapter{Tuples and Records}
 \label{tuplechap}
 
 \section{Tuples are immutable}
@@ -7417,9 +6724,7 @@ You can see my solution at \url{thinkpython.com/code/homophone.py}.
 \index{type!tuple}
 \index{sequence}
 
-A tuple is a sequence of values.  The values can be any type, and
-they are indexed by integers, so in that respect tuples are a lot
-like lists.  The important difference is that tuples are immutable.
+A tuple is an immutable sequence of values, not unlike lists. The important difference is that tuples can contain objects of any type.
 
 \index{mutability}
 \index{immutability}
@@ -7428,127 +6733,34 @@ Syntactically, a tuple is a comma-separated list of values:
 
 \beforeverb
 \begin{verbatim}
->>> t = 'a', 'b', 'c', 'd', 'e'
+# let t = 'a', 'b', 'c', 'd', 'e';;
+val t : char * char * char * char * char = ('a', 'b', 'c', 'd', 'e')
 \end{verbatim}
 \afterverb
 %
-Although it is not necessary, it is common to enclose tuples in
+Note that the ocaml interpreter prints the type of a tuple as a series of types connected by asterisks. Although it is not necessary, it is common to enclose tuples in
 parentheses:
 
 \index{parentheses!tuples in}
 
 \beforeverb
 \begin{verbatim}
->>> t = ('a', 'b', 'c', 'd', 'e')
+# let t = ('a', 'b', 'c', 'd', 'e');;
 \end{verbatim}
 \afterverb
 %
-To create a tuple with a single element, you have to include a final
-comma:
+If you're passing a tuple as an argument, however, it does need to be enclosed in parentheses to tell the function how to group it.
 
-\index{singleton}
-\index{tuple!singleton}
+Much like lists, there's no built-in way to access the elements of a tuple in general. If your tuple is a pair, you can use the {\tt fst} and {\tt snd} functions to access the first and second elements, respecitvely, but for larger tuples you'll need to write your own functions, or use arrays instead. Unlike lists, there isn't the idea of a tuple ``head'' and ``tail,'' either. In general, you need to use pattern matching to select elements of a tuple:
 
 \beforeverb
 \begin{verbatim}
->>> t1 = 'a',
->>> type(t1)
-<type 'tuple'>
+# let third_of_three trip = match trip with (_,_,x) -> x;;
+val third_of_three 'a * 'b * 'c -> 'c = <fun>
+# third_of_three (1,2,3);;
+- : int = 3
 \end{verbatim}
 \afterverb
-%
-A value in parentheses is not a tuple:
-
-\beforeverb
-\begin{verbatim}
->>> t2 = ('a')
->>> type(t2)
-<type 'str'>
-\end{verbatim}
-\afterverb
-%
-Another way to create a tuple is the built-in function {\tt tuple}.
-With no argument, it creates an empty tuple:
-
-\index{tuple function}
-\index{function!tuple}
-
-\beforeverb
-\begin{verbatim}
->>> t = tuple()
->>> print t
-()
-\end{verbatim}
-\afterverb
-%
-If the argument is a sequence (string, list or tuple), the result
-is a tuple with the elements of the sequence:
-
-\beforeverb
-\begin{verbatim}
->>> t = tuple('lupins')
->>> print t
-('l', 'u', 'p', 'i', 'n', 's')
-\end{verbatim}
-\afterverb
-%
-Because {\tt tuple} is the name of a built-in function, you should
-avoid using it as a variable name.
-
-Most list operators also work on tuples.  The bracket operator
-indexes an element:
-
-\index{bracket operator}
-\index{operator!bracket}
-
-\beforeverb
-\begin{verbatim}
->>> t = ('a', 'b', 'c', 'd', 'e')
->>> print t[0]
-'a'
-\end{verbatim}
-\afterverb
-%
-And the slice operator selects a range of elements.
-
-\index{slice operator}
-\index{operator!slice}
-\index{tuple!slice}
-\index{slice!tuple}
-
-\beforeverb
-\begin{verbatim}
->>> print t[1:3]
-('b', 'c')
-\end{verbatim}
-\afterverb
-%
-But if you try to modify one of the elements of the tuple, you get
-an error:
-
-\index{exception!TypeError}
-\index{TypeError}
-\index{item assignment}
-\index{assignment!item}
-
-\beforeverb
-\begin{verbatim}
->>> t[0] = 'A'
-TypeError: object doesn't support item assignment
-\end{verbatim}
-\afterverb
-%
-You can't modify the elements of a tuple, but you can replace
-one tuple with another:
-
-\beforeverb
-\begin{verbatim}
->>> t = ('A',) + t[1:]
->>> print t
-('A', 'b', 'c', 'd', 'e')
-\end{verbatim}
-\afterverb
-%
 
 \section{Tuple assignment}
 \label{tuple assignment}
@@ -7564,17 +6776,25 @@ variable.  For example, to swap {\tt a} and {\tt b}:
 
 \beforeverb
 \begin{verbatim}
->>> temp = a
->>> a = b
->>> b = temp
+# let temp = a;;
+# let a = b;;
+# let b = temp;;
 \end{verbatim}
 \afterverb
 %
-This solution is cumbersome; {\bf tuple assignment} is more elegant:
+This solution is quite combersome, and wastes precious memory. This can more cleanly be accomplished with an {\tt and}:
 
 \beforeverb
 \begin{verbatim}
->>> a, b = b, a
+#let a = b and b = a;;
+\end{verbatim}
+\afterverb
+
+but that's a little cumbersome, too. This can be made much cleaner using {\bf tuple assignment}:
+
+\beforeverb
+\begin{verbatim}
+# let a, b = b, a;;
 \end{verbatim}
 \afterverb
 %
@@ -7591,36 +6811,9 @@ values on the right have to be the same:
 
 \beforeverb
 \begin{verbatim}
->>> a, b = 1, 2, 3
-ValueError: too many values to unpack
-\end{verbatim}
-\afterverb
-%
-More generally, the right side can be any kind of sequence
-(string, list or tuple).  For example, to split an email address
-into a user name and a domain, you could write:
-
-\index{split method}
-\index{method!split}
-\index{email address}
-
-\beforeverb
-\begin{verbatim}
->>> addr = 'monty@python.org'
->>> uname, domain = addr.split('@')
-\end{verbatim}
-\afterverb
-%
-The return value from {\tt split} is a list with two elements;
-the first element is assigned to {\tt uname}, the second to
-{\tt domain}.
-
-\beforeverb
-\begin{verbatim}
->>> print uname
-monty
->>> print domain
-python.org
+# let a, b = 1, 2, 3;;
+Error: This expression has type int * int * int
+       but an expression was expected of type 'a * 'b
 \end{verbatim}
 \afterverb
 %
@@ -7635,21 +6828,14 @@ python.org
 Strictly speaking, a function can only return one value, but
 if the value is a tuple, the effect is the same as returning
 multiple values.  For example, if you want to divide two integers
-and compute the quotient and remainder, it is inefficient to
-compute {\tt x/y} and then {\tt x\%y}.  It is better to compute
-them both at the same time.
-
-\index{divmod}
-
-The built-in function {\tt divmod} takes two arguments and
-returns a tuple of two values, the quotient and remainder.
-You can store the result as a tuple:
+and compute the quotient and remainder, it makes sense to do it in 
+one fell swoop:
 
 \beforeverb
 \begin{verbatim}
->>> t = divmod(7, 3)
->>> print t
-(2, 1)
+# let divmod a b = a/b, a mod b;;
+# divmod 5 2;;
+- : int * int = (2, 1)
 \end{verbatim}
 \afterverb
 %
@@ -7660,182 +6846,38 @@ Or use tuple assignment to store the elements separately:
 
 \beforeverb
 \begin{verbatim}
->>> quot, rem = divmod(7, 3)
->>> print quot
-2
->>> print rem
-1
+# let quot, rem = divmod(5, 2)
+val q : int = 2
+val r : int = 1
 \end{verbatim}
 \afterverb
-%
-Here is an example of a function that returns a tuple:
-
-\beforeverb
-\begin{verbatim}
-def min_max(t):
-    return min(t), max(t)
-\end{verbatim}
-\afterverb
-%
-{\tt max} and {\tt min} are built-in functions that find
-the largest and smallest elements of a sequence.  \verb"min_max"
-computes both and returns a tuple of two values.
-
-\index{max function}
-\index{function!max}
-\index{min function}
-\index{function!min}
-
-
-\section{Variable-length argument tuples}
-
-\index{variable-length argument tuple}
-\index{argument!variable-length tuple}
-\index{gather}
-\index{parameter!gather}
-\index{argument!gather}
-
-Functions can take a variable number of arguments.  A parameter
-name that begins with {\tt *} {\bf gathers} arguments into
-a tuple.  For example, {\tt printall}
-takes any number of arguments and prints them:
-
-\beforeverb
-\begin{verbatim}
-def printall(*args):
-    print args
-\end{verbatim}
-\afterverb
-%
-The gather parameter can have any name you like, but {\tt args} is
-conventional.  Here's how the function works:
-
-\beforeverb
-\begin{verbatim}
->>> printall(1, 2.0, '3')
-(1, 2.0, '3')
-\end{verbatim}
-\afterverb
-%
-The complement of gather is {\bf scatter}.  If you have a
-sequence of values and you want to pass it to a function
-as multiple arguments, you can use the {\tt *} operator.
-For example, {\tt divmod} takes exactly two arguments; it
-doesn't work with a tuple:
-
-% removing this because we haven't seen optional parameters yet
-%You can combine the gather operator with required and positional
-%arguments:
-
-%\beforeverb
-%\begin{verbatim}
-%def pointless(required, optional=0, *args):
-%    print required, optional, args
-%\end{verbatim}
-%\afterverb
-%
-%Run this function with 1, 2, 3 and 4 or more arguments and
-%make sure you understand what it does.
-
-\index{scatter}
-\index{argument scatter}
-
-\index{TypeError}
-\index{exception!TypeError}
-
-\beforeverb
-\begin{verbatim}
->>> t = (7, 3)
->>> divmod(t)
-TypeError: divmod expected 2 arguments, got 1
-\end{verbatim}
-\afterverb
-%
-But if you scatter the tuple, it works:
-
-\beforeverb
-\begin{verbatim}
->>> divmod(*t)
-(2, 1)
-\end{verbatim}
-\afterverb
-%
-\begin{ex}
-Many of the built-in functions use
-variable-length argument tuples.  For example, {\tt max}
-and {\tt min} can take any number of arguments:
-
-\index{max function}
-\index{function!max}
-\index{min function}
-\index{function!min}
-
-\beforeverb
-\begin{verbatim}
->>> max(1,2,3)
-3
-\end{verbatim}
-\afterverb
-%
-But {\tt sum} does not.
-
-\index{sum function}
-\index{function!sum}
-
-\beforeverb
-\begin{verbatim}
->>> sum(1,2,3)
-TypeError: sum expected at most 2 arguments, got 3
-\end{verbatim}
-\afterverb
-%
-Write a function called {\tt sumall} that takes any number
-of arguments and returns their sum.
-
-\end{ex}
-
 
 \section{Lists and tuples}
 
 \index{zip function}
 \index{function!zip}
 
-{\tt zip} is a built-in function that takes two or more sequences and
-``zips'' them into a list\footnote{In Python 3.0, {\tt zip} returns an
-  iterator of tuples, but for most purposes, an iterator behaves like
-  a list.} of tuples where each tuple contains one element from each
-sequence.
+{\tt List.combine} is a built-in function that takes two lists and
+combines them into a list of tuples where each tuple contains one 
+element from each sequence.
 
-\index{Python 3.0}
-
-This example zips a string and a list:
+This example combines a list of ints and a list of chars:
 
 \beforeverb
 \begin{verbatim}
->>> s = 'abc'
->>> t = [0, 1, 2]
->>> zip(s, t)
-[('a', 0), ('b', 1), ('c', 2)]
+# let c = ['a'; 'b'; 'c'];;
+# let t = [0, 1, 2];;
+# List.combine t c;;
+- : (int * char) list = [(1, 'a') (2, 'b') (3, 'c')]
 \end{verbatim}
 \afterverb
 %
 The result is a list of tuples where each tuple contains
-a character from the string and the corresponding element from
-the list.
+an integer and a char.
 
 \index{list!of tuples}
 
-If the sequences are not the same length, the result has the
-length of the shorter one.
-
-\beforeverb
-\begin{verbatim}
->>> zip('Anne', 'Elk')
-[('A', 'E'), ('n', 'l'), ('n', 'k')]
-\end{verbatim}
-\afterverb
-%
-You can use tuple assignment in a {\tt for} loop to traverse a list of
+You can use tuple assignment and recursion to traverse a list of
 tuples:
 
 \index{traversal}
@@ -7844,358 +6886,57 @@ tuples:
 
 \beforeverb
 \begin{verbatim}
-t = [('a', 0), ('b', 1), ('c', 2)]
-for letter, number in t:
-    print number, letter
-\end{verbatim}
-\afterverb
-%
-Each time through the loop, Python selects the next tuple in
-the list and assigns the elements to {\tt letter} and 
-{\tt number}.  The output of this loop is:
+let print_tuple tup = 
+	let t, c = tup in
+		print_string "(";
+		print_int t;
+		print_string ", ";
+		print_char c;
+		print_string")";
+		print_newline ();;
 
-\index{loop}
+let rec tuplister tlst = match tlst with 
+	[] -> ()
+	| h::t -> print_tuple h;
+		tuplister t;;
 
-\beforeverb
-\begin{verbatim}
-0 a
-1 b
-2 c
-\end{verbatim}
-\afterverb
-%
-If you combine {\tt zip}, {\tt for} and tuple assignment, you get a
-useful idiom for traversing two (or more) sequences at the same
-time.  For example, \verb"has_match" takes two sequences, {\tt t1} and
-{\tt t2}, and returns {\tt True} if there is an index {\tt i}
-such that {\tt t1[i] == t2[i]}:
-
-\index{for loop}
-
-\beforeverb
-\begin{verbatim}
-def has_match(t1, t2):
-    for x, y in zip(t1, t2):
-        if x == y:
-            return True
-    return False
-\end{verbatim}
-\afterverb
-%
-If you need to traverse the elements of a sequence and their
-indices, you can use the built-in function {\tt enumerate}:
-
-\index{traversal}
-\index{enumerate function}
-\index{function!enumerate}
-
-\beforeverb
-\begin{verbatim}
-for index, element in enumerate('abc'):
-    print index, element
-\end{verbatim}
-\afterverb
-%
-The output of this loop is:
-
-\beforeverb
-\begin{verbatim}
-0 a
-1 b
-2 c
-\end{verbatim}
-\afterverb
-%
-Again.
-
-
-\section{Dictionaries and tuples}
-
-\index{dictionary}
-\index{items method}
-\index{method!items}
-\index{key-value pair}
-
-Dictionaries have a method called {\tt items} that returns a list of
-tuples, where each tuple is a key-value pair\footnote{This behavior is
-  slightly different in Python 3.0.}.
-
-\beforeverb
-\begin{verbatim}
->>> d = {'a':0, 'b':1, 'c':2}
->>> t = d.items()
->>> print t
-[('a', 0), ('c', 2), ('b', 1)]
-\end{verbatim}
-\afterverb
-%
-As you should expect from a dictionary, the items are in no
-particular order.
-
-\index{dictionary!initialize}
-
-Conversely, you can use a list of tuples to initialize
-a new dictionary:
-
-\beforeverb
-\begin{verbatim}
->>> t = [('a', 0), ('c', 2), ('b', 1)]
->>> d = dict(t)
->>> print d
-{'a': 0, 'c': 2, 'b': 1}
+# let tlist = [(1, 'a'); (2, 'b'); (3, 'c')];;
+# tuplister tlist;;
+(1, 'a')
+(2, 'b')
+(3, 'c')
+- : unit = () 
 \end{verbatim}
 \afterverb
 
-Combining {\tt dict} with {\tt zip} yields a concise way
-to create a dictionary:
-
-\index{zip function!use with dict}
-
-\beforeverb
-\begin{verbatim}
->>> d = dict(zip('abc', range(3)))
->>> print d
-{'a': 0, 'c': 2, 'b': 1}
-\end{verbatim}
-\afterverb
-%
-The dictionary method {\tt update} also takes a list of tuples
-and adds them, as key-value pairs, to an existing dictionary.
-
-\index{update method}
-\index{method!update}
-
-\index{traverse!dictionary}
-\index{dictionary!traversal}
-
-Combining {\tt items}, tuple assignment and {\tt for}, you
-get the idiom for traversing the keys and values of a dictionary:
-
-\beforeverb
-\begin{verbatim}
-for key, val in d.items():
-    print val, key
-\end{verbatim}
-\afterverb
-%
-The output of this loop is:
-
-\beforeverb
-\begin{verbatim}
-0 a
-2 c
-1 b
-\end{verbatim}
-\afterverb
-%
-Again.
-
-\index{tuple!as key in dictionary}
-\index{hashable}
-
-It is common to use tuples as keys in dictionaries (primarily because
-you can't use lists).  For example, a telephone directory might map
-from last-name, first-name pairs to telephone numbers.  Assuming
-that we have defined {\tt last}, {\tt first} and {\tt number}, we
-could write:
-
-\beforeverb
-\begin{verbatim}
-directory[last,first] = number
-\end{verbatim}
-\afterverb
-%
-The expression in brackets is a tuple.  We could use tuple
-assignment to traverse this dictionary.
-
-\index{tuple!in brackets}
-
-\beforeverb
-\begin{verbatim}
-for last, first in directory:
-    print first, last, directory[last,first]
-\end{verbatim}
-\afterverb
-%
-This loop traverses the keys in {\tt directory}, which are tuples.  It
-assigns the elements of each tuple to {\tt last} and {\tt first}, then
-prints the name and corresponding telephone number.
-
-There are two ways to represent tuples in a state diagram.  The more
-detailed version shows the indices and elements just as they appear in
-a list.  For example, the tuple \verb"('Cleese', 'John')" would appear:
-
-\index{state diagram}
-\index{diagram!state}
-
-\beforefig
-\centerline{\includegraphics{figs/tuple1.eps}}
-\afterfig
-
-But in a larger diagram you might want to leave out the
-details.  For example, a diagram of the telephone directory might
-appear:
-
-\beforefig
-\centerline{\includegraphics{figs/dict2.eps}}
-\afterfig
-
-Here the tuples are shown using Python syntax as a graphical
-shorthand.
-
-The telephone number in the diagram is the complaints line for the
-BBC, so please don't call it.
-
-
+\begin{ex}
+Most of these methods have equivalent or similar functions for Arrays. You should look them up in the Array module and play with them, too.
+\end{ex}
 
 \section{Comparing tuples}
 
 \index{comparison!tuple}
 \index{tuple!comparison}
-\index{sort method}
-\index{method!sort}
 
-The relational operators work with tuples and other sequences;
-Python starts by comparing the first element from each
+The relational operators work with tuples;
+OCaml starts by comparing the first element from each
 sequence.  If they are equal, it goes on to the next elements,
 and so on, until it finds elements that differ.  Subsequent
 elements are not considered (even if they are really big).
 
 \beforeverb
 \begin{verbatim}
->>> (0, 1, 2) < (0, 3, 4)
-True
->>> (0, 1, 2000000) < (0, 3, 4)
-True
+# (0, 1, 2) < (0, 3, 4);;
+- : bool = true
+# (0, 1, 2000000) < (0, 3, 4);;
+- : bool = true
 \end{verbatim}
 \afterverb
-%
-The {\tt sort} function works the same way.  It sorts 
-primarily by first element, but in the case of a tie, it sorts
-by second element, and so on.  
-
-This feature lends itself to a pattern called {\bf DSU} for 
-
-\begin{description}
-
-\item[Decorate] a sequence by building a list of tuples
-with one or more sort keys preceding the elements from the sequence,
-
-\item[Sort] the list of tuples, and
-
-\item[Undecorate] by extracting the sorted elements of the sequence.
-
-\end{description}
-
-\label{DSU}
-\index{DSU pattern}
-\index{pattern!DSU}
-\index{decorate-sort-undecorate pattern}
-\index{pattern!decorate-sort-undecorate}
-
-For example, suppose you have a list of words and you want to
-sort them from longest to shortest:
-
-\beforeverb
-\begin{verbatim}
-def sort_by_length(words):
-    t = []
-    for word in words:
-       t.append((len(word), word))
-
-    t.sort(reverse=True)
-
-    res = []
-    for length, word in t:
-        res.append(word)
-    return res
-\end{verbatim}
-\afterverb
-%
-The first loop builds a list of tuples, where each
-tuple is a word preceded by its length.
-
-{\tt sort} compares the first element, length, first, and
-only considers the second element to break ties.  The keyword argument
-{\tt reverse=True} tells {\tt sort} to go in decreasing order.
-
-\index{keyword argument}
-\index{argument!keyword}
-\index{traversal}
-
-The second loop traverses the list of tuples and builds a list of
-words in descending order of length.
-
-\begin{ex}
-In this example, ties are broken by comparing words, so words
-with the same length appear in alphabetical order.  For other
-applications you might want to break ties at random.  Modify
-this example so that words with the same length appear in
-random order.  Hint: see the {\tt random} function in the
-{\tt random} module.
-
-\index{random module}
-\index{module!random}
-\index{random function}
-\index{function!random}
-
-\end{ex}
 
 
-\section{Sequences of sequences}
-\index{sequence}
+\section{Records}
 
-I have focused on lists of tuples, but almost all of the examples in
-this chapter also work with lists of lists, tuples of tuples, and
-tuples of lists.  To avoid enumerating the possible combinations, it
-is sometimes easier to talk about sequences of sequences.
-
-In many contexts, the different kinds of sequences (strings, lists and
-tuples) can be used interchangeably.  So how and why do you choose one
-over the others?
-
-\index{string}
-\index{list}
-\index{tuple}
-\index{mutability}
-\index{immutability}
-
-To start with the obvious, strings are more limited than other
-sequences because the elements have to be characters.  They are
-also immutable.  If you need the ability to change the characters
-in a string (as opposed to creating a new string), you might
-want to use a list of characters instead.
-
-Lists are more common than tuples, mostly because they are mutable.
-But there are a few cases where you might prefer tuples:
-
-\begin{enumerate}
-
-\item In some contexts, like a {\tt return} statement, it is
-syntactically simpler to create a tuple than a list.  In other
-contexts, you might prefer a list.
-
-\item If you want to use a sequence as a dictionary key, you
-have to use an immutable type like a tuple or string.
-
-\item If you are passing a sequence as an argument to a function,
-using tuples reduces the potential for unexpected behavior
-due to aliasing.
-
-\end{enumerate}
-
-Because tuples are immutable, they don't provide methods
-like {\tt sort} and {\tt reverse}, which modify existing lists.
-But Python provides the built-in functions {\tt sorted}
-and {\tt reversed}, which take any sequence as a parameter
-and return a new list with the same elements in a different
-order.
-
-\index{sorted function}
-\index{function!sorted}
-\index{reversed function}
-\index{function!reversed}
-
+%lead write here
 
 \section{Debugging}
 
