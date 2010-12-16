@@ -5593,10 +5593,20 @@ interlock to form ``schooled.''
 
 Regular expressions exist in a lot of programming languages, and OCaml is no exception. {\bf Regular expressions}, often abbreviated as {\bf regex},\footnote{Also sometimes abbreviated as ``regexp,'' but I'm not sure how to pronounce that, so I generally prefer ``regex.''} are a powerful way of processing text, used for anything from find and replace to punctuation stripping to removing duplicate words.
 
-\section{File I/O}input_char chan_in;;
-- : char = 'H'
+\section{File I/O}
 
-First, we're going to want a way of reading and writing files for this chapter. Basic file input/output (I/O, sometimes just IO) is pretty simple in OCaml. Let's say you have a plain-text file named {\tt test.txt} in your current directory, which reads, ``Hi! \n This is a test file!'' and you want to read it into OCaml. To do so, you need to open what's called a {\bf channel}. Channels come in two varieties, input, or read, and output, or write. If we want to read {\tt test.txt}, we want an input channel:
+%input_char chan_in;;
+%- : char = 'H'
+
+First, we're going to want a way of reading and writing files for this
+chapter. Basic file input/output (I/O, sometimes just IO) is pretty
+simple in OCaml. Let's say you have a plain-text file named {\tt
+  test.txt} in your current directory, which reads, ``Hi! \\n This is a
+test file!'' and you want to read it into OCaml. To do so, you need to
+open what's called a {\bf channel}. Channels come in two varieties,
+input, or read, and output, or write. If we want to read {\tt
+  test.txt}, we want an input channel:
+
 \beforeverb
 \begin{verbatim}
 let chan_in = open_in "test.txt";;
@@ -5622,7 +5632,13 @@ Exception: End_of_file.
 \end{verbatim}
 \afterverb
 
-As useful as it is to read a file a character or a line at a time, sometimes we might want to move to a specific position within a file to be able to read it there. In particular, we might want to move back to the beginning of a file. {\tt pos_in} returns the current position within a file, with the start of the file being position zero, of course. {\tt seek_in} goes to a given location.
+As useful as it is to read a file a character or a line at a time,
+sometimes we might want to move to a specific position within a file
+to be able to read it there. In particular, we might want to move back
+to the beginning of a file. \verb"pos_in" returns the current position
+within a file, with the start of the file being position zero, of
+course. \verb"seek_in" goes to a given location.
+
 \beforeverb
 \begin{verbatim}
 # pos_in chan_in;;
@@ -5635,7 +5651,7 @@ As useful as it is to read a file a character or a line at a time, sometimes we 
 - : string = "Hi!"
 \end{verbatim}
 \afterverb
-We can determine the length of the channel using {\tt in_channel_length}:
+We can determine the length of the channel using \verb"in_channel_length":
 \beforeverb
 \begin{verbatim}
 in_channel_length chan_in;;
@@ -5644,14 +5660,24 @@ in_channel_length chan_in;;
 \afterverb
 
 We may also want to write to a file. For that, we want to create an output file:
+
 \beforeverb
 \begin{verbatim}
 # let chan_out = open_out "test2.txt";;
 val out_chan : out_channel <abstr>
 \end{verbatim}
 \afterverb
-If the file you specify does not exist, it is created, and if it does, it is truncated.\footnote{There are ways to open files in other modes, like append. For more information, look up {\tt open_out_gen} in the Pervasives module in the OCaml documentation.} We can write to the channel using {\tt output_char} and {\tt output_string}:
-\beforeverb
+
+If the file you specify does not exist, it is created, and if it does,
+it is truncated.\footnote{There are ways to open files in other modes,
+  like append. 
+
+For more information, look up {\tt open\_out\_gen} in the
+  Pervasives module in the OCaml documentation.}
+
+We can write to the
+channel using \verb"output_char" and \verb"output_string": \beforeverb
+
 \begin{verbatim}
 # output_char chan_out 'a';;
 - : unit = ()
@@ -5679,7 +5705,7 @@ As you may have already noticed, nothing has actually happened to the file yet. 
 - : unit = ()
 \end{verbatim}
 \afterverb
-You can now view the file. Note that it reads ``abcfg'': when we went back in the file and wrote more, it overwrote, it didn't insert. You can also close input files with {\tt close_in}.
+You can now view the file. Note that it reads ``abcfg'': when we went back in the file and wrote more, it overwrote, it didn't insert. You can also close input files with \verb"close_in".
 
 There's also a built-in output channel: the screen. It is named {\tt stdout}, and you can write to it just like any other output channel.
 \beforeverb
@@ -5701,7 +5727,7 @@ However, {\tt Str} is not a standard module, in the way that {\tt List} and {\tt
 \end{verbatim}
 \afterverb
 
-We can now use functions and types defined within the module just as we would normally expect. Note that this is different than if we had called {\tt #use}. We still call it's functions by calling {\tt Str.function}. We can now {\tt #use} it if we so desire.
+We can now use functions and types defined within the module just as we would normally expect. Note that this is different than if we had called {\tt \#use}. We still call it's functions by calling {\tt Str.function}. We can now {\tt \#use} it if we so desire.
 
 \section{Regular Expressions}
 
@@ -5915,8 +5941,8 @@ later, but the jist is that we have many ways to refer to the same object, and w
 must be careful about changing that object from one way and affecting another unexpectedly.
 
 You can also convert arrays to lists and vice versa using 
-the {\tt \verb"Array.to_list"} and {\tt 
-\verb"Array.of_list"} functions.
+the \verb"Array.to_list" and
+\verb"Array.of_list" functions.
 
 \section{Array Operations}
 
@@ -6286,7 +6312,8 @@ let histogram s =
 	in
 	List.iter addfunct wordlist;
 	hist
-;;\end{verbatim}
+;;
+\end{verbatim}
 \afterverb
 %
 This function takes a string, splits it into words, and then creates a 
@@ -6971,7 +6998,7 @@ Or use tuple assignment to store the elements separately:
 val q : int = 2
 val r : int = 1
 \end{verbatim}
-\afterverb
+`\afterverb
 
 \section{Lists and tuples}
 
@@ -7226,9 +7253,9 @@ let pt = PTree ("Root", PTree ("Node", PLeaf "Leaf", PLeaf "Leaf"), PLeaf "Leaf"
 
 Of course, in this example, all the data must be of the same type.
 
-\begin{exercise}
+\begin{ex}
 Rewrite the polymorphic tree example above such that it can store data of two different types. Note that different polymorphic types are written as {\tt 'a}, {\tt 'b}, and so on. 
-\end{exercise}
+\end{ex}
 
 
 \section{Debugging}
@@ -7424,7 +7451,7 @@ Object-oriented programming with objects would be just oriented programming, and
 
 Go to \url{inserturlhere} and download {\tt oturtle.zip}. Unzip the files using your favorite archive software.\footnote{I recommend 7zip for Windows.}
 
-Now, open the interpreter in the same directory and type {\tt #use "oturtle.ml"}. You can now call functions defined within the Oturtle module. You'll better understand  what's going on here later. Note that this loads the very useful {\tt Graphics} module as well. You should briefly check out this module online.
+Now, open the interpreter in the same directory and type {\tt \#use "oturtle.ml"}. You can now call functions defined within the Oturtle module. You'll better understand  what's going on here later. Note that this loads the very useful {\tt Graphics} module as well. You should briefly check out this module online.
 %note to self: get oturtle working as standard module.
 
 What Oturtle does is facilitates a particular method of drawing. Namely, we have turtles, which can draw along their path.\footnote{The reason it's a turtle is of course whimsical.} We can control the turtle by telling it to move, and draw as it goes along (we can also tell it to move {\it without} drawing).
@@ -7509,9 +7536,9 @@ In general, OCaml doesn't provide a way to acces values of an object. Methods, a
 
 These functions don't change values (though a method can both change and return a value), but they do read and return values.
 
-\begin{exercises}
+\begin{ex}
 %write here
-\end{exercises}
+\end{ex}
 
 \section{Defining Modules and Classes}
 
@@ -7537,7 +7564,15 @@ let bob = new Oturtle.turtle 0 0;;
 \afterverb
 which will create {\tt bob} in the bottom-left corner of the screen.
 
-Within class definitions, all our values and methods are contained within the {\tt object... end} construction. The {\tt (self)} lets us call the object within it's definition, just like we would call it outside of the class definition. For example, consider the definition of {\tt step}, which calls {\tt self#advance}. In general, we could call it anything, not just {\tt self}, but ``self'' is very common, and it's not generally good form to call it something else unless it really makes sense to do so.
+Within class definitions, all our values and methods are contained
+within the {\tt object... end} construction. The {\tt (self)} lets us
+call the object within it's definition, just like we would call it
+outside of the class definition. For example, consider the definition
+of {\tt step}, which calls {\tt self\#advance}. In general, we could
+call it anything, not just {\tt self}, but ``self'' is very common,
+and it's not generally good form to call it something else unless it
+really makes sense to do so.
+
 \section{The {\tt Str} module}
 
 There's one more module you might want to be familiar with, that's quite common in OCaml coding. It's the {\tt Str} module, and it allows for a lot of functionality that object-oriented programmers would expect to deal with strings.
