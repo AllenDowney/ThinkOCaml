@@ -5589,6 +5589,130 @@ interlock to form ``schooled.''
 \end{enumerate}
 \end{ex}
 
+\chapter{Case Study: Regular Expressions}
+
+Regular expressions exist in a lot of programming languages, and OCaml is no exception. {\bf Regular expressions}, often abbreviated as {\bf regex},\footnote{Also sometimes abbreviated as ``regexp,'' but I'm not sure how to pronounce that, so I generally prefer ``regex.''} are a powerful way of processing text, used for anything from find and replace to punctuation stripping to removing duplicate words.
+
+\section{File I/O}input_char chan_in;;
+- : char = 'H'
+
+First, we're going to want a way of reading and writing files for this chapter. Basic file input/output (I/O, sometimes just IO) is pretty simple in OCaml. Let's say you have a plain-text file named {\tt test.txt} in your current directory, which reads, ``Hi! \n This is a test file!'' and you want to read it into OCaml. To do so, you need to open what's called a {\bf channel}. Channels come in two varieties, input, or read, and output, or write. If we want to read {\tt test.txt}, we want an input channel:
+\beforeverb
+\begin{verbatim}
+let chan_in = open_in "test.txt";;
+val chan_in = in_channel <abstr>
+\end{verbatim}
+\afterverb
+
+We can now read in the text of that file. There are two primary read functions, one to read a character at a time, and another to read an entire line at a time. There 
+\beforeverb
+\begin{verbatim}
+# input_char chan_in;;
+- : char = 'H'
+# input_char chan_in;;
+- : char = 'i'
+# input_char chan_in;;
+- : char = '!'
+# input_char chan_in;;
+- : char = '\n'
+# input_line chan_in;;
+- : string = "This is a test file!"
+# input_char chan_in;;
+Exception: End_of_file.
+\end{verbatim}
+\afterverb
+
+As useful as it is to read a file a character or a line at a time, sometimes we might want to move to a specific position within a file to be able to read it there. In particular, we might want to move back to the beginning of a file. {\tt pos_in} returns the current position within a file, with the start of the file being position zero, of course. {\tt seek_in} goes to a given location.
+\beforeverb
+\begin{verbatim}
+# pos_in chan_in;;
+- : int = 25;;
+# seek_in chan_in 0;;
+- : unit = ()
+# pos_in chan_in;;
+- : int = 0
+# input_line chan_in;;
+- : string = "Hi!"
+\end{verbatim}
+\afterverb
+We can determine the length of the channel using {\tt in_channel_length}:
+\beforeverb
+\begin{verbatim}
+in_channel_length chan_in;;
+- : int = 25
+\end{verbatim}
+\afterverb
+
+We may also want to write to a file. For that, we want to create an output file:
+\beforeverb
+\begin{verbatim}
+# let chan_out = open_out "test2.txt";;
+val out_chan : out_channel <abstr>
+\end{verbatim}
+\afterverb
+If the file you specify does not exist, it is created, and if it does, it is truncated.\footnote{There are ways to open files in other modes, like append. For more information, look up {\tt open_out_gen} in the Pervasives module in the OCaml documentation.} We can write to the channel using {\tt output_char} and {\tt output_string}:
+\beforeverb
+\begin{verbatim}
+# output_char chan_out 'a';;
+- : unit = ()
+# output_string chan_out "bcde";;
+- : unit = ()
+\end{verbatim}
+\afterverb
+
+We can move position in an output channel, just like in input channels:
+\beforeverb
+\begin{verbatim}
+# pos_out chan_out;;
+- : int = 5
+# seek_out chan_out;;
+- : unit = ()
+# output_string "fg";;
+- : unit = ()
+\end{verbatim}
+\afterverb
+
+As you may have already noticed, nothing has actually happened to the file yet. Nothing will, until you close the file:
+\beforeverb
+\begin{verbatim}
+# close_out chan_out;;
+- : unit = ()
+\end{verbatim}
+\afterverb
+You can now view the file. Note that it reads ``abcfg'': when we went back in the file and wrote more, it overwrote, it didn't insert. You can also close input files with {\tt close_in}.
+
+There's also a built-in output channel: the screen. It is named {\tt stdout}, and you can write to it just like any other output channel.
+\beforeverb
+\begin{verbatim}
+output_string stdout "Hello, world!\n"
+Hello, world!
+- : unit = ()
+\end{verbatim}
+\afterverb
+
+\section{The {\tt Str} module}
+
+The {\tt Str} module is a very common module in OCaml coding, and it allows for a lot of functionality that experienced programmers would expect to deal with strings.
+
+However, {\tt Str} is not a standard module, in the way that {\tt List} and {\tt String} are. In order to use it, we must first load it:
+\beforeverb
+\begin{verbatim}
+# #load "str.cma";;
+\end{verbatim}
+\afterverb
+
+We can now use functions and types defined within the module just as we would normally expect. Note that this is different than if we had called {\tt #use}. We still call it's functions by calling {\tt Str.function}. We can now {\tt #use} it if we so desire.
+
+\section{Regular Expressions}
+
+A regular expression is, at its simplest, a sequence of symbols with particular meanings that are used to {\em match} certain strings or substrings. This will make much more sense with examples. The point however, is that we can match certain strings within a document, which we can use to find information, or check that input is of a certain form, et cetera.
+
+Perhaps the simplest regular expression is just a string. The regular expression ``{\tt a}'' will match any string or substring of exactly the form ``a''. This might be useful if we were looking for all the uses of the word ``a'' within a document, though we must be careful because it will also match any time the letter ``a'' appears {\it within} a word. This is, perhaps, not a compelling example; it would not be particularly difficult to find all instances of the word ``a'' without using a regular expression, especially considering all the built-in search functionality of most any text editor these days. However, regular expressions can get much more advanced.
+
+
+
+%lead1 write here
+
 \chapter{Putting the O in OCaml, Part 1: Imperative programming}
 
 Thus far, everything we've learned has been (relatively) completely functional.
@@ -6165,12 +6289,10 @@ let histogram s =
 ;;\end{verbatim}
 \afterverb
 %
-Note that I use the {\tt Str} module for a couple of its useful functions.
-Nevermind what it is - for now, just trust that the fist line within this 
-function takes a string and splits it into a list of words. You could write 
-your own code to do this, but that'd just be silly. The name of the 
-function is {\bf histogram}, which is a statistical term for a set of 
-counters (or frequencies).
+This function takes a string, splits it into words, and then creates a 
+hashtable with the words as keys and the number of times that word 
+appeared as values. The name of the function is {\bf histogram}, which 
+is a statistical term for a set of counters (or frequencies).
 
 \index{histogram}
 \index{frequency}
@@ -6715,10 +6837,10 @@ Write a program that lists all the words that solve the Puzzler.
 
 
 
-\chapter{Tuples and Records}
+\chapter{Tuples}
 \label{tuplechap}
 
-\section{Tuples are immutable}
+
 
 \index{tuple}
 \index{type!tuple}
@@ -6726,8 +6848,7 @@ Write a program that lists all the words that solve the Puzzler.
 
 A tuple is an immutable sequence of values, not unlike lists. The important difference is that tuples can contain objects of any type.
 
-\index{mutability}
-\index{immutability}
+\section{Creating and Using Tuples}
 
 Syntactically, a tuple is a comma-separated list of values:
 
@@ -6933,99 +7054,197 @@ elements are not considered (even if they are really big).
 \end{verbatim}
 \afterverb
 
+\section{Debugging}
 
-\section{Records}
+\section{Glossary}
 
-%lead write here
+\chapter{Records and Custom Data Structures}
+
+Records are very similar to tuples in that they're ordered sets of information of any type. Records, however, are labelled - each piece of information gets a title. They are also custom-defined types: you have to tell OCaml ahead of time what the record is going to look like. You do this by using the {\tt type} keyword:
+
+\beforeverb
+\begin{verbatim}
+# type identity = {
+  firstName: string;
+  lastName: string; 
+  sex: char; 
+  age: int
+};;
+type identity = {
+  firstName : string;
+  lastName : string;
+  sex : char;
+  age : int;
+}
+\end{verbatim}
+\afterverb
+
+We can now create a record of the type {\tt identity} like so:
+
+\beforeverb
+\begin{verbatim}
+let nmonje = {firstName = "Nicholas"; lastName = "Monje"; sex = 'm'; age = 21}
+\end{verbatim}
+\afterverb
+\section{Tuples}
+
+We can access elements of a record using dot syntax:
+
+\beforeverb
+\begin{verbatim}
+# nmonje.age;;
+- : int = 21
+\end{verbatim}
+\afterverb
+
+Record comparison works the same way as tuple comparison - it compares 
+elements in order and returns a value based on the first different element:
+
+\beforeverb
+\begin{verbatim}
+type pair = {x: int; y: int};;
+let a = {x = 1; y = 2};;
+let b = {x = 2; y = 2};;
+let c = {x = 1; y = 3};;
+let d = {x = 1; y = 2};;
+# a<b
+- : bool = true
+# a<c
+- : bool = true
+# b<c
+- : bool = false
+# a = d
+- : bool = true
+# a == d
+- : bool = false
+\end{verbatim}
+\afterverb
+
+Wait, what? {\tt a} and {\tt d} are ``{\tt =}'' but not ``{\tt ==}''? What does that mean?
+
+The single equals sign tests for what's called {\bf structural} or {\bf deep equality}, or tests to see if two objects' contents are the same. The double equals sign tests for {\bf physical} or {\bf shallow equality}, or whether or not two objects reference the same thing. In most of what we've seen so far, the two are equivalent. If they simply point to integers, then the two equalities effectively mean the same thing. However, now that we're looking at more ``object-y'' objects, there can be a subtle difference. For example, two references are not necessarily shallowly equivalent:
+
+\beforeverb
+\begin{verbatim}
+# let x = ref 10;;
+# let y = ref 10;;
+# x = y;;
+- : bool = true
+# x == y;;
+- : bool = false
+\end{verbatim}
+\afterverb
+
+{\tt x} and {\tt y} have the same value, but they point to two different spots in the computer's memory, so they are not shallowly equivalent. It's perhaps a little bit weird that two things are deeply equivalent but not shallowly equivalent, but just think of it like people: we're different on the outside, but deep down we're all the same. Or something like that.
+
+\section{Enumerated Types}
+
+The {\tt type} keyword isn't just for records. It can be used to define many different kinds of types. One important custom type is called an {\bf enumerated type}, which has a discrete, finite set of values:
+
+\beforeverb
+\begin{verbatim}
+# type enum = A | B | C';
+type enum = A | B | C
+# let a = A;;
+val a : enum = A
+# let d = D;;
+Error: Unbound constructor D
+\end{verbatim}
+\afterverb
+
+The newly-defined {\tt enum} type has three possible values - A, B, or C. This example isn't particularly interesting, but there isn't a whole lot built-in around enumerated types - or any enumerated type, really. They're entirely custom-defined, and you must write code to interact with them.
+
+There is implicit comparison, though, determined by the order in which you defined the type:
+
+\beforeverb
+\begin{verbatim}
+# A < B;;
+- : bool = true
+# C > B;;
+- : bool = true
+# A > C;;
+- : bool = false
+\end{verbatim}
+\afterverb
+
+\section{Aggregate types}
+
+Next, you can define your own {\bf aggregate types}, which are types that are composed of basic types:
+
+\beforeverb
+\begin{verbatim}
+# type agg = Agg of int * string;;
+# let a = Agg (1, "hi");;
+val a : agg = Agg (1, "hi")
+\end{verbatim}
+\afterverb
+
+Aggregate types can be enumerated, and can be recursive. Here's a basic definition of a tree of integers:
+
+\beforeverb
+\begin{verbatim}
+type tree = Tree of int * tree | Leaf of int
+\end{verbatim}
+\afterverb
+
+which would allow us to define the following tree:
+
+\beforeverb
+\begin{verbatim}
+let t = Tree (3, Tree( 2, Leaf 1));;
+\end{verbatim}
+\afterverb
+
+This tree is, of course, not very interesting because it can't branch. We can quite easily create a binary tree:
+
+\beforeverb
+\begin{verbatim}
+type bitree = Tree of int * tree * tree | Leaf of int | Null;;
+\end{verbatim}
+\afterverb
+
+The Null allows us to make this tree not full - if we don't want to branch in both directions, we could make one direction be Null. We could furhter expand this definition to any determined finite size tree. However, if we want to leave the number of nodes ambiguous, we could use a list of trees:
+
+\beforeverb
+\begin{verbatim}
+type mtree = Tree of int * mtree list | Leaf of int | Null;;
+let mt = Tree (3, [Tree (2, [Null]); Tree (2, [Tree (1, [Leaf 1])])]);;
+\end{verbatim}
+\afterverb
+
+Which of course is kind of nasty because {\it every} node must be a list, even if it contains only one element, which you could easily get around by including another enumeration for {\tt Tree of int* mtree}. Even then, this is where parentheses matching can get very important. You might want to consider finding a development environment that will help you with that.
+
+Of course, all these enumerated types only work on integers. We can also define our tree to be polymorphic. I'm going to stick to a binary tree for this example:
+
+\beforeverb
+\begin{verbatim}
+type 'a ptree = PTree of 'a * 'a ptree * 'a ptree | PLeaf of 'a | PNull;;
+
+let pt = PTree ("Root", PTree ("Node", PLeaf "Leaf", PLeaf "Leaf"), PLeaf "Leaf");;
+\end{verbatim}
+\afterverb
+
+Of course, in this example, all the data must be of the same type.
+
+\begin{exercise}
+Rewrite the polymorphic tree example above such that it can store data of two different types. Note that different polymorphic types are written as {\tt 'a}, {\tt 'b}, and so on. 
+\end{exercise}
+
 
 \section{Debugging}
 
 \index{debugging}
-\index{data structure}
-\index{shape error}
-\index{error!shape}
 
-Lists, dictionaries and tuples are known generically as {\bf data
-  structures}; in this chapter we are starting to see compound data
-structures, like lists of tuples, and dictionaries that contain tuples
-as keys and lists as values.  Compound data structures are useful, but
-they are prone to what I call {\bf shape errors}; that is, errors
-caused when a data structure has the wrong type, size or composition.
-For example, if you are expecting a list with one integer and I
-give you a plain old integer (not in a list), it won't work.
 
-\index{structshape module}
-\index{module!structshape}
+One thing to be careful of is redefining types. For example:
 
-To help debug these kinds of errors, I have written a module
-called {\tt structshape} that provides a function, also called
-{\tt structshape}, that takes any kind of data structure as
-an argument and returns a string that summarizes its shape.
-You can download it from \url{thinkpython.com/code/structshape.py}
-
-Here's the result for a simple list:
-
-\beforeverb
-\begin{verbatim}
->>> from structshape import structshape
->>> t = [1,2,3]
->>> print structshape(t)
-list of 3 int
-\end{verbatim}
-\afterverb
-%
-A fancier program might write ``list of 3 int{\em s},'' but it
-was easier not to deal with plurals.  Here's a list of lists:
-
-\beforeverb
-\begin{verbatim}
->>> t2 = [[1,2], [3,4], [5,6]]
->>> print structshape(t2)
-list of 3 list of 2 int
-\end{verbatim}
-\afterverb
-%
-If the elements of the list are not the same type,
-{\tt structshape} groups them, in order, by type:
-
-\beforeverb
-\begin{verbatim}
->>> t3 = [1, 2, 3, 4.0, '5', '6', [7], [8], 9]
->>> print structshape(t3)
-list of (3 int, float, 2 str, 2 list of int, int)
-\end{verbatim}
-\afterverb
-%
-Here's a list of tuples:
-
-\beforeverb
-\begin{verbatim}
->>> s = 'abc'
->>> lt = zip(t, s)
->>> print structshape(lt)
-list of 3 tuple of (int, str)
-\end{verbatim}
-\afterverb
-%
-And here's a dictionary with 3 items that map integers to strings.
-
-\beforeverb
-\begin{verbatim}
->>> d = dict(lt) 
->>> print structshape(d)
-dict of 3 int->str
-\end{verbatim}
-\afterverb
-%
-If you are having trouble keeping track of your data structures,
-{\tt structshape} can help.
-
+%write here
 
 \section{Glossary}
 
 \begin{description}
 
-\item[tuple:] An immutable sequence of elements.
+\item[tuple:] An immutable sequence of elements which may be of different types.
 \index{tuple}
 
 \item[tuple assignment:] An assignment with a sequence on the
@@ -7060,7 +7279,7 @@ size and composition of a data structure.
 
 
 \section{Exercises}
-
+%write here
 \begin{ex}
 Write a function called \verb"most_frequent" that takes a string and
 prints the letters in decreasing order of frequency.  Find text
@@ -7197,13 +7416,148 @@ You can see my solution at \url{thinkpython.com/code/reducible.py}.
 \end{ex}
 
 
+\chapter{Putting the O in Ocaml Part 2: Objects and Classes}
 
+In general, OCaml programming (and programmers) prefer function-oriented programming, and you generally can - and should - use primarily functional solutions to programming. However, object-oriented programming can be very useful in certain situations.
 
-%\begin{ex}
-%\url{wikipedia.org/wiki/Word_Ladder}
-%\end{ex}
+Object-oriented programming with objects would be just oriented programming, and that's not very fun. Objects can take many forms, so the closest thing we can get to a definition is an object is something a variable points to that has a type and value, and possibly methods. What this means will make more sense with an example.
 
+Go to \url{inserturlhere} and download {\tt oturtle.zip}. Unzip the files using your favorite archive software.\footnote{I recommend 7zip for Windows.}
 
+Now, open the interpreter in the same directory and type {\tt #use "oturtle.ml"}. You can now call functions defined within the Oturtle module. You'll better understand  what's going on here later. Note that this loads the very useful {\tt Graphics} module as well. You should briefly check out this module online.
+%note to self: get oturtle working as standard module.
+
+What Oturtle does is facilitates a particular method of drawing. Namely, we have turtles, which can draw along their path.\footnote{The reason it's a turtle is of course whimsical.} We can control the turtle by telling it to move, and draw as it goes along (we can also tell it to move {\it without} drawing).
+
+\section{Turtles}
+
+Now that we conceptually understand what Oturtle does, open a blank figure with {\tt Oturtle.init ()}.
+
+We can now create a turtle like so:
+
+\beforeverb
+\begin{verbatim}
+# let bob = new Oturtle.turtle;;
+\end{verbatim}
+\afterverb
+
+This is a syntax we haven't seen before. We've created a variable, {\tt bob} which refers to an object, namely a turtle. The keyword {\tt new} tells us to create a new object of the specified type (without it, bob would point to the type, or {\bf class} itself). The new turtle is of a random color and exists
+
+Now, let's see what Bob looks like. In order to draw Bob, we can call the {\tt draw} {\bf method}. A method is a like a function, but it is written into the definition of an object and it is kind of like the object is doing something. The syntax is quite unlike what we've seen before:
+
+\beforeverb
+\begin{verbatim}
+# bob#draw;;
+\end{verbatim}
+\afterverb
+
+And Bob shows up in the middle of the canvas! Isn't he cute? Note that this method does not take an argument - not even the unit argument, like all functions we've seen. A method {\it can} take an argument, and we'll see that in a second, but it's not necessary. There is currently no method of erasing bob, so he'll always show up right there, even after we've moved him someplace else. This functionality will hopefully be implemented in a later version.
+%note to self: implement this
+
+Now, that's adorable, but Bob wouldn't be a very good turtle if he couldn't move. Perhaps unsurprisingly, telling Bob to move is also a method. In fact, there are two methods: {\tt step}, which moves a single pixel, and {\tt advance}, which takes an integer argument and moves Bob that many pixels.
+
+\beforeverb
+\begin{verbatim}
+# bob#step;;
+# bob#draw;;
+# bob#advance 100;;
+# bob#draw;;
+\end{verbatim}
+\afterverb
+
+You'll notice that a pixel isn't very far - he barely looks like he's moved at all!
+
+You can also tell Bob to turn:
+
+\beforeverb
+\begin{verbatim}
+# bob#turn 90;;
+# bob#advance 30;;
+# bob#draw;;
+\end{verbatim}
+\afterverb
+
+{\tt turn} also takes an integer argument and rotates Bob that many degrees. If you're not familiar with degrees of a circle, you should read about them on wikipedia.
+
+We can tell Bob to start drawing by lowering his pen, or stop drawing by telling him to raise his pen:
+
+\beforeverb
+\begin{verbatim}
+bob#lower_pen;;
+bob#advance 100;;
+bob#draw;;
+bob#raise_pen;;
+bob#advance 30;;
+bob#draw;;
+\end{verbatim}
+\afterverb
+
+When the pen is lowered, the turtle draws a line along his path. When the pen is raised, it doesn't.
+
+Besides, methods, objects also have values. Values preserve the state of the object - without values, an object doesn't contain any information. Values can be either mutable or immutable, depending on whether you set them to be or not (values are by default immuatble. A turtle, for example, has mutable values x and y coordinates {\tt x} and {\tt y}, direction {\tt theta}, all integers as well as a an immutable color {\tt color}, which is a special type {\tt Graphics.color}, as well as pen status {\tt pen}, which is a custom enumerated type with values {\tt Raised} and {\tt Lowered}.
+
+In general, OCaml doesn't provide a way to acces values of an object. Methods, as we have already seen, can change the values of mutable values - {\tt advance}, {\tt step}, and {\tt turn} all change Bob's values. There are also often methods which return values:
+
+\beforeverb
+\begin{verbatim}
+# bob#get_pos;;
+- : int * int = (400, 254)
+# bob#get_dir;;
+- : int = 90
+\end{verbatim}
+\afterverb
+
+These functions don't change values (though a method can both change and return a value), but they do read and return values.
+
+\begin{exercises}
+%write here
+\end{exercises}
+
+\section{Defining Modules and Classes}
+
+Now, let's lift the hood on this code a little bit. Open {\tt oturtle.ml} in your favorite text editor. You'll notice quite a few constructions we haven't seen before. First, note how we define a module. The syntax {\tt module Oturtle = } is much like a let binding, but for modules. The functions and types defined by the class are enclosed within the {\tt struct... end} construction. You can include values within a module as well.
+
+Defining a class operates in much the same way. The {\tt class turtle =} is just like a let-binding except for classes.\footnote{Note that classes do not have to be defined within modules.} We can also have the turtle take arguments to initialize it. Consider the following alternative definition of a turtle:
+
+\beforeverb
+\begin{verbatim}
+class turtle xi yi = object (self)
+  val mutable x = xi
+  val mutable y = yi
+  ...
+end
+\end{verbatim}
+\afterverb
+
+Now, to create the object, we would call:
+\beforeverb
+\begin{verbatim}
+let bob = new Oturtle.turtle 0 0;;
+\end{verbatim}
+\afterverb
+which will create {\tt bob} in the bottom-left corner of the screen.
+
+Within class definitions, all our values and methods are contained within the {\tt object... end} construction. The {\tt (self)} lets us call the object within it's definition, just like we would call it outside of the class definition. For example, consider the definition of {\tt step}, which calls {\tt self#advance}. In general, we could call it anything, not just {\tt self}, but ``self'' is very common, and it's not generally good form to call it something else unless it really makes sense to do so.
+\section{The {\tt Str} module}
+
+There's one more module you might want to be familiar with, that's quite common in OCaml coding. It's the {\tt Str} module, and it allows for a lot of functionality that object-oriented programmers would expect to deal with strings.
+To define methods or values, we use the {\tt method} or {\tt val} keywords, again, just like let-bindings except for methods and values.
+
+Note that, within both method and class definitions, we do not use semicolons to denot the end of a definition; methods and classes are all defined within a single ``line'' of code.
+
+\section{Debugging}
+
+Because class definitions do not use semicolons to denote the end of lines, figuring out how to define methods that are more than very simple statements can get a little complicated. In general, you can always enclose code in more parentheses to help the compiler figure it out, especially in {\tt if} or {\tt match} clauses.
+
+While it's generally nasty to include more than necessary, using the absolute minimum isn't necessarily recommended either. You want to use exactly the number necessary to make the code clear to both reader and compiler. Sometimes you do have to give up a little readability so that it will compile, but that's often a sign that your code is messy to begin with.
+
+\section{Glossary}
+
+Words
+
+\section{Exercises}
+
+Exercises
 
 
 \chapter{Case study: data structure selection}
@@ -7222,29 +7576,7 @@ converts them to lowercase.
 \index{string module}
 \index{module!string}
 
-Hint: The {\tt string} module provides strings named {\tt whitespace},
-which contains space, tab, newline, etc., and {\tt
-  punctuation} which contains the punctuation characters.  Let's see
-if we can make Python swear:
-
-\beforeverb
-\begin{verbatim}
->>> import string
->>> print string.punctuation
-!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
-\end{verbatim}
-\afterverb
-%
-Also, you might consider using the string methods {\tt strip},
-{\tt replace} and {\tt translate}.
-
-\index{strip method}
-\index{method!strip}
-\index{replace method}
-\index{method!replace}
-\index{translate method}
-\index{method!translate}
-
+Hint: The {\tt Str} module will probably proove useful here.
 \end{ex}
 
 
@@ -7295,6 +7627,7 @@ many of them are really obscure?
 \index{number, random}
 \index{deterministic}
 \index{pseudorandom}
+%lead2 write here
 
 Given the same inputs, most computer programs generate the same
 outputs every time, so they are said to be {\bf deterministic}.
