@@ -5591,7 +5591,7 @@ interlock to form ``schooled.''
 
 \chapter{Case Study: Regular Expressions}
 
-Regular expressions exist in a lot of programming languages, and OCaml is no exception. {\bf Regular expressions}, often abbreviated as {\bf regex},\footnote{Also sometimes abbreviated as ``regexp,'' but I'm not sure how to pronounce that, so I generally prefer ``regex.''} are a powerful way of processing text, used for anything from find and replace to punctuation stripping to removing duplicate words.
+Regular expressions exist in a lot of programming languages, and OCaml is no exception. {\bf Regular expressions}, often abbreviated as {\bf regex} or {\bf regexp}, are a powerful way of processing text, used for anything from find and replace to punctuation stripping to removing duplicate words.
 
 \section{File I/O}
 
@@ -5733,9 +5733,64 @@ We can now use functions and types defined within the module just as we would no
 
 A regular expression is, at its simplest, a sequence of symbols with particular meanings that are used to {\em match} certain strings or substrings. This will make much more sense with examples. The point however, is that we can match certain strings within a document, which we can use to find information, or check that input is of a certain form, et cetera.
 
-Perhaps the simplest regular expression is just a string. The regular expression ``{\tt a}'' will match any string or substring of exactly the form ``a''. This might be useful if we were looking for all the uses of the word ``a'' within a document, though we must be careful because it will also match any time the letter ``a'' appears {\it within} a word. This is, perhaps, not a compelling example; it would not be particularly difficult to find all instances of the word ``a'' without using a regular expression, especially considering all the built-in search functionality of most any text editor these days. However, regular expressions can get much more advanced.
+Perhaps the simplest regular expression is just a string. The regular expression ``{\tt a}'' will match any string or substring of exactly the form ``a''. This might be useful if we were looking for all the uses of the word ``a'' within a document, though we must be careful because it will also match any time the letter ``a'' appears {\it within} a word. It also won't generally match ``A,'' which we probably do want to match. This is, perhaps, not a compelling example; it would not be particularly difficult to find all instances of the word ``a'' without using a regular expression, especially considering all the built-in search functionality of most any text editor these days.
 
+Fortunately, regular expressions allow us to do much cooler things. For example, we can detect the ends of words using the special ``\b'' character. If we want to find words that end in ``ly'', for example, which might make a simple method of finding most, but not all, adverbs, we can use the regular expression ``ly\b.''
 
+Lots of useful functionality in regular expressions comes from some of its operators. Most of the notable regular expression operators are {\tt postfix} operators, meaning they operate on the character before them. For example, the ``*'' token matches the preceding expression any number of times, including zero. For example, the regular expression ``pbb*t'' would match any of ``pbt,'' ``pbbt,'' or ``pbbbbbbt.'' But that's just rude. You can also group expressions using ``\\(... \\)'', and then a postfix operator after the grouping will be applied to the entire grouping, i.e., ``\\(aa\\)*'' will match any sequence with an even number of a's.
+
+There are also character classes, which match a single character out of a set of characters, denoted by square brackets. If we want to match a single digit of a number, we can use the regular expression ``[0123456789],'' or ``[0-9]'' for short. You can also negate a character set by making the first character ``\^'', which will make the character class match any single character {\em not} listed. ``[^0-9]'', for example, will match any character that is not a numeral.
+
+Some systems of regular expressions get more complicated than this,\footnote{Technically speaking, anything that is still technically regular can be built out of these tokens, but some systems of ``regular'' expressions include some useful functionality that is not, strictly speaking regular.} but this pretty much wraps it up for regular expressions in OCaml. The syntax of regular expressions in OCaml is summed up in Table \ref{tab:regex}. They are also summarized in the ocaml Str module documentation.
+
+\begin{tabular}{l | l}
+\hline
+Token & Description & Example \\ \hline
+{\tt \b} & Matches a word boundary. & {\tt a\b} matches the second a in ``aa'' but not the first. \\ \hline
+{\tt .} & Matches any character except newline & {\tt .*} will match any line of a string \\ \hline
+{\tt \^} & Matches the beginning of a line or string \\ {\tt \^a} will match the first a in ``aa'' but not the second.\hline
+{\tt \$} & Matches the end of a line or string. \\ {\tt a\$} will match the second a in ``aa'' but not the first. \hline
+{\tt *} & Postfix Operator. Repeats the preceding character, zero, one, or any number of times. & {\tt a*} matches ``'', ``a'', or ``aaaaa.''\\ \hline
+{\tt +} & Postfix Operator. Repeats the preceding character one or more times. & {\tt a+} matches ``a,'' or ``aaaaa.''\\ \hline
+{\tt ?} & Postfix Operator. Repeats the preceding character zero or one times. & {\tt a?} matches ``'' or ``a''.\\ \hline
+{\tt \\|} & Infix operator. Matches either the expression before the bar or the expression after the bar, but not both at once. This is distinct from character classes in that it can operate on larger grouped expressions. \\ {\tt the\\|a} matches ``a'' or ``the''. \hline
+{\tt [...]} & Defines a character class. It matches exactly one character, of any within the class. You can define a range using ``-''. To include a ``]'', make it the first character within the class. To include a ``-'', make it the first or last character of the class. Negate the class using \^. & {\tt [0-9a-zA-Z] matches any single alphanumeric character. \\ \hline
+{\tt \\(...\\) & Groups a subexpression. & {\tt Jer(ry\\|i)} matches both ``Jerry'' and ``Jeri''. \\ \hline
+{\tt \\1} & Matches the text matched by the first subexpression. (\\2 matches the second, and so on up to \\9) & {\tt (the) \\1} matches ``the the''. \\ \hline
+{\tt \\} & Matches a special character, i.e., one of {\tt \$\^.*+?[]}. & {\tt \\\$[0-9]*} matches any even dollar amount. \\ \hline
+\label{tab:regex}
+\end{tabular}
+
+Note that when entering any of the characters with a ``\\'' in an OCaml string, you will have to double the backslash so that it doesn't try to make it into an escape sequence.
+
+\begin{exercises}
+% write here
+\begin{ex}
+Write a regular expression to match
+\end{ex}
+
+\end{exercises}
+
+\section{Compiling and Using Regular Expressions}
+
+In order to use regular expressions in OCaml, you must first compile them. There are two functions to compile regular expressions, {\tt regexp} and {\tt regexp_case_fold}. The difference is only that the latter ignores the difference between capital letters and lower case letters. Otherwise, the look exactly the same, so I'll just use {\tt regexp} for now:
+\beforeverb
+\begin{verbatim}
+# let r = Str.regexp "a+";;
+val r : Str.regexp = <abstr>
+\end{verbatim}
+\afterverb
+
+There's also {\tt quote} and {\tt regexp_string}, both of which take a string and return a regular expression that matches exactly that string, the difference being that {\tt quote} returns it as a string and {\tt regexp_string} returns it as a compiled regular expression:
+\beforeverb
+\begin{verbatim}
+# let q = Str.quote "a+";;
+val q : string = "a\\+"
+# let r2 = Str.regexp_string "a+";;
+val r2 : Str.regexp = <abstr>
+\end{verbatim}
+\afterverb
+Note that this will match ``a+'', not ``aaa''. There's also a {\tt regexp_string_case_fold}, that is {\tt regexp_string} but case-insensitive.
 
 %lead1 write here
 
@@ -6302,7 +6357,7 @@ Here is what the code might look like:
 #load "str.cma";;
 
 let histogram s = 
-	let wordlist = Str.split (Str.regexp "[ \t\n]") s in
+	let wordlist = Str.split (Str.regexp "\\b ") s in
 	let hist = Hashtbl.create 1 in
 	let addfunct e = 
 		if (Hashtbl.mem hist e)
