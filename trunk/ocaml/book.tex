@@ -1,4 +1,4 @@
-% LaTeX source for ``Think OCaml: How to Think Like a (Functional) Computer Scientist''
+% LaTeX source for ``Think OCaml: How to Think Like a (Functional) Programmer''
 % Copyright (c)  2008  Allen B. Downey.
 
 % Permission is granted to copy, distribute and/or modify this
@@ -32,8 +32,8 @@
 \usepackage{hevea}                           
 \usepackage{upquote}
 
-\newcommand{\thetitle}{Think OCaml: How to Think Like a (Functional) Computer Scientist}
-\newcommand{\theversion}{0.1.0}
+\newcommand{\thetitle}{Think OCaml: How to Think Like a (Functional) Programmer}
+\newcommand{\theversion}{0.1.1}
 
 \makeindex
 
@@ -64,7 +64,7 @@
 
 \begin{spacing}{3}
 {\huge Think OCaml}\\
-{\Large How to Think Like a (Functional) Computer Scientist}
+{\Large How to Think Like a (Functional) Programmer}
 \end{spacing}
 
 \vspace{0.25in}
@@ -144,8 +144,7 @@ a Computer Scientist}.
 a Computer Scientist}.
 
 \item[Someday:] Translation to OCaml, changed title to
-{\em Think OCaml: How to Think Like a (Functional) Computer
-Scientist}.
+{\em Think OCaml: How to Think Like a (Functional) Programmer}.
 
 \end{description}
 
@@ -5683,25 +5682,32 @@ Fortunately, regular expressions allow us to do much cooler things. For example,
 
 Lots of useful functionality in regular expressions comes from some of its operators. Most of the notable regular expression operators are {\tt postfix} operators, meaning they operate on the character before them. For example, the ``*'' token matches the preceding expression any number of times, including zero. For example, the regular expression ``pbb*t'' would match any of ``pbt,'' ``pbbt,'' or ``pbbbbbbt.'' But that's just rude. You can also group expressions using ``\\(... \\)'', and then a postfix operator after the grouping will be applied to the entire grouping, i.e., ``\\(aa\\)*'' will match any sequence with an even number of a's.
 
-There are also character classes, which match a single character out of a set of characters, denoted by square brackets. If we want to match a single digit of a number, we can use the regular expression ``[0123456789],'' or ``[0-9]'' for short. You can also negate a character set by making the first character ``\^'', which will make the character class match any single character {\em not} listed. ``[^0-9]'', for example, will match any character that is not a numeral.
+There are also character classes, which match a single character out
+of a set of characters, denoted by square brackets. If we want to
+match a single digit of a number, we can use the regular expression
+``[0123456789],'' or ``[0-9]'' for short. You can also negate a
+character set by making the first character ``\^'', which will make
+the character class match any single character {\em not}
+listed. ``[\^0-9]'', for example, will match any character that is not
+a numeral.
 
 Some systems of regular expressions get more complicated than this,\footnote{Technically speaking, anything that is still technically regular can be built out of these tokens, but some systems of ``regular'' expressions include some useful functionality that is not, strictly speaking regular.} but this pretty much wraps it up for regular expressions in OCaml. The syntax of regular expressions in OCaml is summed up in Table \ref{tab:regex}. They are also summarized in the ocaml Str module documentation.
 
-\begin{tabular}{l | l}
+\begin{tabular}{l | l | l}
 \hline
 Token & Description & Example \\ \hline
-{\tt \b} & Matches a word boundary. & {\tt a\b} matches the second a in ``aa'' but not the first. \\ \hline
+\verb"\b" & Matches a word boundary. & \verb"a\b" matches the second a in ``aa'' but not the first. \\ \hline
 {\tt .} & Matches any character except newline & {\tt .*} will match any line of a string \\ \hline
-{\tt \^} & Matches the beginning of a line or string \\ {\tt \^a} will match the first a in ``aa'' but not the second.\hline
-{\tt \$} & Matches the end of a line or string. \\ {\tt a\$} will match the second a in ``aa'' but not the first. \hline
+\verb"\^" & Matches the beginning of a line or string & \verb"\^a" will match the first a in ``aa'' but not the second. \\ \hline
+{\tt \$} & Matches the end of a line or string. & {\tt a\$} will match the second a in ``aa'' but not the first. \\ \hline
 {\tt *} & Postfix Operator. Repeats the preceding character, zero, one, or any number of times. & {\tt a*} matches ``'', ``a'', or ``aaaaa.''\\ \hline
 {\tt +} & Postfix Operator. Repeats the preceding character one or more times. & {\tt a+} matches ``a,'' or ``aaaaa.''\\ \hline
 {\tt ?} & Postfix Operator. Repeats the preceding character zero or one times. & {\tt a?} matches ``'' or ``a''.\\ \hline
-{\tt \\|} & Infix operator. Matches either the expression before the bar or the expression after the bar, but not both at once. This is distinct from character classes in that it can operate on larger grouped expressions. \\ {\tt the\\|a} matches ``a'' or ``the''. \hline
-{\tt [...]} & Defines a character class. It matches exactly one character, of any within the class. You can define a range using ``-''. To include a ``]'', make it the first character within the class. To include a ``-'', make it the first or last character of the class. Negate the class using \^. & {\tt [0-9a-zA-Z] matches any single alphanumeric character. \\ \hline
-{\tt \\(...\\) & Groups a subexpression. & {\tt Jer(ry\\|i)} matches both ``Jerry'' and ``Jeri''. \\ \hline
-{\tt \\1} & Matches the text matched by the first subexpression. (\\2 matches the second, and so on up to \\9) & {\tt (the) \\1} matches ``the the''. \\ \hline
-{\tt \\} & Matches a special character, i.e., one of {\tt \$\^.*+?[]}. & {\tt \\\$[0-9]*} matches any even dollar amount. \\ \hline
+\verb"\|" & Infix operator. Matches either the expression before the bar or the expression after the bar, but not both at once. This is distinct from character classes in that it can operate on larger grouped expressions.  \verb"the\|a" matches ``a'' or ``the''. \\ \hline
+\verb"[...]" & Defines a character class. It matches exactly one character, of any within the class. You can define a range using ``-''. To include a ``]'', make it the first character within the class. To include a ``-'', make it the first or last character of the class. Negate the class using \verb"^". & \verb"[0-9a-zA-Z]" matches any single alphanumeric character. \\ \hline
+\verb"(...)" & Groups a subexpression. & \verb"Jer(ry\|i)" matches both ``Jerry'' and ``Jeri''. \\ \hline
+\verb"\1" & Matches the text matched by the first subexpression. (\verb"\2" matches the second, and so on up to \verb"\9") & \verb"(the) \\1" matches ``the the''. \\ \hline
+\verb"\\" & Matches a special character, i.e., one of \verb"\$\^.*+?[]". & \verb"\\\$[0-9]*" matches any even dollar amount. \\ \hline
 \label{tab:regex}
 \end{tabular}
 
@@ -5714,7 +5720,13 @@ Write a regular expression to match doubled words, ex., ``the the''. Spend some 
 
 \section{Compiling Regular Expressions}
 
-In order to use regular expressions in OCaml, you must first compile them. There are two functions to compile regular expressions, {\tt regexp} and {\tt regexp_case_fold}. The difference is only that the latter ignores the difference between capital letters and lower case letters. Otherwise, the look exactly the same, so I'll just use {\tt regexp} for now:
+In order to use regular expressions in OCaml, you must first compile
+them. There are two functions to compile regular expressions, {\tt
+  regexp} and {\tt regexp\_case\_fold}. The difference is only that the
+latter ignores the difference between capital letters and lower case
+letters. Otherwise, the look exactly the same, so I'll just use {\tt
+  regexp} for now:
+
 \beforeverb
 \begin{verbatim}
 # let r = Str.regexp "a+";;
@@ -5722,7 +5734,7 @@ val r : Str.regexp = <abstr>
 \end{verbatim}
 \afterverb
 
-There's also {\tt quote} and {\tt regexp_string}, both of which take a string and return a regular expression that matches exactly that string, the difference being that {\tt quote} returns it as a string and {\tt regexp_string} returns it as a compiled regular expression:
+There's also {\tt quote} and {\tt regexp\_string}, both of which take a string and return a regular expression that matches exactly that string, the difference being that {\tt quote} returns it as a string and {\tt regexp\_string} returns it as a compiled regular expression:
 \beforeverb
 \begin{verbatim}
 # let q = Str.quote "a+";;
@@ -5731,7 +5743,7 @@ val q : string = "a\\+"
 val r2 : Str.regexp = <abstr>
 \end{verbatim}
 \afterverb
-Note that this will match ``a+'', not ``aaa''. There's also a {\tt regexp_string_case_fold}, that is {\tt regexp_string} but case-insensitive.
+Note that this will match ``a+'', not ``aaa''. There's also a {\tt regexp\_string\_case\_fold}, that is {\tt regexp\_string} but case-insensitive.
 
 \section{Using Regular Expressions: Search}
 
@@ -5745,7 +5757,7 @@ First, we can check whether or not a substring matches a regular expression:
 - : bool = true
 \end{verbatim}
 \afterverb
-{\tt Str.string_match} is a function which takes a regular expression, a string, and an int, and determines whether or not a substring starting at the position specified\footnote{Strings are indexed from 0!} matches the regular expression. Note that this doesn't test the entire string, only searches for the (longest) substring starting at that position:
+{\tt Str.string\_match} is a function which takes a regular expression, a string, and an int, and determines whether or not a substring starting at the position specified\footnote{Strings are indexed from 0!} matches the regular expression. Note that this doesn't test the entire string, only searches for the (longest) substring starting at that position:
 \beforeverb
 \begin{verbatim}
 # let s2 = "baaa";;
@@ -6446,9 +6458,9 @@ day,:1
 %
 The histogram indicates that ``sun'', ``the'', and ``says'' all appear once, and hello appears twice. Note that it doesn't really handle punctuation the way we'd probably want it to, so the word ``day,'' appears once, not just the word ``day''.
 
-\begin{exercise}
+\begin{ex}
 Rewrite {\tt histogram} to better handle punctuation. If you did the exercises in chapter \ref{chap:regex}, this should be easy for you.
-\end{exercise}
+\end{ex}
 
 \section{Iteration and Hashtables}
 
