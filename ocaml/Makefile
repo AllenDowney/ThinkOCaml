@@ -44,7 +44,7 @@ distrib:
 	ps2pdf $(PDFFLAGS) thinkocaml.ps
 	rm -rf dist
 	mkdir dist dist/tex dist/tex/figs
-	rsync -a thinkocaml.pdf thinkocaml.ps html dist
+	rsync -a index.html thinkocaml.pdf thinkocaml.ps html dist
 	rsync -a Makefile book.tex latexonly htmlonly dist/tex
 	rsync -a figs/*.fig figs/*.eps dist/tex/figs
 	cd dist; zip -r thinkocaml.tex.zip tex
