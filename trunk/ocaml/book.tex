@@ -870,9 +870,9 @@ Experiment with several different methods of writing this program. In particular
 \index{type}
 \index{string}
 
-A {\bf value} is one of the basic things a program works with, like a letter or a number.  Some values we have seen so far are {\tt 1}, {\tt 2}, and {\verb "Hello, World!"}.
+A {\bf value} is one of the basic things a program works with, like a letter or a number.  Some values we have seen so far are {\tt 1}, {\tt 2}, and {\tt "Hello, World!"}.
 
-These values belong to different {\bf types}: {\tt 2} is an integer, and {\verb "Hello, World!"} is a {\bf string}, so-called because it contains a ``string'' of letters. You (and the interpreter) can identify strings because they are enclosed in double quotation marks.
+These values belong to different {\bf types}: {\tt 2} is an integer, and {\tt "Hello, World!"} is a {\bf string}, so-called because it contains a ``string'' of letters. You (and the interpreter) can identify strings because they are enclosed in double quotation marks.
 
 \index{quotation mark}
 
@@ -2261,7 +2261,7 @@ Debugging can take a long time if you keep running the same,
 incorrect, program over and over!
 
 Make sure that the code you are looking at is the code you are running.
-If you're not sure, put something like {\verb print_int 42} at the
+If you're not sure, put something like {\tt print\_int 42} at the
 beginning of the program and run it again.  If you don't see
 {\tt 42}, you're not running the right program!
 
@@ -5686,9 +5686,9 @@ There are also character classes, which match a single character out
 of a set of characters, denoted by square brackets. If we want to
 match a single digit of a number, we can use the regular expression
 ``[0123456789],'' or ``[0-9]'' for short. You can also negate a
-character set by making the first character ``\^'', which will make
+character set by making the first character ``\verb"^"'', which will make
 the character class match any single character {\em not}
-listed. ``[\^0-9]'', for example, will match any character that is not
+listed. ``[\verb"^"0-9]'', for example, will match any character that is not
 a numeral.
 
 Some systems of regular expressions get more complicated than this,\footnote{Technically speaking, anything that is still technically regular can be built out of these tokens, but some systems of ``regular'' expressions include some useful functionality that is not, strictly speaking regular.} but this pretty much wraps it up for regular expressions in OCaml. The syntax of regular expressions in OCaml is summed up in Table \ref{tab:regex}. They are also summarized in the ocaml Str module documentation.
@@ -5707,11 +5707,11 @@ Token & Description & Example \\ \hline
 \verb"[...]" & Defines a character class. It matches exactly one character, of any within the class. You can define a range using ``-''. To include a ``]'', make it the first character within the class. To include a ``-'', make it the first or last character of the class. Negate the class using \verb"^". & \verb"[0-9a-zA-Z]" matches any single alphanumeric character. \\ \hline
 \verb"(...)" & Groups a subexpression. & \verb"Jer(ry\|i)" matches both ``Jerry'' and ``Jeri''. \\ \hline
 \verb"\1" & Matches the text matched by the first subexpression. (\verb"\2" matches the second, and so on up to \verb"\9") & \verb"(the) \\1" matches ``the the''. \\ \hline
-\verb"\\" & Matches a special character, i.e., one of \verb"\$\^.*+?[]". & \verb"\\\$[0-9]*" matches any even dollar amount. \\ \hline
+\verb"\" & Escapes a special character, i.e., one of \verb"$^.*+?[]". & \verb"\$[0-9]*" matches any even dollar amount. \\ \hline
 \label{tab:regex}
 \end{tabular}
 
-Note that when entering any of the characters with a ``\\'' in an OCaml string, you will have to double the backslash so that it doesn't try to make it into an escape sequence.
+Note that when entering any of the characters with a ``\\'' in an OCaml string, you will have to double the backslash so that it doesn't try to make it into an escape sequence (unless the escape sequence is what you want, as with tab and newline).
 
 % write here
 \begin{ex} \label{ex:regex_doubles}
@@ -6973,8 +6973,6 @@ Write a program that lists all the words that solve the Puzzler.
 \chapter{Tuples}
 \label{tuplechap}
 
-
-
 \index{tuple}
 \index{type!tuple}
 \index{sequence}
@@ -7190,6 +7188,8 @@ elements are not considered (even if they are really big).
 \section{Debugging}
 
 \section{Glossary}
+
+\section{Exercises}
 
 \chapter{Records and Custom Data Structures}
 
@@ -7437,7 +7437,7 @@ More anagrams!
 \begin{enumerate}
 
 \item Write a program
-that reads a word list from a file (see Section~\ref{wordlist}) and
+that reads a word list from a file and
 prints all the sets of words that are anagrams.
 
 Here is an example of what the output might look like:
@@ -7754,8 +7754,7 @@ Modify the program from the previous exercise to print the
 
 
 \begin{ex}
-Modify the previous program to read a word list (see
-Section~\ref{wordlist}) and then print all the words in the book that
+Modify the previous program to read a word list and then print all the words in the book that
 are not in the word list.  How many of them are typos?  How many of
 them are common words that {\em should} be in the word list, and how
 many of them are really obscure?
@@ -7814,28 +7813,27 @@ We can then return random integers, floots, booleans, or other number types we h
 
 \index{histogram!random choice}
 
-Write a function named \verb"choose_from_hist" that takes
+Write a function named \verb"histchoose" that takes
 a histogram as defined in Section~\ref{histogram} and returns a 
 random value from the histogram, chosen with probability
 in proportion to frequency.  For example, for this histogram:
 
 \beforeverb
 \begin{verbatim}
-# let t = ["a"; "a"; "b"]
+# let t = ["a"; "a"; "b"];
 # let h = histogram(t);
->>> print h
-{'a': 2, 'b': 1}
+# histprint h;;
+b:1
+a:2
 \end{verbatim}
 \afterverb
 %
-your function should {\tt 'a'} with probability $2/3$ and \verb"'b'"
+your function should choose {\tt "a"} with probability $2/3$ and {\tt "b"}
 with probability $1/3$.
 \end{ex}
 
-
 \section{Word histogram}
 
-% lead write here
 Here is a program that reads a file and builds a histogram of the
 words in the file:
 
@@ -7843,51 +7841,57 @@ words in the file:
 
 \beforeverb
 \begin{verbatim}
-import string
+#load "str.cma";;
+Random.self_init ();;
 
-def process_file(filename):
-    h = dict()
-    fp = open(filename)
-    for line in fp:
-        process_line(line, h)
-    return h
+let r_punc = "[]\\$\\^\\.\\*\\+\\?{}|:;'\"<>,/\\\\[=_@#%&!()-]+";;
+let strip = Str.global_replace (Str.regexp r_punc) "";;
 
-def process_line(line, h):
-    line = line.replace('-', ' ')
-    
-    for word in line.split():
-        word = word.strip(string.punctuation + string.whitespace)
-        word = word.lower()
+let addfunct h v k = 
+	if (Hashtbl.mem h k)
+	then let cntr = (Hashtbl.find h k + v)
+		in Hashtbl.replace h k cntr
+	else Hashtbl.add h k 1;;
 
-        h[word] = h.get(word, 0) + 1
+let histogram s = 
+	let wordlist = Str.split (Str.regexp "[\t\n ]+") (strip (String.lowercase s)) in
+	let hist = Hashtbl.create 1 in
+	List.iter (addfunct hist 1) wordlist;
+	hist;;
 
-hist = process_file('emma.txt')
+let hist_add h2 h1 =
+	Hashtbl.iter (fun k v -> addfunct h1 v k) h2;;
+
+let hist_print tbl = 
+	Hashtbl.iter (fun key value ->
+			print_string (key^":"^(string_of_int value)^"\n"))
+		tbl;;
+
+let hist_of_file filename =
+	let in_chan = open_in filename in
+	let hist = histogram (input_line in_chan) in
+	let done_flag = ref false in
+	while not !done_flag do
+		try (
+		let line = input_line in_chan in
+		hist_add (histogram line) hist)
+		with End_of_file -> done_flag := true
+	done;
+	hist;;
+
+let sherlock_hist = hist_of_file "sherlock.txt"
 \end{verbatim}
 \afterverb
 %
-This program reads {\tt emma.txt}, which contains the text of {\em
-  Emma} by Jane Austen.
+This program reads {\tt sherlock.txt}, which contains the text of {\em
+  The Adventures of Sherlock Holmes} by Sir Arthur Conan Doyle.
 
-\index{Austin, Jane}
+\index{Doyle, Sir Arthur Conan}
 
-\verb"process_file" loops through the lines of the file,
-passing them one at a time to \verb"process_line".  The histogram
-{\tt h} is being used as an accumulator.
+\verb"hist_of_file" loops through the lines of the file, passing them one at a time to \verb"histogram", and the result is added to an accumulating histogram.
 
 \index{accumulator!histogram}
 \index{traversal}
-
-\verb"process_line" uses the string method {\tt replace} to replace
-hyphens with spaces before using {\tt split} to break the line into a
-list of strings.  It traverses the list of words and uses {\tt strip}
-and {\tt lower} to remove punctuation and convert to lower case.  (It
-is a shorthand to say that strings are ``converted;'' remember that
-string are immutable, so methods like {\tt strip} and {\tt lower}
-return new strings.)
-
-Finally, \verb"process_line" updates the histogram by creating a new
-item or incrementing an existing one.
-
 \index{update!histogram}
 
 To count the total number of words in the file, we can add up
@@ -7895,8 +7899,7 @@ the frequencies in the histogram:
 
 \beforeverb
 \begin{verbatim}
-def total_words(h):
-    return sum(h.values())
+let total_words h = Hashtbl.fold (fun k v p -> p+v) h 0;;
 \end{verbatim}
 \afterverb
 %
@@ -7905,8 +7908,7 @@ the dictionary:
 
 \beforeverb
 \begin{verbatim}
-def different_words(h):
-    return len(h)
+let different_words h = Hashtbl.length h;;
 \end{verbatim}
 \afterverb
 %
@@ -7914,8 +7916,11 @@ Here is some code to print the results:
 
 \beforeverb
 \begin{verbatim}
-print 'Total number of words:', total_words(hist)
-print 'Number of different words:', different_words(hist)
+let print_info h = 
+	print_string ("Total number of words: "^(string_of_int (total_words h)));
+	print_newline();
+	print_string ("Number of different words: "^(string_of_int (different_words h)));
+	print_newline();;
 \end{verbatim}
 \afterverb
 %
@@ -7923,130 +7928,181 @@ And the results:
 
 \beforeverb
 \begin{verbatim}
-Total number of words: 161073
-Number of different words: 7212
+Total number of words: 104465
+Number of different words: 8413
 \end{verbatim}
 \afterverb
 %
 
 \section{Most common words}
 
-\index{DSU pattern}
-\index{pattern!DSU}
-
-To find the most common words, we can apply the DSU pattern;
-\verb"most_common" takes a histogram and returns a list of
-word-frequency tuples, sorted in reverse order by frequency:
+To find the most common words, we can convert the histogram to a list, then sort it.
 
 \beforeverb
 \begin{verbatim}
-def most_common(h):
-    t = []
-    for key, value in h.items():
-        t.append((value, key))
+let list_of_hist h = Hashtbl.fold (fun k v acc -> (k, v) :: acc) h [];;
 
-    t.sort(reverse=True)
-    return t
-\end{verbatim}
+let most_common_words h = List.sort
+	(fun (k1, v1) (k2, v2) -> -(compare v1 v2)) (list_of_hist h);;\end{verbatim}
 \afterverb
 %
-Here is a loop that prints the ten most common words:
+Here is a recursive function that prints the ten most common words:
 
 \beforeverb
 \begin{verbatim}
-t = most_common(hist)
-print 'The most common words are:'
-for freq, word in t[0:10]:
-    print word, '\t', freq
+let print_ten l = 
+	let rec print_helper l i = 
+		if i = 10
+		then ()
+		else (
+			let k, v = List.hd l in (
+			print_string (k^":\t"^(string_of_int v));
+			print_newline());
+			print_helper (List.tl l) (i+1)
+		)
+	in print_helper l 0;;
 \end{verbatim}
 \afterverb
 %
-And here are the results from {\em Emma}:
+And here are the results from {\em The Adventures of Sherlock Holmes}:
 
 \beforeverb
 \begin{verbatim}
-The most common words are:
-to      5242
-the     5204
-and     4897
-of      4293
-i       3191
-a       3130
-it      2529
-her     2483
-was     2400
-she     2364
+The ten most common words are:
+the:	5619
+and:	3000
+i:	2994
+to:	2681
+of:	2653
+a:	2624
+in:	1759
+that:	1735
+it:	1695
+you:	1473
 \end{verbatim}
 \afterverb
-%
 
-\section{Optional parameters}
+\section{Labelled and Optional Parameters}
 
 \index{optional parameter}
 \index{parameter!optional}
+\index{parameter!labelled}
+\index{labelled parameter}
 
-We have seen built-in functions and methods that take a variable
-number of arguments.  It is possible to write user-defined functions
-with optional arguments, too.  For example, here is a function that
-prints the most common words in a histogram
+It is possible to write functions with optional arguments. In order to do so, though, we must learn how to use {\em labelled arguments} first. Labelled arguments, rather than appearing in a specific order, are given specific titles. As a trivial example, let's look at this subtraction function:
 
 \beforeverb
 \begin{verbatim}
-def print_most_common(hist, num=10)
-    t = most_common(hist)
-    print 'The most common words are:'
-    for freq, word in t[0:num]:
-        print word, '\t', freq
+# let sub ~num1:x ~num2:y = x-y;;
+val add : num1:int -> num2:int -> int = <fun>
 \end{verbatim}
 \afterverb
+The syntax for each argument is that the label is to the left of the colon, and the variable within the function is to the right of the colon. As shorthand, we can write {\tt ~varname} instead of {\tt ~varname:varname}. Now let's now see how these arguments work.
+\beforeverb
+\begin{verbatim}
+# sub 3 2;;
+- : int = 1
+# sub 2 3;;
+- : int = -1
+# sub ~num1:3 ~num2:2;;
+- : int = 1
+# sub ~num2:2 ~num1:3;;
+- : int = 1
+# let num1 = 3 and num2 = 2;;
+# sub num2 num1
+- : int = -1
+# sub ~num2 ~num1
+- : int = 1
+\end{verbatim}
+\afterverb
+As you can see, you can call the function normally, and it's the argument order that matters. However, if you use labels, and the argument order doesn't.
 
-The first parameter is required; the second is optional.
-The {\bf default value} of {\tt num} is 10.
+You can also have functions that mix labelled and unlabelled arguments. Consider this function, which takes a string and extracts a substring of length {\tt len} starting at position {\tt pos}
+\beforeverb
+\begin{verbatim}
+# let substr str ~len:l ~start:s = String.sub str s l
+# substr "Hello" 3 1;;
+- : string = "ell"
+# substr "Hello" ~start:1 ~len:3;;
+- : string = "ell"
+# substr ~start:1 "Hello" ~len:3;;
+- : string = "ell"
+\end{verbatim}
+\afterverb
+If you have multiple unlabelled arguments, then the order between them matters, but you can still do whatever you'd like with the labelled arguments.
+
+Optional arguments work much the same way, except you give the labelled value a default value. For example, here's a simple increment function:
+\beforeverb
+\begin{verbatim}
+# let bump ?i:(i=1) x = x+i;;
+val bump : ?i:int -> int -> int = <fun>
+# bump 3;;
+- : int = 4
+# bump 3 ~i:10;;
+- : int = 13;;
+# bump 1 3;;
+Error: The function applied to this argument has type ?i:int -> int
+This argument cannot be applied without label
+\end{verbatim}
+\afterverb
+Note that the optional argument comes first in the funciton definition. An optional argument cannot be the last argument of the function definition, or your argument won't actually be optional:
+\beforeverb
+\begin{verbatim}
+# let bump x ?i:(i=1) = x+i;;
+Warning X: this optional argument cannot be erased
+# bump 3 ~i:2;;
+- : int = 5
+# bump 3;;
+- : ?i:int -> int = <fun>
+\end{verbatim}
+\afterverb
+Not really all that useful, as an optional argument goes. If all your arguments are optional, you should include a unit at the end of your function definiton.
+
+Here is a function that prints the most common words in a histogram, which defaults to printing ten:
+
+\beforeverb
+\begin{verbatim}
+let print_most_common ?x:(x=10) l = 
+	print_string "The ten most common words are:\n";
+	let rec print_helper l i = 
+		if i = x
+		then ()
+		else (
+			let k, v = List.hd l in (
+			print_string (k^":\t"^(string_of_int v));
+			print_newline());
+			print_helper (List.tl l) (i+1)
+		)
+	in print_helper l 0;;\end{verbatim}
+\afterverb
 
 \index{default value}
 \index{value!default}
 
-If you only provide one argument:
-
+Note that, in this case, and many others, we could not use the optional argument but instead write the general case and use currying to define a more specific function:
 \beforeverb
 \begin{verbatim}
-print_most_common(hist)
+let print_most_common x l = 
+	(function as defined above)
+
+let print_ten = print_most_common 10;;
 \end{verbatim}
 \afterverb
 
-{\tt num} gets the default value.  If you provide two arguments:
+\section{Hashtable subtraction}
 
-\beforeverb
-\begin{verbatim}
-print_most_common(hist, 20)
-\end{verbatim}
-\afterverb
-
-{\tt num} gets the value of the argument instead.  In other
-words, the optional argument {\bf overrides} the default value.
-
-\index{override}
-
-If a function has both required and optional parameters, all
-the required parameters have to come first, followed by the
-optional ones.
-
-
-\section{Dictionary subtraction}
-
-\index{dictionary!subtraction}
-\index{subtraction!dictionary}
-
+\index{hashtbale!subtraction}
+\index{subtraction!hashtable}
+%lead write here
 Finding the words from the book that are not in the word list
 from {\tt words.txt} is a problem you might recognize as set
 subtraction; that is, we want to find all the words from one
 set (the words in the book) that are not in another set (the
 words in the list).
 
-{\tt subtract} takes dictionaries {\tt d1} and {\tt d2} and returns a
-new dictionary that contains all the keys from {\tt d1} that are not
-in {\tt d2}.  Since we don't really care about the values, we
-set them all to None.
+{\tt subtract} takes hashtables {\tt h1} and {\tt h2} and returns a
+new hashtable that contains all the keys from {\tt h1} that are not
+in {\tt h2}.
 
 \beforeverb
 \begin{verbatim}
@@ -8143,8 +8199,8 @@ An alternative is:
 \item Use {\tt keys} to get a list of the words in the book.
 
 \item Build a list that contains the cumulative sum of the word
-  frequencies (see Exercise~\ref{cumulative}).  The last item
-  in this list is the total number of words in the book, $n$.
+  frequencies.  The last item in this list is the total number 
+  of words in the book, $n$.
   
 \item Choose a random number from 1 to $n$.  Use a bisection search
   (See Exercise~\ref{bisection}) to find the index where the random
