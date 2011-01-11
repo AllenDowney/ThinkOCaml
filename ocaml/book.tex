@@ -1,4 +1,4 @@
-% LaTeX source for ``Think OCaml: How to Think Like a (Functional) Programmer''
+% LaTeX source for ``Think OCaml: How to Think Like a Computer Scientist''
 % Copyright (c)  2011  Nicolas Monje
 
 % Permission is granted to copy, distribute and/or modify this
@@ -32,7 +32,7 @@
 \usepackage{hevea}                           
 \usepackage{upquote}
 
-\newcommand{\thetitle}{Think OCaml: How to Think Like a (Functional) Programmer}
+\newcommand{\thetitle}{Think OCaml: How to Think Like a Computer Scientist}
 \newcommand{\theversion}{0.1.1}
 
 \makeindex
@@ -64,7 +64,7 @@
 
 \begin{spacing}{3}
 {\huge Think OCaml}\\
-{\Large How to Think Like a (Functional) Programmer}
+{\Large How to Think Like a Computer Scientist}
 \end{spacing}
 
 \vspace{0.25in}
@@ -93,7 +93,7 @@ Version \theversion
 
 \begin{spacing}{3}
 {\huge Think OCaml}\\
-{\Large How to Think Like a (Functional) Computer Scientist}
+{\Large How to Think Like a Computer Scientist}
 \end{spacing}
 
 \vspace{0.25in}
@@ -144,7 +144,7 @@ a Computer Scientist}.
 a Computer Scientist}.
 
 \item[January 2011:] Translation to OCaml, changed title to
-{\em Think OCaml: How to Think Like a (Functional) Programmer}.
+{\em Think OCaml: How to Think Like a Computer Scientist}.
 
 \end{description}
 
@@ -201,33 +201,11 @@ Version \theversion
 
 \chapter{Preface}
 
-%\section*{The strange history of this book}
-
-%My goals were:
-
-%\begin{itemize}
-
-%\item Keep it short.  It is better for students to read 10 pages
-%than not read 50 pages.
-
-%\item Be careful with vocabulary.  I tried to minimize the jargon
-%and define each term at first use.
-
-%\item Build gradually. To avoid trap doors, I took the most difficult
-%topics and split them into a series of small steps. 
-
-%\item Focus on programming, not the programming language.  I included
-%the minimum useful subset of Java and left out the rest.
-
-%\end{itemize}
-
-\section*{Acknowledgements}
-
-Cover image is courtesy of Anumpama Kinagi, all rights reserved.
+% TODO(monje): write a preface :)
 
 \section*{Contributor List}
 
-Cover image is courtesy of Anumpama Kinagi, all rights reserved.
+Many thanks to Anumpama Kinagi for the use of the cover image.
 
 
 % TABLE OF CONTENTS
@@ -725,9 +703,15 @@ Some people judge the quality of a programming language by the simplicity of the
 \index{Programming Paradigms!Functional}
 \index{Programming Paradigms!Object-Oriented}
 
-You may have noticed that this book is entitled ``Think OCaml: How to Think Like a (Functional) Computer Scientist.'' No, this is not saying that you'll be passable-but-not-great, at programming. Rather, it's a particular paradigm of programming. {\bf Functional Programming} is programming where the function is a first-class citizen. Now, this is of course a silly definition, but it's the best we can really do for now.
+{\bf Functional Programming} is a programming paradigm where the function is a
+first-class citizen. Now, this is of course a silly definition, but
+it's the best we can really do for now.
 
-Another popular programming paradigm is {\bf Object-Oriented}. Languages that are object-oriented, such as C++ and Python, focus rather on having ``objects'' and changing them. ``Object'' is really kind of a blanket term for all kinds of different, often custom, ways of storing data.
+Another popular programming paradigm is {\bf
+  Object-Oriented}. Languages that are object-oriented, such as C++
+and Python, focus rather on having ``objects'' and changing
+them. ``Object'' is really kind of a blanket term for all kinds of
+different, often custom, ways of storing data.
 
 OCaml is mostly a functional programming language. However, OCaml has support for some level of object-oriented programming, unlike it's predecessor Caml. The ``O'' in OCaml stands for ``Objective''.\footnote{``Caml'' once stood for ``Categorical Abstract Machine Language'' but it doesn't any more. Now it just represents an even-toed ungulate with humps on its back.}
 
@@ -3157,7 +3141,8 @@ is forgetting to decrement when you make the recursive call:
 let rec csum n = 
 	if n = 0
 	then 0
-	else (n + csum n);;\end{verbatim}
+	else (n + csum n);;
+\end{verbatim}
 \afterverb
 %
 In most programming environments, a program with infinite recursion
