@@ -6333,23 +6333,37 @@ to find a given element no longer how large the hashtable is!
 
 \index{hashtable}
 
-\begin{ex}
-\label{wordlist2}
-
-\index{set membership}
-\index{membership!set}
-
-Write a function that reads the words in {\tt words.txt} and
-stores them as keys in a hashtable.  It doesn't matter what the
-values are.  Then you can use the {\tt mem} function
-as a fast way to check whether a string is in
-the hashtable.
-
-If you did Exercise~\ref{wordlist1}, you can compare the speed
-of this implementation with the list equivalent.
-
-\end{ex}
-
+% \begin{ex}
+% \label{wordlist2}
+% 
+% \index{set membership}
+% \index{membership!set}
+% 
+% For this exercise, we need a list of English words.
+% There are lots of word lists available on the Web, but the one most
+% suitable for our purpose is one of the word lists collected and
+% contributed to the public domain by Grady Ward as part of the Moby
+% lexicon project\footnote{\url{wikipedia.org/wiki/Moby_Project}.}.  It
+% is a list of 113,809 official crosswords; that is, words that are
+% considered valid in crossword puzzles and other word games.  In the
+% Moby collection, the filename is {\tt 113809of.fic}; I host a copy
+% of this file, with the simpler name {\tt words.txt}, at {\url www.nmonje.com/bin/words.txt}.
+% % make words.txt available for this book, and get rid of \r
+% 
+% \index{word list}
+% \index{words.txt}
+% 
+% Write a function that reads the words in {\tt words.txt} and
+% stores them as keys in a hashtable.  It doesn't matter what the
+% values are.  Then you can use the {\tt mem} function
+% as a fast way to check whether a string is in
+% the hashtable.
+% 
+% If you did Exercise~\ref{wordlist1}, you can compare the speed
+% of this implementation with the list equivalent.
+% 
+% \end{ex}
+% 
 
 \section{Hashtable as a set of counters}
 \label{histogram}
@@ -8084,7 +8098,7 @@ let print_ten = print_most_common 10;;
 
 \index{hashtbale!subtraction}
 \index{subtraction!hashtable}
-%lead write here
+
 Finding the words from the book that are not in the word list
 from {\tt words.txt} is a problem you might recognize as set
 subtraction; that is, we want to find all the words from one
@@ -8097,37 +8111,32 @@ in {\tt h2}.
 
 \beforeverb
 \begin{verbatim}
-def subtract(d1, d2):
-    res = dict()
-    for key in d1:
-        if key not in d2:
-            res[key] = None
-    return res
+let hash_subtract h1 h2 =
+	let h = Hashtbl.create 3 in
+	let f k v = if not (Hashtbl.mem h2 k)
+		then Hashtbl.add h k v in
+	Hashtbl.iter f h1; h;;
 \end{verbatim}
 \afterverb
 %
 To find the words in the book that are not in {\tt words.txt},
-we can use \verb"process_file" to build a histogram for
+we can use \verb"hist_of_file" to build a histogram for
 {\tt words.txt}, and then subtract:
 
 \beforeverb
 \begin{verbatim}
-words = process_file('words.txt')
-diff = subtract(hist, words)
-
-print "The words in the book that aren't in the word list are:"
-for word in diff.keys():
-    print word,
+let words_hist = hist_of_file "words.txt";;
+let unlisted_words = hash_subtract sherlock_hist words_hist;;
+print_string "The words in the book that aren't in the word list are:\n"
+hist_print unlisted_words;;
 \end{verbatim}
 \afterverb
 %
-Here are some of the results from {\em Emma}:
-
+Here are some of the results from {\em The Adventures of Sherlock Holmes}:
+%DO THIS
 \beforeverb
 \begin{verbatim}
-The words in the book that aren't in the word list are:
- rencontre jane's blanche woodhouses disingenuousness 
-friend's venice apartment ...
+Sike!
 \end{verbatim}
 \afterverb
 %
@@ -8139,8 +8148,8 @@ words that should really be in the list!
 
 \index{set}
 \index{type!set}
-
-Python provides a data structure called {\tt set} that provides many
+%Look this up!
+OCaml provides a data structure called {\tt set} that provides many
 common set operations.  Read the documentation at
 \url{docs.python.org/lib/types-set.html} and write a program
 that uses set subtraction to find words in the book that are not in
@@ -8153,25 +8162,23 @@ the word list.
 
 \index{histogram!random choice}
 
-To choose a random word from the histogram, the simplest algorithm
+To choose a random word from the histogram, the simplest (at least, conceptually) algorithm
 is to build a list with multiple copies of each word, according
 to the observed frequency, and then choose from the list:
-
+%do this
 \beforeverb
 \begin{verbatim}
-def random_word(h):
-    t = []
-    for word, freq in h.items():
-        t.extend([word] * freq)
+let build_list h = 
+	let rec list_builder_helper k v l = 
+		if v = 0 then l
+		else list_builder_helper k (v-1) (k::l)
+	in Hashtbl.fold list_builder_helper h [];;
 
-    return random.choice(t)
-\end{verbatim}
+let hist_random_word h = 
+	let l = build_list h in
+	List.nth l (Random.int (List.length l))\end{verbatim}
 \afterverb
 %
-The expression {\tt [word] * freq} creates a list with {\tt freq}
-copies of the string {\tt word}.  The {\tt extend}
-method is similar to {\tt append} except that the argument is
-a sequence.
 
 \begin{ex}
 \label{randhist}
@@ -8187,17 +8194,11 @@ An alternative is:
 
 \begin{enumerate}
 
-\item Use {\tt keys} to get a list of the words in the book.
+\item Determine the total number of words, $len$, and pick a random integer between $0$ and $len$.
 
-\item Build a list that contains the cumulative sum of the word
-  frequencies.  The last item in this list is the total number 
-  of words in the book, $n$.
+\item Create a reference integer which is initialized to 0.
   
-\item Choose a random number from 1 to $n$.  Use a bisection search
-  (See Exercise~\ref{bisection}) to find the index where the random
-  number would be inserted in the cumulative sum.
-
-\item Use the index to find the corresponding word in the word list.
+\item Iterate over the hashtable ({\tt Hashtbl.iter}!), incrementing the reference integer by the value for each key, selecting the word it's processing when the reference integer exceeds the random integer. (You might want a reference string to store the selected word.)
 
 \end{enumerate}
 
@@ -8213,10 +8214,10 @@ word from the book.
 
 If you choose words from the book at random, you can get a
 sense of the vocabulary, you probably won't get a sentence:
-
+% do this
 \beforeverb
 \begin{verbatim}
-this the small regard harriet which knightley's it most things
+believe brilliant fact if bedrooms my thank moss to out
 \end{verbatim}
 \afterverb
 %
@@ -8289,14 +8290,11 @@ length two, but you should write the program in a way that makes
 it easy to try other lengths.
 
 \item Add a function to the previous program to generate random text
-based on the Markov analysis.  Here is an example from {\em Emma}
+based on the Markov analysis.  Here is an example from {\em The Adventures of Sherlock Holmes}
 with prefix length 2:
 
 \begin{quote}
-He was very clever, be it sweetness or be angry, ashamed or only
-amused, at such a stroke. She had never thought of Hannah till you
-were never meant for me?" "I cannot make speeches, Emma:" he soon cut
-it all himself.
+anything else. There you are. You'll know all about it presently. Jump up here. All right, John; we shall call at the Hotel Cosmopolitan. Pray
 \end{quote}
 
 For this example, I left the punctuation attached to the words.
@@ -8337,11 +8335,11 @@ the collection of possible suffixes.
 \end{itemize}
 
 Ok, the last one is the easy; the only mapping type we have
-seen is a dictionary, so it is the natural choice.
+seen is a hashtable, so it is the natural choice.
 
 For the prefixes, the most obvious options are string,
 list of strings, or tuple of strings.  For the suffixes,
-one option is a list; another is a histogram (dictionary).
+one option is a list; another is a histogram (hashtable).
 
 \index{implementation}
 
@@ -8352,26 +8350,6 @@ the beginning and add to the end.  For example, if the current
 prefix is ``Half a,'' and the next word is ``bee,'' you need
 to be able to form the next prefix, ``a bee.''
 
-\index{tuple!as key in dictionary}
-
-Your first choice might be a list, since it is easy to add
-and remove elements, but we also need to be able to use the
-prefixes as keys in a dictionary, so that rules out lists.
-With tuples, you can't append or remove, but you can use
-the addition operator to form a new tuple:
-
-\beforeverb
-\begin{verbatim}
-def shift(prefix, word):
-    return prefix[1:] + (word,)
-\end{verbatim}
-\afterverb
-%
-{\tt shift} takes a tuple of words, {\tt prefix}, and a string, 
-{\tt word}, and forms a new tuple that has all the words
-in {\tt prefix} except the first, and {\tt word} added to
-the end.
-
 For the collection of suffixes, the operations we need to
 perform include adding a new suffix (or increasing the frequency
 of an existing one), and choosing a random suffix.
@@ -8379,14 +8357,14 @@ of an existing one), and choosing a random suffix.
 Adding a new suffix is equally easy for the list implementation
 or the histogram.  Choosing a random element from a list
 is easy; choosing from a histogram is harder to do
-efficiently (see Exercise~\ref{randhist}).
+efficiently (see Exercise~\ref{randhist}), but we also already built 
+a function that does it.
 
 So far we have been talking mostly about ease of implementation,
 but there are other factors to consider in choosing data structures.
 One is run time.  Sometimes there is a theoretical reason to expect
-one data structure to be faster than other; for example, I mentioned
-that the {\tt in} operator is faster for dictionaries than for lists,
-at least when the number of elements is large.
+one data structure to be faster than other; for example, random access 
+is faster in dictionaries and arrays than in lists.
 
 But often you don't know ahead of time which implementation will
 be faster.  One option is to implement both of them and see which
@@ -8394,12 +8372,10 @@ is better.  This approach is called {\bf benchmarking}.  A practical
 alternative is to choose the data structure that is
 easiest to implement, and then see if it is fast enough for the
 intended application.  If so, there is no need to go on.  If not,
-there are tools, like the {\tt profile} module, that can identify
+there are tools, that can identify %find one!
 the places in a program that take the most time.
 
 \index{benchmarking}
-\index{profile module}
-\index{module!profile}
 
 The other factor to consider is storage space.  For example, using a
 histogram for the collection of suffixes might take less space because
@@ -8441,7 +8417,7 @@ last, before the problem appeared?
 
 \item[retreating:] At some point, the best thing to do is back
 off, undoing recent changes, until you get back to a program that
-works and that you understand.  Then you can starting rebuilding.
+works and that you understand.  Then you can start rebuilding.
 
 \end{description}
 
@@ -8520,7 +8496,6 @@ possible inputs.
 \index{benchmarking}
 
 \end{description}
-
 
 \section{Exercises}
 
