@@ -16,17 +16,9 @@ PDFFLAGS = -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress \
 %.pdf: %.ps
 	ps2pdf $(PDFFLAGS) $<
 
-all:	book.tex
-	latex book
-	makeindex book
-	latex book
-	dvips -t letter -Ppdf -o thinkocaml.ps book
-#	dvips -T 5.5in,8in -Ppdf -o thinkocaml.ps book
-#	dvips -t b5 -Ppdf -o thinkocaml.ps book
-#	dvips -T 7in,10in -Ppdf -o thinkocaml.ps book
-	gv thinkocaml.ps
+all: book html distrib
 
-html:	book.tex  
+html:	book.tex book
 # header.html footer.html
 	rm -rf html
 	mkdir html
@@ -40,7 +32,7 @@ html:	book.tex
 
 DEST = /home/downey/public_html/greent/thinkocaml
 
-distrib:
+distrib: book
 	ps2pdf $(PDFFLAGS) thinkocaml.ps
 	rm -rf dist
 	mkdir dist dist/tex dist/tex/figs
@@ -51,6 +43,17 @@ distrib:
 	cd dist; zip -r thinkocaml.html.zip html
 	rsync -a dist/* $(DEST)
 	chmod -R o+r $(DEST)/*
+
+book:	book.tex
+	latex book
+	makeindex book
+	latex book
+	dvips -t letter -Ppdf -o thinkocaml.ps book
+#	dvips -T 5.5in,8in -Ppdf -o thinkocaml.ps book
+#	dvips -t b5 -Ppdf -o thinkocaml.ps book
+#	dvips -T 7in,10in -Ppdf -o thinkocaml.ps book
+	gv thinkocaml.ps
+
 
 clean:
 	rm -f *~ *.aux *.log *.dvi *.idx *.ilg *.ind *.toc

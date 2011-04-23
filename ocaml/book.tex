@@ -310,7 +310,7 @@ This makes it easier to pass along your program to non-OCaml users, which for a 
 up-and-coming programming language like OCaml, is a nice feature. On the other hand, 
 OCaml can be treated like an interpreted programming language, meaning that an OCaml 
 script or OCaml commands can be executed by an interpreter. This is useful for finding 
-errors in your code and testing commands and snippits of code. There are two ways to use 
+errors in your code and testing commands and snippets of code. There are two ways to use 
 the interpreter: {\bf interactive mode} and {\bf script mode}. In interactive mode, you 
 type OCaml commands into the {\bf toplevel} and the interpreter prints the result:
 
@@ -351,7 +351,8 @@ using the toplevel in Windows (7) and Ubuntu (10.04 Karmic). \footnote{Mac users
 One thing you will need to use are OCaml commands known as {\bf directives}. 
 Directives tell the interpreter or compiler to do specific tasks, like load 
 code from a file or exit. A list of some directives  can be found at 
-\url{http://caml.inria.fr/pub/docs/manual-ocaml/manual023.html}. 
+\url{http://caml.inria.fr/pub/docs/manual-ocaml/manual023.html}. One particularly
+useful directive is {\tt \verb"#quit;;"}, which does exactly what it sounds like.
 
 \index{Directive}
 \index{Toplevel}
@@ -372,7 +373,7 @@ Once in the toplevel, you can open a script by using the {\tt \#use "{\it filena
 
 \beforeverb
 \begin{verbatim}
- #use "myscript.ml";;
+# #use "myscript.ml";;
 \end{verbatim}
 \afterverb
 
@@ -390,21 +391,21 @@ directions therein.
 
 You can now run an OCaml toplevel from the windows command line by typing {\tt ocaml}. Alternatively,
 OCaml has a very pretty toplevel with some nice features which you can open by running "Objective Caml"
-from Windows > All Programs > Objective Caml, or open the same program by searching from the windows 
+from Windows \verb">" All Programs \verb">" Objective Caml, or open the same program by searching from the windows 
 start menu.
 
 Once in the toplevel, you can open a script by using the {\tt \#use "{\it filename}";;} directive:
 
 \beforeverb
 \begin{verbatim}
- #use "myscript.ml";;
+# #use "myscript.ml";;
 \end{verbatim}
 \afterverb
 
 Note that the toplevel's {\bf current directory} \footnote{The {\bf current directory} is the 
 directory in which ocaml will look to find files to run, outside of the standard ocaml directories.} 
 will be the current directory when you ran it within the terminal. You can change your current directory 
-using the {\tt \#cd ``{\it dirname}'';;} directive.
+using the {\tt \#cd "{\it dirname}";;} directive.
 
 \section{What is a program?}
 
@@ -649,7 +650,7 @@ like this:
 
 \beforeverb
 \begin{verbatim}
-print_string ''Hello, World!\n'';;
+print_string "Hello, World!\n";;
 \end{verbatim}
 \afterverb
 
@@ -664,8 +665,8 @@ Hello, World!
 \afterverb
 
 The quotation marks in the program mark the beginning and end of the text to be displayed; they 
-don't appear in the result. The ``\\n'' is an {\bf escape character} \footnote{An escape character 
-is a special character within a string denoted by a ``whack'' (``\\'') followed by a character or 
+don't appear in the result. The ``\verb"\n"'' is an {\bf escape character} \footnote{An escape character 
+is a special character within a string denoted by a ``whack'' (``\textbackslash'') followed by a character or 
 series of characters that results in a special character, such as a new line.}, specifically the 
 newline character, which tells the output to move to a new line.
 
@@ -674,8 +675,8 @@ newline character, which tells the output to move to a new line.
 \index{print statement}
 \index{statement!print}
 
-There's another, more general print statement called ``printf,'' which lets you do more than $print_string$.
-Printf comes from it's own {\bf module}, called Printf, meaning you call printf by typing ``Printf.printf.''
+There's another, more general print statement called ``printf,'' which lets you do more than {\tt print\verb"_"string}.
+Printf comes from it's own {\bf module}, called Printf, meaning you call printf by typing ``Printf.printf.' 
 Modules are extensions of OCaml that often contain useful functions. Printf is a standard module, meaning
 it comes prepackaged with most OCaml installations. You can look up printf on your own if you're interested.
 
@@ -691,7 +692,7 @@ And then call printf simply as {\tt printf}. However, importing a module general
 
 \index{module}
 
-Really, we could get simply and just type ``Hello, World!'' and get the result ``{\tt - : string = ''Hello, World!''.}''
+Really, we could simply just type ``Hello, World!'' and get the result ``{\tt - : string = ''Hello, World!''.}''
 
 Some people judge the quality of a programming language by the simplicity of the ``Hello, World!'' program.  By this standard, OCaml does \footnote{Or can do, anyway. There are about as many different OCaml ``Hello, World!'' programs as there are OCaml programmers, all arguably equally valid.} about as well as possible.
 
@@ -720,7 +721,7 @@ OCaml is mostly a functional programming language. However, OCaml has support fo
 
 It is a good idea to read this book in front of a computer so you can try out the examples as you go.  You can run most of the examples in interactive mode, but if you put the code into a script, it is easier to try out variations.
 
-Whenever you are experimenting with a new feature, you should try to make mistakes.  For example, in the ``Hello, world!'' program, what happens if you leave out one of the quotation marks?  What if you leave out both?  What if you spell {\tt $print_string$} wrong?
+Whenever you are experimenting with a new feature, you should try to make mistakes.  For example, in the ``Hello, world!'' program, what happens if you leave out one of the quotation marks?  What if you leave out both?  What if you spell {\tt print\verb"_"string} wrong?
 
 \index{error message}
 
@@ -777,10 +778,10 @@ Learning to debug can be frustrating, but it is a valuable skill that is useful 
 \item[script:] A program stored in a file (usually one that will be interpreted).
 \index{script}
 
-\item[interactive mode:] A way of using the Python interpreter by typing commands and expressions at the prompt.
+\item[interactive mode:] A way of using the OCaml interpreter by typing commands and expressions at the prompt.
 \index{interactive mode}
 
-\item[script mode:] A way of using the Python interpreter to read and execute statements in a script.
+\item[script mode:] A way of using the OCaml interpreter to read and execute statements in a script.
 \index{script mode}
 
 \item[toplevel:] The interface you interact with when working with the interpreter.
@@ -2355,29 +2356,29 @@ single-argument functions.
 
 \section{Exercises}
 
-\begin{ex}
-
-\index{len function}
-\index{function!len}
-
-OCaml provides a standard module called {\tt String}, which includes a useful 
-function called {\tt length } that returns the length of a string, so the value 
-of \begin{verbatim} String.length("monje")" \end{verbatim} is 5.
-
-Write a function named \verb"right_justify" that takes a string
-named {\tt s} as a parameter and prints the string with enough
-leading spaces so that the last letter of the string is in column 70
-of the display.
-
-\beforeverb
-\begin{verbatim}
-# right_justify('monje')
-                                                                 monje
-\end{verbatim}
-\afterverb
-
-\end{ex}
-
+% \begin{ex}
+% 
+% \index{len function}
+% \index{function!len}
+% 
+% OCaml provides a standard module called {\tt String}, which includes a useful 
+% function called {\tt length } that returns the length of a string, so the value 
+% of \begin{verbatim} String.length("monje")" \end{verbatim} is 5.
+% 
+% Write a function named \verb"right_justify" that takes a string
+% named {\tt s} as a parameter and prints the string with enough
+% leading spaces so that the last letter of the string is in column 70
+% of the display.
+% 
+% \beforeverb
+% \begin{verbatim}
+% # right_justify('monje')
+%                                                                  monje
+% \end{verbatim}
+% \afterverb
+% 
+% \end{ex}
+% 
 \begin{ex}
 Write a function that takes two strings as an argument and concatenates
 them with a space in between.
@@ -2389,40 +2390,40 @@ Finally, write a function to append a symbol x number of times.
 
 \end{ex}
 
-\begin{ex}
-This exercise\footnote{Based on an exercise in Oualline, {\em
-    Practical C Programming, Third Edition}, O'Reilly (1997)} can be
-done using only the statements and other features we have learned so
-far.
-
-\index{grid}
-
-\begin{enumerate}
-
-\item Write a function that draws a grid like the
-  following:
-
-\beforeverb
-\begin{verbatim}
-+ - - - - + - - - - +
-|         |         |
-|         |         |
-|         |         |
-|         |         |
-+ - - - - + - - - - +
-|         |         |
-|         |         |
-|         |         |
-|         |         |
-+ - - - - + - - - - +
-\end{verbatim}
-\afterverb
-%
-
-\item Use the previous function to draw a similar grid
-with four rows and four columns.
-
-\end{enumerate}
+% \begin{ex}
+% This exercise\footnote{Based on an exercise in Oualline, {\em
+%     Practical C Programming, Third Edition}, O'Reilly (1997)} can be
+% done using only the statements and other features we have learned so
+% far.
+% 
+% \index{grid}
+% 
+% \begin{enumerate}
+% 
+% \item Write a function that draws a grid like the
+%   following:
+% 
+% \beforeverb
+% \begin{verbatim}
+% + - - - - + - - - - +
+% |         |         |
+% |         |         |
+% |         |         |
+% |         |         |
+% + - - - - + - - - - +
+% |         |         |
+% |         |         |
+% |         |         |
+% |         |         |
+% + - - - - + - - - - +
+% \end{verbatim}
+% \afterverb
+% 
+% 
+% \item Use the previous function to draw a similar grid
+% with four rows and four columns.
+% 
+% \end{enumerate}
 
 %You can see my solution at \url{thinkpython.com/ocaml/code/grid.ml}.
 %% Not yet you can't!
@@ -2438,7 +2439,7 @@ with four rows and four columns.
 \index{operator!modulus}
 
 The {\bf modulus operator} works on integers and yields the remainder
-when the first operand is divided by the second.  In Python, the
+when the first operand is divided by the second.  In OCaml, the
 modulus operator is {\tt mod}. The syntax is the same
 as for other operators:
 
@@ -5535,7 +5536,7 @@ Regular expressions exist in a lot of programming languages, and OCaml is no exc
 First, we're going to want a way of reading and writing files for this
 chapter. Basic file input/output (I/O, sometimes just IO) is pretty
 simple in OCaml. Let's say you have a plain-text file named {\tt
-  test.txt} in your current directory, which reads, ``Hi! \\n This is a
+  test.txt} in your current directory, which reads, ``Hi! \verb"\"n This is a
 test file!'' and you want to read it into OCaml. To do so, you need to
 open what's called a {\bf channel}. Channels come in two varieties,
 input, or read, and output, or write. If we want to read {\tt
@@ -5671,7 +5672,7 @@ Perhaps the simplest regular expression is just a string. The regular expression
 
 Fortunately, regular expressions allow us to do much cooler things. For example, we can detect the ends of words using the special ``\b'' character. If we want to find words that end in ``ly'', for example, which might make a simple method of finding most, but not all, adverbs, we can use the regular expression ``ly\b.''
 
-Lots of useful functionality in regular expressions comes from some of its operators. Most of the notable regular expression operators are {\tt postfix} operators, meaning they operate on the character before them. For example, the ``*'' token matches the preceding expression any number of times, including zero. For example, the regular expression ``pbb*t'' would match any of ``pbt,'' ``pbbt,'' or ``pbbbbbbt.'' But that's just rude. You can also group expressions using ``\\(... \\)'', and then a postfix operator after the grouping will be applied to the entire grouping, i.e., ``\\(aa\\)*'' will match any sequence with an even number of a's.
+Lots of useful functionality in regular expressions comes from some of its operators. Most of the notable regular expression operators are {\tt postfix} operators, meaning they operate on the character before them. For example, the ``*'' token matches the preceding expression any number of times, including zero. For example, the regular expression ``pbb*t'' would match any of ``pbt,'' ``pbbt,'' or ``pbbbbbbt.'' But that's just rude. You can also group expressions using ``\verb"\"(... \verb"\")'', and then a postfix operator after the grouping will be applied to the entire grouping, i.e., ``\\(aa\\)*'' will match any sequence with an even number of a's.
 
 There are also character classes, which match a single character out
 of a set of characters, denoted by square brackets. If we want to
@@ -5702,7 +5703,7 @@ Token & Description & Example \\ \hline
 \label{tab:regex}
 \end{tabular}
 
-Note that when entering any of the characters with a ``\\'' in an OCaml string, you will have to double the backslash so that it doesn't try to make it into an escape sequence (unless the escape sequence is what you want, as with tab and newline).
+Note that when entering any of the characters with a ``\verb"\\"'' in an OCaml string, you will have to double the backslash so that it doesn't try to make it into an escape sequence (unless the escape sequence is what you want, as with tab and newline).
 
 % write here
 \begin{ex} \label{ex:regex_doubles}
@@ -6333,37 +6334,36 @@ to find a given element no longer how large the hashtable is!
 
 \index{hashtable}
 
-% \begin{ex}
-% \label{wordlist2}
-% 
-% \index{set membership}
-% \index{membership!set}
-% 
-% For this exercise, we need a list of English words.
-% There are lots of word lists available on the Web, but the one most
-% suitable for our purpose is one of the word lists collected and
-% contributed to the public domain by Grady Ward as part of the Moby
-% lexicon project\footnote{\url{wikipedia.org/wiki/Moby_Project}.}.  It
-% is a list of 113,809 official crosswords; that is, words that are
-% considered valid in crossword puzzles and other word games.  In the
-% Moby collection, the filename is {\tt 113809of.fic}; I host a copy
-% of this file, with the simpler name {\tt words.txt}, at {\url www.nmonje.com/bin/words.txt}.
-% % make words.txt available for this book, and get rid of \r
-% 
-% \index{word list}
-% \index{words.txt}
-% 
-% Write a function that reads the words in {\tt words.txt} and
-% stores them as keys in a hashtable.  It doesn't matter what the
-% values are.  Then you can use the {\tt mem} function
-% as a fast way to check whether a string is in
-% the hashtable.
-% 
-% If you did Exercise~\ref{wordlist1}, you can compare the speed
-% of this implementation with the list equivalent.
-% 
-% \end{ex}
-% 
+\begin{ex}
+\label{wordlist2}
+
+\index{set membership}
+\index{membership!set}
+
+For this exercise, we need a list of English words.
+There are lots of word lists available on the Web, but the one most
+suitable for our purpose is one of the word lists collected and
+contributed to the public domain by Grady Ward as part of the Moby
+lexicon project\footnote{\url{wikipedia.org/wiki/Moby_Project}.}.  It
+is a list of 113,809 official crosswords; that is, words that are
+considered valid in crossword puzzles and other word games.  In the
+Moby collection, the filename is {\tt 113809of.fic}; I host a copy
+of this file, with the simpler name {\tt words.txt}, at {\url www.thinkocaml.com/bin/words.txt}.
+
+\index{word list}
+\index{words.txt}
+
+Write a function that reads the words in {\tt words.txt} and
+stores them as keys in a hashtable.  It doesn't matter what the
+values are.  Then you can use the {\tt mem} function
+as a fast way to check whether a string is in
+the hashtable.
+
+If you did Exercise~\ref{wordlist1}, you can compare the speed
+of this implementation with the list equivalent.
+
+\end{ex}
+
 
 \section{Hashtable as a set of counters}
 \label{histogram}
@@ -7483,9 +7483,9 @@ Hint: there are seven.
   ``converse'' and ``conserve.''  Write a program that finds all of
   the metathesis pairs in the dictionary.  Hint: don't test all pairs
   of words, and don't test all possible swaps.
-
-You can download a solution from \url{thinkpython.com/code/anagram_sets.py}.
-
+% 
+% You can download a solution from \url{thinkpython.com/code/anagram_sets.py}.
+% 
 \end{enumerate}
 \end{ex}
 
@@ -7549,8 +7549,8 @@ to memoize the words that are known to be reducible.
 
 \end{enumerate}
 
-You can see my solution at \url{thinkpython.com/code/reducible.py}.
-
+% You can see my solution at \url{thinkpython.com/code/reducible.py}.
+% 
 \end{ex}
 
 
@@ -7849,7 +7849,7 @@ words in the file:
 #load "str.cma";;
 Random.self_init ();;
 
-let r_punc = "[]\\$\\^\\.\\*\\+\\?{}|:;'\"<>,/\\\\[=_@#%&!()-]+";;
+let r_punc = "[]\\$\\^\\.\\*\\+\\?{}|:;'\"<>,/\\ \\[=_@#%&!()-]+";;
 let strip = Str.global_replace (Str.regexp r_punc) "";;
 
 let addfunct h v k = 
@@ -8132,29 +8132,29 @@ hist_print unlisted_words;;
 \end{verbatim}
 \afterverb
 %
-Here are some of the results from {\em The Adventures of Sherlock Holmes}:
-%DO THIS
-\beforeverb
-\begin{verbatim}
-Sike!
-\end{verbatim}
-\afterverb
-%
-Some of these words are names and possessives.  Others, like
-``rencontre,'' are no longer in common use.  But a few are common
-words that should really be in the list!
+% Here are some of the results from {\em The Adventures of Sherlock Holmes}:
+% %DO THIS
+% \beforeverb
+% \begin{verbatim}
+% Sike!
+% \end{verbatim}
+% \afterverb
+% %
+% Some of these words are names and possessives.  Others, like
+% ``rencontre,'' are no longer in common use.  But a few are common
+% words that should really be in the list!
 
-\begin{ex}
-
-\index{set}
-\index{type!set}
-%Look this up!
-OCaml provides a data structure called {\tt set} that provides many
-common set operations.  Read the documentation at
-\url{docs.python.org/lib/types-set.html} and write a program
-that uses set subtraction to find words in the book that are not in
-the word list.
-\end{ex}
+% \begin{ex}
+% 
+% \index{set}
+% \index{type!set}
+% %Look this up!
+% OCaml provides a data structure called {\tt set} that provides many
+% common set operations.  Read the documentation at
+% \url{docs.python.org/lib/types-set.html} and write a program
+% that uses set subtraction to find words in the book that are not in
+% the word list.
+% \end{ex}
 
 
 \section{Random words}
@@ -8371,9 +8371,9 @@ be faster.  One option is to implement both of them and see which
 is better.  This approach is called {\bf benchmarking}.  A practical
 alternative is to choose the data structure that is
 easiest to implement, and then see if it is fast enough for the
-intended application.  If so, there is no need to go on.  If not,
-there are tools, that can identify %find one!
-the places in a program that take the most time.
+intended application.  % If so, there is no need to go on.  If not,
+% there are tools, that can identify %find one!
+% the places in a program that take the most time.
 
 \index{benchmarking}
 
@@ -8544,690 +8544,690 @@ a straight line.  Can you estimate the value of $s$?
 
 \appendix
 
-\chapter{Debugging}
-\index{debugging}
-
-Different kinds of errors can occur
-in a program, and it is useful to distinguish among them
-in order to track them down more quickly:
-
-\begin{itemize}
-
-\item Syntax errors are produced by Python when it is translating the
-  source code into byte code.  They usually indicate that there is
-  something wrong with the syntax of the program.  Example: Omitting
-  the colon at the end of a {\tt def} statement yields the somewhat
-  redundant message {\tt SyntaxError: invalid syntax}.
-
-\item Runtime errors are produced by the interpreter if something goes
-  wrong while the program is running.  Most runtime error messages
-  include information about where the error occurred and what
-  functions were executing.  Example: An infinite recursion eventually
-  causes the runtime error ``maximum recursion depth exceeded.''
-
-\item Semantic errors are problems with a program that runs without
-  producing error messages but doesn't do the right thing.  Example:
-  An expression may not be evaluated in the order you expect, yielding
-  an incorrect result.
-
-\end{itemize}
-
-\index{syntax error}
-\index{runtime error}
-\index{semantic error}
-\index{error!compile-time}
-\index{error!syntax}
-\index{error!runtime}
-\index{error!semantic}
-\index{exception}
-
-The first step in debugging is to figure out which kind of
-error you are dealing with.  Although the following sections are
-organized by error type, some techniques are
-applicable in more than one situation.
-
-
-\section{Syntax errors}
-
-\index{error message}
-
-Syntax errors are usually easy to fix once you figure out what they
-are.  Unfortunately, the error messages are often not helpful.
-The most common messages are {\tt SyntaxError: invalid syntax} and
-{\tt SyntaxError: invalid token}, neither of which is very informative.
-
-On the other hand, the message does tell you where in the program the
-problem occurred.  Actually, it tells you where Python
-noticed a problem, which is not necessarily where the error
-is.  Sometimes the error is prior to the location of the error
-message, often on the preceding line.
-
-\index{incremental development}
-\index{development plan!incremental}
-
-If you are building the program incrementally, you should have
-a good idea about where the error is.  It will be in the last
-line you added.
-
-If you are copying code from a book, start by comparing
-your code to the book's code very carefully.  Check every character.
-At the same time, remember that the book might be wrong, so
-if you see something that looks like a syntax error, it might be.
-
-Here are some ways to avoid the most common syntax errors:
-
-\index{syntax}
-
-\begin{enumerate}
-
-\item Make sure you are not using a Python keyword for a variable name.
-
-\index{keyword}
-
-\item Check that you have a colon at the end of the header of every
-compound statement, including {\tt for}, {\tt while},
-{\tt if}, and {\tt def} statements.
-
-\index{header}
-\index{colon}
-
-\item Make sure that any strings in the code have matching
-quotation marks.
-
-\index{quotation mark}
-
-\item If you have multiline strings with triple quotes (single or double), make
-sure you have terminated the string properly.  An unterminated string
-may cause an {\tt invalid token} error at the end of your program,
-or it may treat the following part of the program as a string until it
-comes to the next string.  In the second case, it might not produce an error
-message at all!
-
-\index{multiline string}
-\index{string!multiline}
-
-\item An unclosed opening operator---\verb+(+, \verb+{+, or
-  \verb+[+---makes Python continue with the next line as part of the
-  current statement.  Generally, an error occurs almost immediately in
-  the next line.
-
-\item Check for the classic {\tt =} instead of {\tt ==} inside
-a conditional.
-
-\index{conditional}
-
-\item Check the indentation to make sure it lines up the way it
-is supposed to.  Python can handle space and tabs, but if you mix
-them it can cause problems.  The best way to avoid this problem
-is to use a text editor that knows about Python and generates
-consistent indentation.
-
-\index{indentation}
-\index{whitespace}
-
-\end{enumerate}
-
-If nothing works, move on to the next section...
-
-
-\subsection{I keep making changes and it makes no difference.}
-
-If the interpreter says there is an error and you don't see it, that
-might be because you and the interpreter are not looking at the same
-code.  Check your programming environment to make sure that the
-program you are editing is the one Python is trying to run.
-
-If you are not sure, try putting an obvious and deliberate syntax
-error at the beginning of the program.  Now run it again.  If the
-interpreter doesn't find the new error, you are not running the
-new code.
-
-There are a few likely culprits:
-
-\begin{itemize}
-
-\item You edited the file and forgot to save the changes before
-running it again.  Some programming environments do this
-for you, but some don't.
-
-\item You changed the name of the file, but you are still running
-the old name.
-
-\item Something in your development environment is configured
-incorrectly.
-
-\item If you are writing a module and using {\tt import},
-make sure you don't give your module the same name as one
-of the standard Python modules.
-
-\index{module!reload}
-\index{reload function}
-\index{function!reload}
-
-\item If you are using {\tt import} to read a module, remember
-that you have to restart the interpreter or use {\tt reload}
-to read a modified file.  If you import the module again, it
-doesn't do anything.
-
-\end{itemize}
-
-If you get stuck and you can't figure out what is going on, one
-approach is to start again with a new program like ``Hello, World!,''
-and make sure you can get a known program to run.  Then gradually add
-the pieces of the original program to the new one.
-
-
-\section{Runtime errors}
-
-Once your program is syntactically correct,
-Python can compile it and at least start running it.  What could
-possibly go wrong?
-
-
-\subsection{My program does absolutely nothing.}
-
-This problem is most common when your file consists of functions and
-classes but does not actually invoke anything to start execution.
-This may be intentional if you only plan to import this module to
-supply classes and functions.
-
-If it is not intentional, make sure that you
-are invoking a function to start execution, or execute one from
-the interactive prompt.  Also see the ``Flow of Execution'' section
-below.
-
-
-\subsection{My program hangs.}
-\index{infinite loop}
-\index{infinite recursion}
-\index{hanging}
-
-If a program stops and seems to be doing nothing, it is ``hanging.''
-Often that means that it is caught in an infinite loop or infinite
-recursion.
-
-\begin{itemize}
-
-\item If there is a particular loop that you suspect is the
-problem, add a {\tt print} statement immediately before the loop that says
-``entering the loop'' and another immediately after that says
-``exiting the loop.''
-
-Run the program.  If you get the first message and not the second,
-you've got an infinite loop.  Go to the ``Infinite Loop'' section
-below.
-
-\item Most of the time, an infinite recursion will cause the program
-to run for a while and then produce a ``RuntimeError: Maximum
-recursion depth exceeded'' error.  If that happens, go to the
-``Infinite Recursion'' section below.
-
-If you are not getting this error but you suspect there is a problem
-with a recursive method or function, you can still use the techniques
-in the ``Infinite Recursion'' section.
-
-\item If neither of those steps works, start testing other
-loops and other recursive functions and methods.
-
-\item If that doesn't work, then it is possible that
-you don't understand the flow of execution in your program.
-Go to the ``Flow of Execution'' section below.
-
-\end{itemize}
-
-
-\subsubsection{Infinite Loop}
-\index{infinite loop}
-\index{loop!infinite}
-\index{condition}
-\index{loop!condition}
-
-If you think you have an infinite loop and you think you know
-what loop is causing the problem, add a {\tt print} statement at
-the end of the loop that prints the values of the variables in
-the condition and the value of the condition.
-
-For example:
-
-\beforeverb
-\begin{verbatim}
-while x > 0 and y < 0 :
-    # do something to x
-    # do something to y
-
-    print  "x: ", x
-    print  "y: ", y
-    print  "condition: ", (x > 0 and y < 0)
-\end{verbatim}
-\afterverb
-%
-Now when you run the program, you will see three lines of output
-for each time through the loop.  The last time through the
-loop, the condition should be {\tt false}.  If the loop keeps
-going, you will be able to see the values of {\tt x} and {\tt y},
-and you might figure out why they are not being updated correctly.
-
-
-\subsubsection{Infinite Recursion}
-\index{infinite recursion}
-\index{recursion!infinite}
-
-Most of the time, an infinite recursion will cause the program to run
-for a while and then produce a {\tt Maximum recursion depth exceeded}
-error.
-
-If you suspect that a function or method is causing an infinite
-recursion, start by checking to make sure that there is a base case.
-In other words, there should be some condition that will cause the
-function or method to return without making a recursive invocation.
-If not, then you need to rethink the algorithm and identify a base
-case.
-
-If there is a base case but the program doesn't seem to be reaching
-it, add a {\tt print} statement at the beginning of the function or method
-that prints the parameters.  Now when you run the program, you will see
-a few lines of output every time the function or method is invoked,
-and you will see the parameters.  If the parameters are not moving
-toward the base case, you will get some ideas about why not.
-
-
-\subsubsection{Flow of Execution}
-\index{flow of execution}
-
-If you are not sure how the flow of execution is moving through
-your program, add {\tt print} statements to the beginning of each
-function with a message like ``entering function {\tt foo},'' where
-{\tt foo} is the name of the function.
-
-Now when you run the program, it will print a trace of each
-function as it is invoked.
-
-
-\subsection{When I run the program I get an exception.}
-\index{exception}
-\index{runtime error}
-
-If something goes wrong during runtime, Python
-prints a message that includes the name of the
-exception, the line of the program where the problem occurred,
-and a traceback.
-
-\index{traceback}
-
-The traceback identifies the function that is currently running,
-and then the function that invoked it, and then the function that
-invoked {\em that}, and so on.  In other words, it traces the
-sequence of function invocations that got you to where you are.  It
-also includes the line number in your file where each of these
-calls occurs.
-
-The first step is to examine the place in the program where
-the error occurred and see if you can figure out what happened.
-These are some of the most common runtime errors:
-
-\begin{description}
-
-\item[NameError:]  You are trying to use a variable that doesn't
-exist in the current environment.
-Remember that local variables are local.  You
-cannot refer to them from outside the function where they are defined.
-
-\index{NameError}
-\index{TypeError}
-\index{exception!NameError}
-\index{exception!TypeError}
-
-\item[TypeError:] There are several possible causes:
-
-\begin{itemize}
-
-\item  You are trying to use a value improperly.  Example: indexing
-a string, list, or tuple with something other than an integer.
-
-\index{index}
-
-\item There is a mismatch between the items in a format string and
-the items passed for conversion.  This can happen if either the number
-of items does not match or an invalid conversion is called for.
-
-\index{format operator}
-\index{operator!format}
-
-\item You are passing the wrong number of arguments to a function or method.
-For methods, look at the method definition and
-check that the first parameter is {\tt self}.  Then look at the
-method invocation; make sure you are invoking the method on an
-object with the right type and providing the other arguments
-correctly.
-
-\end{itemize}
-
-\item[KeyError:]  You are trying to access an element of a dictionary
-using a key that the dictionary does not contain.
-
-\index{KeyError}
-\index{exception!KeyError}
-\index{dictionary}
-
-\item[AttributeError:] You are trying to access an attribute or method
-that does not exist.  Check the spelling!  You can use
-{\tt dir} to list the attributes that do exist.
-
-If an AttributeError indicates that an object has {\tt NoneType},
-that means that it is {\tt None}.  One common cause is forgetting
-to return a value from a function; if you get to the end of
-a function without hitting a {\tt return} statement, it returns
-{\tt None}.  Another common cause is using the result from
-a list method, like {\tt sort}, that returns {\tt None}.
-
-\index{AttributeError}
-\index{exception!AttributeError}
-
-\item[IndexError:] The index you are using
-to access a list, string, or tuple is greater than
-its length minus one.  Immediately before the site of the error,
-add a {\tt print} statement to display
-the value of the index and the length of the array.
-Is the array the right size?  Is the index the right value?
-
-\index{IndexError}
-\index{exception!IndexError}
-
-\end{description}
-
-\index{debugger (pdb)}
-\index{Python debugger (pdb)}
-\index{pdb (Python debugger)}
-
-The Python debugger ({\tt pdb}) is useful for tracking down
-Exceptions because it allows you to examine the state of the
-program immediately before the error.  You can read
-about {\tt pdb} at \url{docs.python.org/lib/module-pdb.html}.
-
-
-\subsection{I added so many {\tt print} statements I get inundated with
-output.}
-
-\index{print statement}
-\index{statement!print}
-
-One of the problems with using {\tt print} statements for debugging
-is that you can end up buried in output.  There are two ways
-to proceed: simplify the output or simplify the program.
-
-To simplify the output, you can remove or comment out {\tt print}
-statements that aren't helping, or combine them, or format
-the output so it is easier to understand.
-
-To simplify the program, there are several things you can do.  First,
-scale down the problem the program is working on.  For example, if you
-are searching a list, search a {\em small} list.  If the program takes
-input from the user, give it the simplest input that causes the
-problem.
-
-\index{dead code}
-
-Second, clean up the program.  Remove dead code and reorganize the
-program to make it as easy to read as possible.  For example, if you
-suspect that the problem is in a deeply nested part of the program,
-try rewriting that part with simpler structure.  If you suspect a
-large function, try splitting it into smaller functions and testing them
-separately.
-
-\index{testing!minimal test case}
-\index{test case, minimal}
-
-Often the process of finding the minimal test case leads you to the
-bug.  If you find that a program works in one situation but not in
-another, that gives you a clue about what is going on.
-
-Similarly, rewriting a piece of code can help you find subtle
-bugs.  If you make a change that you think shouldn't affect the
-program, and it does, that can tip you off.
-
-
-\section{Semantic errors}
-\index{semantic error}
-\index{error!semantic}
-
-In some ways, semantic errors are the hardest to debug,
-because the interpreter provides no information
-about what is wrong.  Only you know what the program is supposed to
-do.
-
-The first step is to make a connection between the program
-text and the behavior you are seeing.  You need a hypothesis
-about what the program is actually doing.  One of the things
-that makes that hard is that computers run so fast.
-
-You will often wish that you could slow the program down to human
-speed, and with some debuggers you can.  But the time it takes to
-insert a few well-placed {\tt print} statements is often short compared to
-setting up the debugger, inserting and removing breakpoints, and
-``stepping'' the program to where the error is occurring.
-
-\subsection{My program doesn't work.}
-
-You should ask yourself these questions:
-
-\begin{itemize}
-
-\item Is there something the program was supposed to do but
-which doesn't seem to be happening?  Find the section of the code
-that performs that function and make sure it is executing when
-you think it should.
-
-\item Is something happening that shouldn't?  Find code in
-your program that performs that function and see if it is
-executing when it shouldn't.
-
-\item Is a section of code producing an effect that is not
-what you expected?  Make sure that you understand the code in
-question, especially if it involves invocations to functions or methods in
-other OCaml modules.  Read the documentation for the functions you invoke.
-Try them out by writing simple test cases and checking the results.
-
-\end{itemize}
-
-In order to program, you need to have a mental model of how
-programs work.  If you write a program that doesn't do what you expect,
-very often the problem is not in the program; it's in your mental
-model.
-
-\index{model, mental}
-\index{mental model}
-
-The best way to correct your mental model is to break the program
-into its components (usually the functions and methods) and test
-each component independently.  Once you find the discrepancy
-between your model and reality, you can solve the problem.
-
-Of course, you should be building and testing components as you
-develop the program.  If you encounter a problem,
-there should be only a small amount of new code
-that is not known to be correct.
-
-
-\subsection{I've got a big hairy expression and it doesn't
-do what I expect.}
-
-\index{expression!big and hairy}
-\index{big, hairy expression}
-
-Writing complex expressions is fine as long as they are readable,
-but they can be hard to debug.  It is often a good idea to
-break a complex expression into a series of assignments to
-temporary variables.
-
-For example:
-
-\beforeverb
-\begin{verbatim}
-self.hands[i].addCard(self.hands[self.findNeighbor(i)].popCard())
-\end{verbatim}
-\afterverb
-%
-This can be rewritten as:
-
-\beforeverb
-\begin{verbatim}
-neighbor = self.findNeighbor(i)
-pickedCard = self.hands[neighbor].popCard()
-self.hands[i].addCard(pickedCard)
-\end{verbatim}
-\afterverb
-%
-The explicit version is easier to read because the variable
-names provide additional documentation, and it is easier to debug
-because you can check the types of the intermediate variables
-and display their values.
-
-\index{temporary variable}
-\index{variable!temporary}
-\index{order of operations}
-\index{precedence}
-
-Another problem that can occur with big expressions is
-that the order of evaluation may not be what you expect.
-For example, if you are translating the expression
-$\frac{x}{2 \pi}$ into Python, you might write:
-
-\beforeverb
-\begin{verbatim}
-y = x / 2 * math.pi
-\end{verbatim}
-\afterverb
-%
-That is not correct because multiplication and division have
-the same precedence and are evaluated from left to right.
-So this expression computes $x \pi / 2$.
-
-A good way to debug expressions is to add parentheses to make
-the order of evaluation explicit:
-
-\beforeverb
-\begin{verbatim}
- y = x / (2 * math.pi)
-\end{verbatim}
-\afterverb
-%
-Whenever you are not sure of the order of evaluation, use
-parentheses.  Not only will the program be correct (in the sense
-of doing what you intended), it will also be more readable for
-other people who haven't memorized the rules of precedence.
-
-
-\subsection{I've got a function or method that doesn't return what I
-expect.}
-\index{return statement}
-\index{statement!return}
-
-If you have a {\tt return} statement with a complex expression,
-you don't have a chance to print the {\tt return} value before
-returning.  Again, you can use a temporary variable.  For
-example, instead of:
-
-\beforeverb
-\begin{verbatim}
-return self.hands[i].removeMatches()
-\end{verbatim}
-\afterverb
-%
-you could write:
-
-\beforeverb
-\begin{verbatim}
-count = self.hands[i].removeMatches()
-return count
-\end{verbatim}
-\afterverb
-%
-Now you have the opportunity to display the value of
-{\tt count} before returning.
-
-
-\subsection{I'm really, really stuck and I need help.}
-
-First, try getting away from the computer for a few minutes.
-Computers emit waves that affect the brain, causing these
-symptoms:
-
-\begin{itemize}
-
-\item Frustration and rage.
-
-\index{frustration}
-\index{rage}
-\index{debugging!emotional response}
-\index{emotional debugging}
-
-\item Superstitious beliefs (``the computer hates me'') and
-magical thinking (``the program only works when I wear my
-hat backward'').
-
-\index{debugging!superstition}
-\index{superstitious debugging}
-
-\item Random walk programming (the attempt to program by writing
-every possible program and choosing the one that does the right
-thing).
-
-\index{random walk programming}
-\index{development plan!random walk programming}
-
-\end{itemize}
-
-If you find yourself suffering from any of these symptoms, get
-up and go for a walk.  When you are calm, think about the program.
-What is it doing?  What are some possible causes of that
-behavior?  When was the last time you had a working program,
-and what did you do next?
-
-Sometimes it just takes time to find a bug.  I often find bugs
-when I am away from the computer and let my mind wander.  Some
-of the best places to find bugs are trains, showers, and in bed,
-just before you fall asleep.
-
-
-\subsection{No, I really need help.}
-
-It happens.  Even the best programmers occasionally get stuck.
-Sometimes you work on a program so long that you can't see the
-error.  A fresh pair of eyes is just the thing.
-
-Before you bring someone else in, make sure you are prepared.
-Your program should be as simple
-as possible, and you should be working on the smallest input
-that causes the error.  You should have {\tt print} statements in the
-appropriate places (and the output they produce should be
-comprehensible).  You should understand the problem well enough
-to describe it concisely.
-
-When you bring someone in to help, be sure to give
-them the information they need:
-
-\begin{itemize}
-
-\item If there is an error message, what is it
-and what part of the program does it indicate?
-
-\item What was the last thing you did before this error occurred?
-What were the last lines of code that you wrote, or what is
-the new test case that fails?
-
-\item What have you tried so far, and what have you learned?
-
-\end{itemize}
-
-When you find the bug, take a second to think about what you
-could have done to find it faster.  Next time you see something
-similar, you will be able to find the bug more quickly.
-
-Remember, the goal is not just to make the program
-work.  The goal is to learn how to make the program work.
-
-
-
+% \chapter{Debugging}
+% \index{debugging}
+% 
+% Different kinds of errors can occur
+% in a program, and it is useful to distinguish among them
+% in order to track them down more quickly:
+% 
+% \begin{itemize}
+% 
+% \item Syntax errors are produced by OCaml when it is translating the
+%   source code into byte code.  They usually indicate that there is
+%   something wrong with the syntax of the program.  Example: Omitting
+%   the colon at the end of a {\tt def} statement yields the somewhat
+%   redundant message {\tt SyntaxError: invalid syntax}.
+% 
+% \item Runtime errors are produced by the interpreter if something goes
+%   wrong while the program is running.  Most runtime error messages
+%   include information about where the error occurred and what
+%   functions were executing.  Example: An infinite recursion eventually
+%   causes the runtime error ``maximum recursion depth exceeded.''
+% 
+% \item Semantic errors are problems with a program that runs without
+%   producing error messages but doesn't do the right thing.  Example:
+%   An expression may not be evaluated in the order you expect, yielding
+%   an incorrect result.
+% 
+% \end{itemize}
+% 
+% \index{syntax error}
+% \index{runtime error}
+% \index{semantic error}
+% \index{error!compile-time}
+% \index{error!syntax}
+% \index{error!runtime}
+% \index{error!semantic}
+% \index{exception}
+% 
+% The first step in debugging is to figure out which kind of
+% error you are dealing with.  Although the following sections are
+% organized by error type, some techniques are
+% applicable in more than one situation.
+% 
+% 
+% \section{Syntax errors}
+% 
+% \index{error message}
+% 
+% Syntax errors are usually easy to fix once you figure out what they
+% are.  Unfortunately, the error messages are often not helpful.
+% The most common messages are {\tt SyntaxError: invalid syntax} and
+% {\tt SyntaxError: invalid token}, neither of which is very informative.
+% 
+% On the other hand, the message does tell you where in the program the
+% problem occurred.  Actually, it tells you where OCaml
+% noticed a problem, which is not necessarily where the error
+% is.  Sometimes the error is prior to the location of the error
+% message, often on the preceding line.
+% 
+% \index{incremental development}
+% \index{development plan!incremental}
+% 
+% If you are building the program incrementally, you should have
+% a good idea about where the error is.  It will be in the last
+% line you added.
+% 
+% If you are copying code from a book, start by comparing
+% your code to the book's code very carefully.  Check every character.
+% At the same time, remember that the book might be wrong, so
+% if you see something that looks like a syntax error, it might be.
+% 
+% Here are some ways to avoid the most common syntax errors:
+% 
+% \index{syntax}
+% 
+% \begin{enumerate}
+% 
+% \item Make sure you are not using a OCaml keyword for a variable name.
+% 
+% \index{keyword}
+% 
+% \item Check that you have a colon at the end of the header of every
+% compound statement, including {\tt for}, {\tt while},
+% {\tt if}, and {\tt def} statements.
+% 
+% \index{header}
+% \index{colon}
+% 
+% \item Make sure that any strings in the code have matching
+% quotation marks.
+% 
+% \index{quotation mark}
+% 
+% \item If you have multiline strings with triple quotes (single or double), make
+% sure you have terminated the string properly.  An unterminated string
+% may cause an {\tt invalid token} error at the end of your program,
+% or it may treat the following part of the program as a string until it
+% comes to the next string.  In the second case, it might not produce an error
+% message at all!
+% 
+% \index{multiline string}
+% \index{string!multiline}
+% 
+% \item An unclosed opening operator---\verb+(+, \verb+{+, or
+%   \verb+[+---makes OCaml continue with the next line as part of the
+%   current statement.  Generally, an error occurs almost immediately in
+%   the next line.
+% 
+% \item Check for the classic {\tt =} instead of {\tt ==} inside
+% a conditional.
+% 
+% \index{conditional}
+% 
+% \item Check the indentation to make sure it lines up the way it
+% is supposed to.  Python can handle space and tabs, but if you mix
+% them it can cause problems.  The best way to avoid this problem
+% is to use a text editor that knows about Python and generates
+% consistent indentation.
+% 
+% \index{indentation}
+% \index{whitespace}
+% 
+% \end{enumerate}
+% 
+% If nothing works, move on to the next section...
+% 
+% 
+% \subsection{I keep making changes and it makes no difference.}
+% 
+% If the interpreter says there is an error and you don't see it, that
+% might be because you and the interpreter are not looking at the same
+% code.  Check your programming environment to make sure that the
+% program you are editing is the one Python is trying to run.
+% 
+% If you are not sure, try putting an obvious and deliberate syntax
+% error at the beginning of the program.  Now run it again.  If the
+% interpreter doesn't find the new error, you are not running the
+% new code.
+% 
+% There are a few likely culprits:
+% 
+% \begin{itemize}
+% 
+% \item You edited the file and forgot to save the changes before
+% running it again.  Some programming environments do this
+% for you, but some don't.
+% 
+% \item You changed the name of the file, but you are still running
+% the old name.
+% 
+% \item Something in your development environment is configured
+% incorrectly.
+% 
+% \item If you are writing a module and using {\tt import},
+% make sure you don't give your module the same name as one
+% of the standard Python modules.
+% 
+% \index{module!reload}
+% \index{reload function}
+% \index{function!reload}
+% 
+% \item If you are using {\tt import} to read a module, remember
+% that you have to restart the interpreter or use {\tt reload}
+% to read a modified file.  If you import the module again, it
+% doesn't do anything.
+% 
+% \end{itemize}
+% 
+% If you get stuck and you can't figure out what is going on, one
+% approach is to start again with a new program like ``Hello, World!,''
+% and make sure you can get a known program to run.  Then gradually add
+% the pieces of the original program to the new one.
+% 
+% 
+% \section{Runtime errors}
+% 
+% Once your program is syntactically correct,
+% Python can compile it and at least start running it.  What could
+% possibly go wrong?
+% 
+% 
+% \subsection{My program does absolutely nothing.}
+% 
+% This problem is most common when your file consists of functions and
+% classes but does not actually invoke anything to start execution.
+% This may be intentional if you only plan to import this module to
+% supply classes and functions.
+% 
+% If it is not intentional, make sure that you
+% are invoking a function to start execution, or execute one from
+% the interactive prompt.  Also see the ``Flow of Execution'' section
+% below.
+% 
+% 
+% \subsection{My program hangs.}
+% \index{infinite loop}
+% \index{infinite recursion}
+% \index{hanging}
+% 
+% If a program stops and seems to be doing nothing, it is ``hanging.''
+% Often that means that it is caught in an infinite loop or infinite
+% recursion.
+% 
+% \begin{itemize}
+% 
+% \item If there is a particular loop that you suspect is the
+% problem, add a {\tt print} statement immediately before the loop that says
+% ``entering the loop'' and another immediately after that says
+% ``exiting the loop.''
+% 
+% Run the program.  If you get the first message and not the second,
+% you've got an infinite loop.  Go to the ``Infinite Loop'' section
+% below.
+% 
+% \item Most of the time, an infinite recursion will cause the program
+% to run for a while and then produce a ``RuntimeError: Maximum
+% recursion depth exceeded'' error.  If that happens, go to the
+% ``Infinite Recursion'' section below.
+% 
+% If you are not getting this error but you suspect there is a problem
+% with a recursive method or function, you can still use the techniques
+% in the ``Infinite Recursion'' section.
+% 
+% \item If neither of those steps works, start testing other
+% loops and other recursive functions and methods.
+% 
+% \item If that doesn't work, then it is possible that
+% you don't understand the flow of execution in your program.
+% Go to the ``Flow of Execution'' section below.
+% 
+% \end{itemize}
+% 
+% 
+% \subsubsection{Infinite Loop}
+% \index{infinite loop}
+% \index{loop!infinite}
+% \index{condition}
+% \index{loop!condition}
+% 
+% If you think you have an infinite loop and you think you know
+% what loop is causing the problem, add a {\tt print} statement at
+% the end of the loop that prints the values of the variables in
+% the condition and the value of the condition.
+% 
+% For example:
+% 
+% \beforeverb
+% \begin{verbatim}
+% while x > 0 and y < 0 :
+%     # do something to x
+%     # do something to y
+% 
+%     print  "x: ", x
+%     print  "y: ", y
+%     print  "condition: ", (x > 0 and y < 0)
+% \end{verbatim}
+% \afterverb
+% %
+% Now when you run the program, you will see three lines of output
+% for each time through the loop.  The last time through the
+% loop, the condition should be {\tt false}.  If the loop keeps
+% going, you will be able to see the values of {\tt x} and {\tt y},
+% and you might figure out why they are not being updated correctly.
+% 
+% 
+% \subsubsection{Infinite Recursion}
+% \index{infinite recursion}
+% \index{recursion!infinite}
+% 
+% Most of the time, an infinite recursion will cause the program to run
+% for a while and then produce a {\tt Maximum recursion depth exceeded}
+% error.
+% 
+% If you suspect that a function or method is causing an infinite
+% recursion, start by checking to make sure that there is a base case.
+% In other words, there should be some condition that will cause the
+% function or method to return without making a recursive invocation.
+% If not, then you need to rethink the algorithm and identify a base
+% case.
+% 
+% If there is a base case but the program doesn't seem to be reaching
+% it, add a {\tt print} statement at the beginning of the function or method
+% that prints the parameters.  Now when you run the program, you will see
+% a few lines of output every time the function or method is invoked,
+% and you will see the parameters.  If the parameters are not moving
+% toward the base case, you will get some ideas about why not.
+% 
+% 
+% \subsubsection{Flow of Execution}
+% \index{flow of execution}
+% 
+% If you are not sure how the flow of execution is moving through
+% your program, add {\tt print} statements to the beginning of each
+% function with a message like ``entering function {\tt foo},'' where
+% {\tt foo} is the name of the function.
+% 
+% Now when you run the program, it will print a trace of each
+% function as it is invoked.
+% 
+% 
+% \subsection{When I run the program I get an exception.}
+% \index{exception}
+% \index{runtime error}
+% 
+% If something goes wrong during runtime, Python
+% prints a message that includes the name of the
+% exception, the line of the program where the problem occurred,
+% and a traceback.
+% 
+% \index{traceback}
+% 
+% The traceback identifies the function that is currently running,
+% and then the function that invoked it, and then the function that
+% invoked {\em that}, and so on.  In other words, it traces the
+% sequence of function invocations that got you to where you are.  It
+% also includes the line number in your file where each of these
+% calls occurs.
+% 
+% The first step is to examine the place in the program where
+% the error occurred and see if you can figure out what happened.
+% These are some of the most common runtime errors:
+% 
+% \begin{description}
+% 
+% \item[NameError:]  You are trying to use a variable that doesn't
+% exist in the current environment.
+% Remember that local variables are local.  You
+% cannot refer to them from outside the function where they are defined.
+% 
+% \index{NameError}
+% \index{TypeError}
+% \index{exception!NameError}
+% \index{exception!TypeError}
+% 
+% \item[TypeError:] There are several possible causes:
+% 
+% \begin{itemize}
+% 
+% \item  You are trying to use a value improperly.  Example: indexing
+% a string, list, or tuple with something other than an integer.
+% 
+% \index{index}
+% 
+% \item There is a mismatch between the items in a format string and
+% the items passed for conversion.  This can happen if either the number
+% of items does not match or an invalid conversion is called for.
+% 
+% \index{format operator}
+% \index{operator!format}
+% 
+% \item You are passing the wrong number of arguments to a function or method.
+% For methods, look at the method definition and
+% check that the first parameter is {\tt self}.  Then look at the
+% method invocation; make sure you are invoking the method on an
+% object with the right type and providing the other arguments
+% correctly.
+% 
+% \end{itemize}
+% 
+% \item[KeyError:]  You are trying to access an element of a dictionary
+% using a key that the dictionary does not contain.
+% 
+% \index{KeyError}
+% \index{exception!KeyError}
+% \index{dictionary}
+% 
+% \item[AttributeError:] You are trying to access an attribute or method
+% that does not exist.  Check the spelling!  You can use
+% {\tt dir} to list the attributes that do exist.
+% 
+% If an AttributeError indicates that an object has {\tt NoneType},
+% that means that it is {\tt None}.  One common cause is forgetting
+% to return a value from a function; if you get to the end of
+% a function without hitting a {\tt return} statement, it returns
+% {\tt None}.  Another common cause is using the result from
+% a list method, like {\tt sort}, that returns {\tt None}.
+% 
+% \index{AttributeError}
+% \index{exception!AttributeError}
+% 
+% \item[IndexError:] The index you are using
+% to access a list, string, or tuple is greater than
+% its length minus one.  Immediately before the site of the error,
+% add a {\tt print} statement to display
+% the value of the index and the length of the array.
+% Is the array the right size?  Is the index the right value?
+% 
+% \index{IndexError}
+% \index{exception!IndexError}
+% 
+% \end{description}
+% 
+% \index{debugger (pdb)}
+% \index{Python debugger (pdb)}
+% \index{pdb (Python debugger)}
+% 
+% The Python debugger ({\tt pdb}) is useful for tracking down
+% Exceptions because it allows you to examine the state of the
+% program immediately before the error.  You can read
+% about {\tt pdb} at \url{docs.python.org/lib/module-pdb.html}.
+% 
+% 
+% \subsection{I added so many {\tt print} statements I get inundated with
+% output.}
+% 
+% \index{print statement}
+% \index{statement!print}
+% 
+% One of the problems with using {\tt print} statements for debugging
+% is that you can end up buried in output.  There are two ways
+% to proceed: simplify the output or simplify the program.
+% 
+% To simplify the output, you can remove or comment out {\tt print}
+% statements that aren't helping, or combine them, or format
+% the output so it is easier to understand.
+% 
+% To simplify the program, there are several things you can do.  First,
+% scale down the problem the program is working on.  For example, if you
+% are searching a list, search a {\em small} list.  If the program takes
+% input from the user, give it the simplest input that causes the
+% problem.
+% 
+% \index{dead code}
+% 
+% Second, clean up the program.  Remove dead code and reorganize the
+% program to make it as easy to read as possible.  For example, if you
+% suspect that the problem is in a deeply nested part of the program,
+% try rewriting that part with simpler structure.  If you suspect a
+% large function, try splitting it into smaller functions and testing them
+% separately.
+% 
+% \index{testing!minimal test case}
+% \index{test case, minimal}
+% 
+% Often the process of finding the minimal test case leads you to the
+% bug.  If you find that a program works in one situation but not in
+% another, that gives you a clue about what is going on.
+% 
+% Similarly, rewriting a piece of code can help you find subtle
+% bugs.  If you make a change that you think shouldn't affect the
+% program, and it does, that can tip you off.
+% 
+% 
+% \section{Semantic errors}
+% \index{semantic error}
+% \index{error!semantic}
+% 
+% In some ways, semantic errors are the hardest to debug,
+% because the interpreter provides no information
+% about what is wrong.  Only you know what the program is supposed to
+% do.
+% 
+% The first step is to make a connection between the program
+% text and the behavior you are seeing.  You need a hypothesis
+% about what the program is actually doing.  One of the things
+% that makes that hard is that computers run so fast.
+% 
+% You will often wish that you could slow the program down to human
+% speed, and with some debuggers you can.  But the time it takes to
+% insert a few well-placed {\tt print} statements is often short compared to
+% setting up the debugger, inserting and removing breakpoints, and
+% ``stepping'' the program to where the error is occurring.
+% 
+% \subsection{My program doesn't work.}
+% 
+% You should ask yourself these questions:
+% 
+% \begin{itemize}
+% 
+% \item Is there something the program was supposed to do but
+% which doesn't seem to be happening?  Find the section of the code
+% that performs that function and make sure it is executing when
+% you think it should.
+% 
+% \item Is something happening that shouldn't?  Find code in
+% your program that performs that function and see if it is
+% executing when it shouldn't.
+% 
+% \item Is a section of code producing an effect that is not
+% what you expected?  Make sure that you understand the code in
+% question, especially if it involves invocations to functions or methods in
+% other OCaml modules.  Read the documentation for the functions you invoke.
+% Try them out by writing simple test cases and checking the results.
+% 
+% \end{itemize}
+% 
+% In order to program, you need to have a mental model of how
+% programs work.  If you write a program that doesn't do what you expect,
+% very often the problem is not in the program; it's in your mental
+% model.
+% 
+% \index{model, mental}
+% \index{mental model}
+% 
+% The best way to correct your mental model is to break the program
+% into its components (usually the functions and methods) and test
+% each component independently.  Once you find the discrepancy
+% between your model and reality, you can solve the problem.
+% 
+% Of course, you should be building and testing components as you
+% develop the program.  If you encounter a problem,
+% there should be only a small amount of new code
+% that is not known to be correct.
+% 
+% 
+% \subsection{I've got a big hairy expression and it doesn't
+% do what I expect.}
+% 
+% \index{expression!big and hairy}
+% \index{big, hairy expression}
+% 
+% Writing complex expressions is fine as long as they are readable,
+% but they can be hard to debug.  It is often a good idea to
+% break a complex expression into a series of assignments to
+% temporary variables.
+% 
+% For example:
+% 
+% \beforeverb
+% \begin{verbatim}
+% self.hands[i].addCard(self.hands[self.findNeighbor(i)].popCard())
+% \end{verbatim}
+% \afterverb
+% %
+% This can be rewritten as:
+% 
+% \beforeverb
+% \begin{verbatim}
+% neighbor = self.findNeighbor(i)
+% pickedCard = self.hands[neighbor].popCard()
+% self.hands[i].addCard(pickedCard)
+% \end{verbatim}
+% \afterverb
+% %
+% The explicit version is easier to read because the variable
+% names provide additional documentation, and it is easier to debug
+% because you can check the types of the intermediate variables
+% and display their values.
+% 
+% \index{temporary variable}
+% \index{variable!temporary}
+% \index{order of operations}
+% \index{precedence}
+% 
+% Another problem that can occur with big expressions is
+% that the order of evaluation may not be what you expect.
+% For example, if you are translating the expression
+% $\frac{x}{2 \pi}$ into Python, you might write:
+% 
+% \beforeverb
+% \begin{verbatim}
+% y = x / 2 * math.pi
+% \end{verbatim}
+% \afterverb
+% %
+% That is not correct because multiplication and division have
+% the same precedence and are evaluated from left to right.
+% So this expression computes $x \pi / 2$.
+% 
+% A good way to debug expressions is to add parentheses to make
+% the order of evaluation explicit:
+% 
+% \beforeverb
+% \begin{verbatim}
+%  y = x / (2 * math.pi)
+% \end{verbatim}
+% \afterverb
+% %
+% Whenever you are not sure of the order of evaluation, use
+% parentheses.  Not only will the program be correct (in the sense
+% of doing what you intended), it will also be more readable for
+% other people who haven't memorized the rules of precedence.
+% 
+% 
+% \subsection{I've got a function or method that doesn't return what I
+% expect.}
+% \index{return statement}
+% \index{statement!return}
+% 
+% If you have a {\tt return} statement with a complex expression,
+% you don't have a chance to print the {\tt return} value before
+% returning.  Again, you can use a temporary variable.  For
+% example, instead of:
+% 
+% \beforeverb
+% \begin{verbatim}
+% return self.hands[i].removeMatches()
+% \end{verbatim}
+% \afterverb
+% %
+% you could write:
+% 
+% \beforeverb
+% \begin{verbatim}
+% count = self.hands[i].removeMatches()
+% return count
+% \end{verbatim}
+% \afterverb
+% %
+% Now you have the opportunity to display the value of
+% {\tt count} before returning.
+% 
+% 
+% \subsection{I'm really, really stuck and I need help.}
+% 
+% First, try getting away from the computer for a few minutes.
+% Computers emit waves that affect the brain, causing these
+% symptoms:
+% 
+% \begin{itemize}
+% 
+% \item Frustration and rage.
+% 
+% \index{frustration}
+% \index{rage}
+% \index{debugging!emotional response}
+% \index{emotional debugging}
+% 
+% \item Superstitious beliefs (``the computer hates me'') and
+% magical thinking (``the program only works when I wear my
+% hat backward'').
+% 
+% \index{debugging!superstition}
+% \index{superstitious debugging}
+% 
+% \item Random walk programming (the attempt to program by writing
+% every possible program and choosing the one that does the right
+% thing).
+% 
+% \index{random walk programming}
+% \index{development plan!random walk programming}
+% 
+% \end{itemize}
+% 
+% If you find yourself suffering from any of these symptoms, get
+% up and go for a walk.  When you are calm, think about the program.
+% What is it doing?  What are some possible causes of that
+% behavior?  When was the last time you had a working program,
+% and what did you do next?
+% 
+% Sometimes it just takes time to find a bug.  I often find bugs
+% when I am away from the computer and let my mind wander.  Some
+% of the best places to find bugs are trains, showers, and in bed,
+% just before you fall asleep.
+% 
+% 
+% \subsection{No, I really need help.}
+% 
+% It happens.  Even the best programmers occasionally get stuck.
+% Sometimes you work on a program so long that you can't see the
+% error.  A fresh pair of eyes is just the thing.
+% 
+% Before you bring someone else in, make sure you are prepared.
+% Your program should be as simple
+% as possible, and you should be working on the smallest input
+% that causes the error.  You should have {\tt print} statements in the
+% appropriate places (and the output they produce should be
+% comprehensible).  You should understand the problem well enough
+% to describe it concisely.
+% 
+% When you bring someone in to help, be sure to give
+% them the information they need:
+% 
+% \begin{itemize}
+% 
+% \item If there is an error message, what is it
+% and what part of the program does it indicate?
+% 
+% \item What was the last thing you did before this error occurred?
+% What were the last lines of code that you wrote, or what is
+% the new test case that fails?
+% 
+% \item What have you tried so far, and what have you learned?
+% 
+% \end{itemize}
+% 
+% When you find the bug, take a second to think about what you
+% could have done to find it faster.  Next time you see something
+% similar, you will be able to find the bug more quickly.
+% 
+% Remember, the goal is not just to make the program
+% work.  The goal is to learn how to make the program work.
+% 
+% 
+% 
 \printindex
 
 \clearemptydoublepage
